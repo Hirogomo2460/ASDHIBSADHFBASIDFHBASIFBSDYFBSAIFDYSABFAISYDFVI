@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<title>Мой сайт</title>
+</head>
+<body>
+<h1>Привет</h1>
+<p>Это мой сайт.</p>
+</body>
+</html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Волшебная Школа</title>
+    <style>
+        body {
+            margin: 0; 
+            padding: 0;
+            font-family: 'Segoe UI', 'Verdana', sans-serif;
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #333;
+        }
+
+        :root {
+            --primary: #6C63FF;
+            --accent: #FF4081;
+        }
+
+        #intro-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 10000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.5s;
+        }
+        
+        .intro-text {
+            font-size: 3rem; font-weight: bold; color: var(--primary);
+            opacity: 0; transform: translateY(20px); transition: 0.5s;
+        }
+        
+        .intro-visible { opacity: 1; transform: translateY(0); }
+        
+        #start-btn {
+            margin-top: 30px; padding: 15px 50px; font-size: 1.5rem;
+            background: var(--primary); color: white; border: none; border-radius: 50px;
+            cursor: pointer; opacity: 0; transform: scale(0.8); transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.4);
+        }
+        
+        #start-btn.show { opacity: 1; transform: scale(1); }
+        #start-btn:hover { transform: scale(1.1); background: #5a52d5; }
+
+        .container {
+            max-width: 1200px; margin: 0 auto; padding: 40px 20px;
+            opacity: 0; transition: opacity 1s; display: none;
+        }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        
+        .card {
+            background: rgba(255,255,255,0.8); border-radius: 20px; padding: 25px;
+            text-align: center; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: relative;
+            backdrop-filter: blur(5px);
+        }
+        
+        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); background: rgba(255,255,255,0.95); }
+        .card-emoji { font-size: 4rem; display: block; margin-bottom: 10px; }
+        .tag { position: absolute; top: 15px; right: 15px; padding: 5px 10px; border-radius: 10px; color: white; font-weight: bold; font-size: 0.8rem; }
+        .bg-ru { background: #FF9800; }
+        .bg-math { background: #00BCD4; }
+
+        .game-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 5000; 
+            display: none; 
+            flex-direction: column; overflow-y: auto;
+        }
+        
+        .close-btn {
+            position: fixed; top: 20px; left: 20px; z-index: 5001;
+            background: #fff; border: 2px solid #333; padding: 8px 20px;
+            border-radius: 20px; cursor: pointer; font-weight: bold;
+        }
+
+        .char-intro {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            padding: 40px;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            margin: auto;
+        }
+        
+        .char-emoji {
+            font-size: 6rem;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .speech-bubble {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            color: #333;
+        }
+        
+        .start-game-btn {
+            background: #FF4081; color: white; border: none; padding: 15px 40px;
+            font-size: 1.5rem; border-radius: 30px; cursor: pointer; transition: 0.3s;
+            font-weight: bold;
+        }
+        
+        .start-game-btn:hover { background: #F50057; transform: scale(1.05); }
+
+        .theme-pancakes { background: #FFF3E0; font-family: 'Comic Sans MS', cursive; }
+        
+        .skillet {
+            width: 320px; height: 320px; background: #212121;
+            border-radius: 50%; position: relative; margin: 30px auto;
+            box-shadow: inset 0 -10px 20px rgba(0,0,0,0.6), 0 10px 20px rgba(0,0,0,0.3);
+            display: flex; justify-content: center; align-items: center;
+        }
+        
+        .skillet-handle {
+            position: absolute; width: 40px; height: 160px;
+            background: #3E2723; bottom: -120px; right: -30px;
+            transform: rotate(-45deg); border-radius: 20px; z-index: -1;
+            box-shadow: inset -5px 0 10px rgba(0,0,0,0.5);
+        }
+        
+        .pan-plate {
+            width: 270px; height: 270px; background: radial-gradient(circle at 30% 30%, #FFD54F, #FFB300);
+            border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            box-shadow: inset -5px -5px 15px rgba(230,81,0,0.4), 0 5px 10px rgba(0,0,0,0.5);
+            font-size: 2.2rem; font-weight: bold; color: #4E342E; text-align: center;
+        }
+        
+        .pan-btn {
+            background: white; border: 3px solid #EF6C00; padding: 15px 30px;
+            font-size: 1.2rem; border-radius: 20px; margin: 10px; cursor: pointer;
+            font-family: 'Comic Sans MS', cursive; transition: 0.2s; font-weight: bold;
+        }
+        
+        .pan-btn:hover { transform: scale(1.05); background: #FFF8E1; }
+        
+        .vowel-btn {
+            display: inline-block; padding: 2px 8px; margin: 0 2px;
+            background: rgba(255,255,255,0.6); border-radius: 12px;
+            cursor: pointer; transition: 0.2s; border: 2px solid transparent;
+        }
+        
+        .vowel-btn:hover { background: white; border-color: #E65100; transform: scale(1.1); }
+        .cons-text { padding: 0 2px; }
+
+        .theme-prosto { background: linear-gradient(to bottom, #E1F5FE 0%, #F1F8E9 100%); }
+        .prosto-board {
+            background: #FFFDE7; border: 8px solid #795548; border-radius: 20px;
+            padding: 30px; width: 90%; max-width: 600px; margin: 60px auto;
+            text-align: center; box-shadow: 0 20px 0 #5D4037;
+        }
+
+        .theme-math { background: #263238; color: white; }
+        .math-wrapper { display: flex; align-items: center; justify-content: center; min-height: 100%; width: 100%; }
+        .math-bg-1 { background: linear-gradient(135deg, #0f2027, #2c5364); }
+        .math-bg-2 { background: linear-gradient(135deg, #11998e, #38ef7d); }
+        .math-bg-3 { background: linear-gradient(135deg, #00c6ff, #0072ff); }
+        .math-card { background: rgba(255,255,255,0.1); padding: 40px; border-radius: 30px; backdrop-filter: blur(10px); width: 90%; max-width: 500px; text-align: center; margin: auto; }
+    </style>
+</head>
+<body>
+
+    <div id="intro-overlay">
+        <div class="intro-text" id="intro-msg">...</div>
+        <button id="start-btn" onclick="enterSite()">🚀 Поехали!</button>
+    </div>
+
+    <div class="container" id="main-menu">
+        <h1 style="text-align:center; color: #4A148C; margin-bottom: 40px;">Учебный Портал 🎓</h1>
+        
+        <h2 style="border-left: 5px solid orange; padding-left: 10px;">📚 Русский Язык</h2>
+        <div class="grid">
+            <div class="card" onclick="openPancakes()">
+                <span class="tag bg-ru">Фонетика</span>
+                <span class="card-emoji">🥞</span>
+                <h3>Печем Блинчики</h3>
+                <p>Ударения, Перенос, Звуки</p>
+            </div>
+            <div class="card" onclick="openProstokvashino()">
+                <span class="tag bg-ru">Грамматика</span>
+                <span class="card-emoji">🏡</span>
+                <h3>Простоквашино</h3>
+                <p>Падежи и окончания</p>
+            </div>
+        </div>
+
+        <h2 style="border-left: 5px solid cyan; padding-left: 10px; margin-top: 40px;">🧮 Математика</h2>
+        <div class="grid">
+            <div class="card" onclick="openMath(1)">
+                <span class="tag bg-math">1 Класс</span>
+                <span class="card-emoji">🚀</span>
+                <h3>Космос</h3>
+                <p>Счет до 20</p>
+            </div>
+            <div class="card" onclick="openMath(2)">
+                <span class="tag bg-math">2 Класс</span>
+                <span class="card-emoji">🦁</span>
+                <h3>Джунгли</h3>
+                <p>Таблица умножения</p>
+            </div>
+            <div class="card" onclick="openMath(3)">
+                <span class="tag bg-math">3 Класс</span>
+                <span class="card-emoji">🌊</span>
+                <h3>Океан</h3>
+                <p>Деление и примеры</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-pancakes" class="game-modal theme-pancakes">
+        <button class="close-btn" onclick="exitGame()">✖ Выход</button>
+        
+        <div id="pan-intro-screen" class="char-intro">
+            <div class="char-emoji">👨‍🍳</div>
+            <div class="speech-bubble">
+                <b>Привет! Я шеф-повар Коржик!</b><br><br>
+                Сегодня у нас много заказов на вкусные блинчики. Но чтобы блин не подгорел, тебе нужно правильно выполнить задания.<br><br>
+                Выбирай правильные ударения, переноси слова и угадывай звуки. Поможешь мне на кухне?
+            </div>
+            <button class="start-game-btn" onclick="showPanMenu()">Помочь повару!</button>
+        </div>
+
+        <div id="pan-menu" style="text-align:center; display:none; margin-top: 80px;">
+            <h1 style="color:#E65100">Блинная Мастерская</h1>
+            <p style="font-size:1.3rem;">Какое тесто замешиваем?</p>
+            <button class="pan-btn" onclick="initPanGame('stress')">Ударения</button>
+            <button class="pan-btn" onclick="initPanGame('hyphen')">Перенос слов</button>
+            <button class="pan-btn" onclick="initPanGame('sounds')">Звуки</button>
+        </div>
+
+        <div id="pan-game" style="display:none; text-align:center; margin-top: 20px;">
+            <h2 style="margin: 5px;">Спечено блинов: <span id="pan-score" style="color:#E65100">0</span></h2>
+            
+            <div class="skillet">
+                <div class="skillet-handle"></div>
+                <div class="pan-plate">
+                    <div id="pan-content">Загрузка...</div>
+                </div>
+            </div>
+
+            <div id="pan-feedback" style="height: 30px; font-weight:bold; font-size:1.4rem;"></div>
+            <div id="pan-controls" style="margin-top:15px;"></div>
+            
+            <button class="pan-btn" id="pan-next-btn" style="display:none; margin-top:20px; background:#4CAF50; color:white; border-color:#2E7D32;" onclick="nextPanQuestion()">След. блин ➡</button>
+            <button class="pan-btn" id="pan-end-btn" style="display:none; margin-top:20px;" onclick="exitGame()">Вернуться в меню</button>
+        </div>
+    </div>
+
+    <div id="game-prosto" class="game-modal theme-prosto">
+        <button class="close-btn" onclick="exitGame()">✖ Выход</button>
+
+        <div id="prosto-intro-screen" class="char-intro">
+            <div class="char-emoji">🐱</div>
+            <div class="speech-bubble">
+                <b>Мяу! Я кот Матроскин!</b><br><br>
+                Мы в Простоквашино совсем запутались. Шарик пишет с ошибками, Печкин посылки путает, а Дядя Федор не может правильное слово подобрать.<br><br>
+                Вставь правильные окончания в предложения, чтобы у нас снова был порядок!
+            </div>
+            <button class="start-game-btn" onclick="initProstokvashino()">Навести порядок!</button>
+        </div>
+
+        <div id="prosto-game-screen" class="prosto-board" style="display:none;">
+            <h1 style="color:#5D4037; margin-top:0;">Простоквашино</h1>
+            <div style="font-size:5rem; margin:10px;">
+                <span id="pr-emoji">🐱</span>
+            </div>
+            <div id="pr-q" style="font-size:1.4rem; margin:20px 0; background:white; padding:15px; border-radius:10px;">
+                Загрузка...
+            </div>
+            <div id="pr-opts"></div>
+            <div id="pr-msg" style="height:30px; margin-top:10px; font-weight:bold;"></div>
+            <button id="pr-restart" class="pan-btn" style="display:none;" onclick="openProstokvashino()">Сыграть еще раз</button>
+        </div>
+    </div>
+
+    <div id="game-math" class="game-modal theme-math">
+        <button class="close-btn" onclick="exitGame()">✖ Выход</button>
+
+        <div id="math-intro-screen" class="char-intro" style="color:#333;">
+            <div class="char-emoji" id="math-intro-emoji">🚀</div>
+            <div class="speech-bubble" id="math-intro-text">
+                Текст
+            </div>
+            <button class="start-game-btn" onclick="startMathGame()">Я готов!</button>
+        </div>
+
+        <div id="math-game-screen" class="math-wrapper" style="display:none;">
+            <div class="math-card">
+                <div id="math-icon" style="font-size:5rem;">🚀</div>
+                <h2>Реши пример:</h2>
+                <div id="math-q" style="font-size:4rem; font-weight:bold; margin:20px 0;">2 + 2</div>
+                <div id="math-opts"></div>
+                <div id="math-msg" style="height:30px; font-weight:bold; margin-top:10px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const wait = ms => new Promise(r => setTimeout(r, ms));
+        
+        async function playIntro() {
+            const msg = document.getElementById('intro-msg');
+            msg.innerText = "Привет! 👋";
+            msg.classList.add('intro-visible');
+            await wait(1500);
+            msg.classList.remove('intro-visible');
+            await wait(500);
+            msg.innerText = "Добро пожаловать!";
+            msg.classList.add('intro-visible');
+            await wait(1500);
+            msg.style.display = 'none';
+            document.getElementById('start-btn').classList.add('show');
+        }
+
+        function enterSite() {
+            document.getElementById('intro-overlay').style.opacity = 0;
+            setTimeout(() => {
+                document.getElementById('intro-overlay').style.display = 'none';
+                document.getElementById('main-menu').style.display = 'block';
+                setTimeout(() => document.getElementById('main-menu').style.opacity = 1, 100);
+            }, 500);
+        }
+
+        window.onload = playIntro;
+
+        function exitGame() {
+            document.querySelectorAll('.game-modal').forEach(m => m.style.display = 'none');
+        }
+
+        const panDB = {
+            stress: [
+                {w:"ТОРТЫ", i:1}, {w:"БАНТЫ", i:1}, {w:"ШАРФЫ", i:1},
+                {w:"ЗВОНИТ", i:4}, {w:"АРБУЗ", i:3}, {w:"АЛФАВИТ", i:5},
+                {w:"МАГАЗИН", i:5}, {w:"СТОЛЯР", i:4}, {w:"ПОРТФЕЛЬ", i:5},
+                {w:"ЩАВЕЛЬ", i:3}, {w:"ДОКУМЕНТ", i:5}, {w:"ИНСТРУМЕНТ", i:7}
+            ],
+            hyphen: [
+                {w:"МАЙКА", q:"МАЙ-КА", right:true},
+                {w:"ОСЕНЬ", q:"О-СЕНЬ", right:false},
+                {w:"ВАННА", q:"ВАН-НА", right:true},
+                {w:"УРОК", q:"У-РОК", right:false},
+                {w:"ПОДЪЕЗД", q:"ПОДЪ-ЕЗД", right:true},
+                {w:"ЧАЙНИК", q:"ЧАЙ-НИК", right:true},
+                {w:"ЮЛА", q:"Ю-ЛА", right:false},
+                {w:"КОЛЬЦО", q:"КОЛЬ-ЦО", right:true}
+            ],
+            sounds: [
+                {q:"ЛЫЖИ: Звук [Ж]", o:["🔵 Всегда Твердый", "🟢 Мягкий"], c:0},
+                {q:"ЧАЩА: Звук [Ч']", o:["🔵 Твердый", "🟢 Всегда Мягкий"], c:1},
+                {q:"ЙОД: Звук [Й']", o:["🔵 Твердый", "🟢 Всегда Мягкий"], c:1},
+                {q:"ШИНА: Звук [Ш]", o:["🔵 Всегда Твердый", "🟢 Мягкий"], c:0},
+                {q:"МЯЧ: Звук [М']", o:["🔵 Твердый", "🟢 Мягкий"], c:1},
+                {q:"ЛЕС: Звук [Л']", o:["🔵 Твердый", "🟢 Мягкий"], c:1},
+                {q:"СОК: Звук [С]", o:["🔵 Твердый", "🟢 Мягкий"], c:0}
+            ]
+        };
+
+        let panQueue = []; 
+        let panCurrent = 0;
+        let panScoreVal = 0;
+        let panMode = '';
+
+        function openPancakes() {
+            document.getElementById('game-pancakes').style.display = 'flex';
+            document.getElementById('pan-intro-screen').style.display = 'block';
+            document.getElementById('pan-menu').style.display = 'none';
+            document.getElementById('pan-game').style.display = 'none';
+        }
+
+        function showPanMenu() {
+            document.getElementById('pan-intro-screen').style.display = 'none';
+            document.getElementById('pan-menu').style.display = 'block';
+        }
+
+        function initPanGame(mode) {
+            panMode = mode;
+            panQueue = [...panDB[mode]].sort(() => Math.random() - 0.5);
+            panCurrent = 0;
+            panScoreVal = 0;
+            
+            document.getElementById('pan-score').innerText = '0';
+            document.getElementById('pan-menu').style.display = 'none';
+            document.getElementById('pan-game').style.display = 'block';
+            document.getElementById('pan-end-btn').style.display = 'none';
+            
+            showPanQuestion();
+        }
+
+        function showPanQuestion() {
+            const content = document.getElementById('pan-content');
+            const controls = document.getElementById('pan-controls');
+            const feedback = document.getElementById('pan-feedback');
+            const nextBtn = document.getElementById('pan-next-btn');
+
+            feedback.innerText = "";
+            controls.innerHTML = "";
+            nextBtn.style.display = 'none';
+
+            if (panCurrent >= panQueue.length) {
+                content.innerText = "Готово!";
+                feedback.innerText = `Испечено: ${panScoreVal} из ${panQueue.length}`;
+                feedback.style.color = "#3E2723";
+                document.getElementById('pan-end-btn').style.display = 'inline-block';
+                return;
+            }
+
+            const task = panQueue[panCurrent];
+
+            if (panMode === 'stress') {
+                let html = "";
+                const vowels = "АЕЁИОУЫЭЮЯ";
+                for(let i=0; i<task.w.length; i++) {
+                    let char = task.w[i];
+                    if (vowels.includes(char)) {
+                        html += `<span class="vowel-btn" onclick="checkPanAnswer(this, ${i}, ${task.i})">${char}</span>`;
+                    } else {
+                        html += `<span class="cons-text">${char}</span>`;
+                    }
+                }
+                content.innerHTML = html + "<br><span style='font-size:1.1rem; color:#5D4037; font-weight:normal;'>Нажми на гласную</span>";
+            } else if (panMode === 'hyphen') {
+                content.innerHTML = `${task.q}<br><span style='font-size:1.1rem; color:#5D4037; font-weight:normal;'>Верно?</span>`;
+                controls.innerHTML = `
+                    <button class="pan-btn" onclick="checkPanAnswer(this, true, ${task.right})">✅ Да</button>
+                    <button class="pan-btn" onclick="checkPanAnswer(this, false, ${task.right})">❌ Нет</button>
+                `;
+            } else {
+                content.innerText = task.q;
+                task.o.forEach((opt, idx) => {
+                    controls.innerHTML += `<button class="pan-btn" onclick="checkPanAnswer(this, ${idx}, ${task.c})">${opt}</button>`;
+                });
+            }
+        }
+
+        function checkPanAnswer(element, selected, correct) {
+            if(document.getElementById('pan-next-btn').style.display === 'inline-block') return;
+
+            const feedback = document.getElementById('pan-feedback');
+
+            if (selected === correct) {
+                panScoreVal++;
+                document.getElementById('pan-score').innerText = panScoreVal;
+                feedback.innerText = "Идеально! Вкусный блин! 🥞";
+                feedback.style.color = "#2E7D32";
+                if(panMode === 'stress') {
+                    element.style.background = "#4CAF50";
+                    element.style.color = "white";
+                }
+                if(panMode !== 'stress') element.style.background = "#C8E6C9";
+            } else {
+                feedback.innerText = "Ой! Блинчик подгорел! 🔥";
+                feedback.style.color = "#D32F2F";
+                if(panMode === 'stress') {
+                    element.style.background = "#F44336";
+                    element.style.color = "white";
+                }
+                if(panMode !== 'stress') element.style.background = "#FFCDD2";
+            }
+
+            document.getElementById('pan-next-btn').style.display = 'inline-block';
+        }
+
+        function nextPanQuestion() {
+            panCurrent++;
+            showPanQuestion();
+        }
+
+        const prostoDB = [
+            {t:"Матроскин любит свою...", a:"КоровУ", b:"КоровА", e:"🐱"},
+            {t:"Шарик купил фото...", a:"РужьЁ", b:"РужьЯ", e:"📷"},
+            {t:"Печкин принес...", a:"ПосылкУ", b:"ПосылкА", e:"📦"},
+            {t:"Дядя Федор ест...", a:"БутерброД", b:"БутерброТ", e:"🥪"},
+            {t:"Галчонок спрашивает:...", a:"КтО там?", b:"КтА там?", e:"🦅"},
+            {t:"Мама надела...", a:"ПлатьЕ", b:"ПлатьЮ", e:"👗"},
+            {t:"Папа чинит...", a:"МашинУ", b:"МашинА", e:"🚗"},
+            {t:"Трактор Митя...", a:"ЕдЕТ", b:"ЕдУТ", e:"🚜"},
+            {t:"Корова дает...", a:"МолокО", b:"МолокА", e:"🥛"},
+            {t:"В лесу растут...", a:"ГрибЫ", b:"ГрибА", e:"🍄"},
+            {t:"Печкин едет на...", a:"ВелосипедЕ", b:"ВелосипедУ", e:"🚲"},
+            {t:"Шарик рисует...", a:"КарандашОМ", b:"КарандашЕМ", e:"✏️"},
+            {t:"Мы идем гулять в...", a:"ЛеС", b:"ЛеСУ", e:"🌲"},
+            {t:"Матроскин играет на...", a:"ГитарЕ", b:"ГитарИ", e:"🎸"},
+            {t:"Печка топится...", a:"ДровамИ", b:"ДровамЕ", e:"🔥"}
+        ];
+        
+        let prostoQueue = [];
+        let prostoCurr = 0;
+
+        function openProstokvashino() {
+            document.getElementById('game-prosto').style.display = 'flex';
+            document.getElementById('prosto-intro-screen').style.display = 'block';
+            document.getElementById('prosto-game-screen').style.display = 'none';
+        }
+
+        function initProstokvashino() {
+            document.getElementById('prosto-intro-screen').style.display = 'none';
+            document.getElementById('prosto-game-screen').style.display = 'block';
+            
+            prostoQueue = [...prostoDB].sort(() => Math.random() - 0.5);
+            prostoCurr = 0;
+            document.getElementById('pr-restart').style.display = 'none';
+            showProsto();
+        }
+
+        function showProsto() {
+            const qDiv = document.getElementById('pr-q');
+            const optDiv = document.getElementById('pr-opts');
+            const emoji = document.getElementById('pr-emoji');
+            const msg = document.getElementById('pr-msg');
+            
+            optDiv.innerHTML = '';
+            msg.innerText = '';
+
+            if (prostoCurr >= prostoQueue.length) {
+                emoji.innerText = "🎉";
+                qDiv.innerText = "Порядок наведен! Ты настоящий знаток грамматики!";
+                document.getElementById('pr-restart').style.display = 'inline-block';
+                return;
+            }
+
+            const item = prostoQueue[prostoCurr];
+            emoji.innerText = item.e;
+            qDiv.innerHTML = item.t.replace("...", " <span style='color:#795548; border-bottom:2px solid #795548'>???</span>");
+
+            let btns = [
+                {txt: item.a, cor: true}, 
+                {txt: item.b, cor: false}
+            ].sort(() => Math.random() - 0.5);
+
+            btns.forEach(b => {
+                let btn = document.createElement('button');
+                btn.className = 'pan-btn';
+                btn.innerText = b.txt;
+                btn.onclick = () => {
+                    if (b.cor) {
+                        btn.style.background = "#C8E6C9";
+                        qDiv.innerHTML = item.t.replace("...", ` <span style='color:green'>${item.a}</span>`);
+                        setTimeout(() => {
+                            prostoCurr++;
+                            showProsto();
+                        }, 1000);
+                    } else {
+                        btn.style.background = "#FFCDD2";
+                        msg.innerText = "Подумай еще!";
+                    }
+                };
+                optDiv.appendChild(btn);
+            });
+        }
+
+        let mathLvl = 1;
+        function openMath(lvl) {
+            const modal = document.getElementById('game-math');
+            const introText = document.getElementById('math-intro-text');
+            const introEmoji = document.getElementById('math-intro-emoji');
+            
+            modal.style.display = 'flex'; 
+            modal.classList.remove('math-bg-1', 'math-bg-2', 'math-bg-3');
+            modal.classList.add('math-bg-' + lvl);
+            
+            document.getElementById('math-intro-screen').style.display = 'block';
+            document.getElementById('math-game-screen').style.display = 'none';
+
+            mathLvl = lvl;
+
+            if(lvl === 1) {
+                introEmoji.innerText = '🧑‍🚀';
+                introText.innerHTML = "<b>Прием! Я Космонавт Рома.</b><br><br>Мы летим на Марс! Но чтобы ракета летела быстро, нужно правильно считать топливо. Решай примеры на сложение и вычитание до 20. Поможешь мне?";
+            } else if(lvl === 2) {
+                introEmoji.innerText = '🦁';
+                introText.innerHTML = "<b>Ррр! Я Лев Алекс.</b><br><br>Ты в моих джунглях. Чтобы пройти через лианы, нужно знать таблицу умножения. Я приготовил для тебя примеры. Справишься?";
+            } else if(lvl === 3) {
+                introEmoji.innerText = '🐡';
+                introText.innerHTML = "<b>Буль-буль! Я Капитан Немо.</b><br><br>На самом дне океана спрятаны сокровища, но сундуки закрыты на математические замки. Тебя ждут деление и большие числа. Поможешь открыть?";
+            }
+        }
+
+        function startMathGame() {
+            document.getElementById('math-intro-screen').style.display = 'none';
+            document.getElementById('math-game-screen').style.display = 'flex';
+            nextMath();
+        }
+
+        function nextMath() {
+            const q = document.getElementById('math-q');
+            const opts = document.getElementById('math-opts');
+            const msg = document.getElementById('math-msg');
+            const icon = document.getElementById('math-icon');
+            opts.innerHTML = ''; msg.innerText = '';
+
+            let n1, n2, ans, sign;
+            if(mathLvl === 1) {
+                icon.innerText = '🚀';
+                sign = Math.random()>0.5?'+':'-';
+                if(sign==='+'){n1=r(10);n2=r(10);ans=n1+n2;}
+                else{n1=r(10)+5;n2=r(5);ans=n1-n2;}
+            } else if(mathLvl === 2) {
+                icon.innerText = '🦁';
+                sign = '×'; n1=r(8)+1; n2=r(9)+1; ans=n1*n2;
+            } else {
+                icon.innerText = '🌊';
+                sign = ':'; n2=r(8)+2; ans=r(9)+1; n1=n2*ans;
+            }
+
+            q.innerText = `${n1} ${sign} ${n2} = ?`;
+            
+            let arr = [ans];
+            while(arr.length < 4) {
+                let f = ans + r(10) - 5;
+                if(f!==ans && f>=0 && !arr.includes(f)) arr.push(f);
+            }
+            arr.sort(()=>Math.random()-0.5);
+
+            arr.forEach(val => {
+                let b = document.createElement('button');
+                b.className = 'pan-btn'; 
+                b.style.border = 'none';
+                b.style.fontSize = '2rem';
+                b.style.width = '80px';
+                b.style.height = '80px';
+                b.innerText = val;
+                b.onclick = () => {
+                    if(val === ans) {
+                        b.style.background = "#00E676";
+                        setTimeout(nextMath, 800);
+                    } else {
+                        b.style.background = "#FF5252";
+                        b.style.color = "white";
+                    }
+                };
+                opts.appendChild(b);
+            });
+        }
+
+        function r(max) { return Math.floor(Math.random()*max)+1; }
+
+    </script>
+</body>
+</html>
