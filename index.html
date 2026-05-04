@@ -1,658 +1,1658 @@
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="robots" content="noindex, nofollow">
-<title>Портфолио</title>
-</head>
-<body>
-</body>
-</html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Волшебная Школа</title>
-    <style>
-        body {
-            margin: 0; 
-            padding: 0;
-            font-family: 'Segoe UI', 'Verdana', sans-serif;
-            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-            color: #333;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Панорама 360°</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════
+   RESET & BASE
+══════════════════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;overflow:hidden;background:#050508;touch-action:none}
+body{font-family:'Syne',sans-serif;color:#fff;height:100dvh;display:flex;flex-direction:column;position:relative}
 
-        :root {
-            --primary: #6C63FF;
-            --accent: #FF4081;
-        }
+/* ══════════════════════════════════════════════════════
+   CSS VARIABLES
+══════════════════════════════════════════════════════ */
+:root{
+  --c-bg:#050508;
+  --c-surface:#0d0d14;
+  --c-surface2:#15151f;
+  --c-surface3:#1e1e2c;
+  --c-border:rgba(255,255,255,0.07);
+  --c-border2:rgba(255,255,255,0.12);
+  --c-cyan:#00e5ff;
+  --c-purple:#a259ff;
+  --c-green:#00e676;
+  --c-orange:#ff6d00;
+  --c-red:#ff1744;
+  --c-text:rgba(255,255,255,0.9);
+  --c-text2:rgba(255,255,255,0.5);
+  --c-text3:rgba(255,255,255,0.25);
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
 
-        #intro-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; z-index: 10000;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            transition: opacity 0.5s;
-        }
-        
-        .intro-text {
-            font-size: 3rem; font-weight: bold; color: var(--primary);
-            opacity: 0; transform: translateY(20px); transition: 0.5s;
-        }
-        
-        .intro-visible { opacity: 1; transform: translateY(0); }
-        
-        #start-btn {
-            margin-top: 30px; padding: 15px 50px; font-size: 1.5rem;
-            background: var(--primary); color: white; border: none; border-radius: 50px;
-            cursor: pointer; opacity: 0; transform: scale(0.8); transition: 0.3s;
-            box-shadow: 0 10px 20px rgba(108, 99, 255, 0.4);
-        }
-        
-        #start-btn.show { opacity: 1; transform: scale(1); }
-        #start-btn:hover { transform: scale(1.1); background: #5a52d5; }
+/* ══════════════════════════════════════════════════════
+   SCREENS
+══════════════════════════════════════════════════════ */
+.screen{
+  position:absolute;inset:0;
+  display:none;flex-direction:column;
+  overflow:hidden;
+}
+.screen.active{display:flex}
 
-        .container {
-            max-width: 1200px; margin: 0 auto; padding: 40px 20px;
-            opacity: 0; transition: opacity 1s; display: none;
-        }
-        
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        
-        .card {
-            background: rgba(255,255,255,0.8); border-radius: 20px; padding: 25px;
-            text-align: center; cursor: pointer; transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); position: relative;
-            backdrop-filter: blur(5px);
-        }
-        
-        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); background: rgba(255,255,255,0.95); }
-        .card-emoji { font-size: 4rem; display: block; margin-bottom: 10px; }
-        .tag { position: absolute; top: 15px; right: 15px; padding: 5px 10px; border-radius: 10px; color: white; font-weight: bold; font-size: 0.8rem; }
-        .bg-ru { background: #FF9800; }
-        .bg-math { background: #00BCD4; }
+/* ══════════════════════════════════════════════════════
+   SCREEN: HOME
+══════════════════════════════════════════════════════ */
+#s-home{
+  background:var(--c-bg);
+  align-items:center;justify-content:flex-start;
+  padding-top:calc(var(--safe-top) + 60px);
+  overflow-y:auto;
+}
 
-        .game-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; z-index: 5000; 
-            display: none; 
-            flex-direction: column; overflow-y: auto;
-        }
-        
-        .close-btn {
-            position: fixed; top: 20px; left: 20px; z-index: 5001;
-            background: #fff; border: 2px solid #333; padding: 8px 20px;
-            border-radius: 20px; cursor: pointer; font-weight: bold;
-        }
+.home-noise{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  opacity:0.6;
+}
+.home-glow{
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 10%,rgba(0,229,255,0.06) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 50% at 80% 80%,rgba(162,89,255,0.06) 0%,transparent 60%);
+}
 
-        .char-intro {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 25px;
-            padding: 40px;
-            max-width: 600px;
-            text-align: center;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-            margin: auto;
-        }
-        
-        .char-emoji {
-            font-size: 6rem;
-            margin-bottom: 20px;
-            animation: bounce 2s infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-        
-        .speech-bubble {
-            font-size: 1.4rem;
-            margin-bottom: 30px;
-            line-height: 1.5;
-            color: #333;
-        }
-        
-        .start-game-btn {
-            background: #FF4081; color: white; border: none; padding: 15px 40px;
-            font-size: 1.5rem; border-radius: 30px; cursor: pointer; transition: 0.3s;
-            font-weight: bold;
-        }
-        
-        .start-game-btn:hover { background: #F50057; transform: scale(1.05); }
+.home-inner{
+  position:relative;z-index:1;
+  width:100%;max-width:380px;
+  padding:0 24px 48px;
+  display:flex;flex-direction:column;align-items:center;
+  gap:0;
+}
 
-        .theme-pancakes { background: #FFF3E0; font-family: 'Comic Sans MS', cursive; }
-        
-        .skillet {
-            width: 320px; height: 320px; background: #212121;
-            border-radius: 50%; position: relative; margin: 30px auto;
-            box-shadow: inset 0 -10px 20px rgba(0,0,0,0.6), 0 10px 20px rgba(0,0,0,0.3);
-            display: flex; justify-content: center; align-items: center;
-        }
-        
-        .skillet-handle {
-            position: absolute; width: 40px; height: 160px;
-            background: #3E2723; bottom: -120px; right: -30px;
-            transform: rotate(-45deg); border-radius: 20px; z-index: -1;
-            box-shadow: inset -5px 0 10px rgba(0,0,0,0.5);
-        }
-        
-        .pan-plate {
-            width: 270px; height: 270px; background: radial-gradient(circle at 30% 30%, #FFD54F, #FFB300);
-            border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center;
-            box-shadow: inset -5px -5px 15px rgba(230,81,0,0.4), 0 5px 10px rgba(0,0,0,0.5);
-            font-size: 2.2rem; font-weight: bold; color: #4E342E; text-align: center;
-        }
-        
-        .pan-btn {
-            background: white; border: 3px solid #EF6C00; padding: 15px 30px;
-            font-size: 1.2rem; border-radius: 20px; margin: 10px; cursor: pointer;
-            font-family: 'Comic Sans MS', cursive; transition: 0.2s; font-weight: bold;
-        }
-        
-        .pan-btn:hover { transform: scale(1.05); background: #FFF8E1; }
-        
-        .vowel-btn {
-            display: inline-block; padding: 2px 8px; margin: 0 2px;
-            background: rgba(255,255,255,0.6); border-radius: 12px;
-            cursor: pointer; transition: 0.2s; border: 2px solid transparent;
-        }
-        
-        .vowel-btn:hover { background: white; border-color: #E65100; transform: scale(1.1); }
-        .cons-text { padding: 0 2px; }
+/* Logo / hero */
+.hero-orb{
+  width:110px;height:110px;
+  margin-bottom:28px;
+  position:relative;
+  flex-shrink:0;
+}
+.hero-orb svg{width:100%;height:100%}
+.orb-spin{animation:orb-rotate 12s linear infinite}
+.orb-pulse{animation:orb-pulse 3s ease-in-out infinite}
+@keyframes orb-rotate{to{transform:rotate(360deg)}}
+@keyframes orb-pulse{0%,100%{opacity:0.5}50%{opacity:1}}
 
-        .theme-prosto { background: linear-gradient(to bottom, #E1F5FE 0%, #F1F8E9 100%); }
-        .prosto-board {
-            background: #FFFDE7; border: 8px solid #795548; border-radius: 20px;
-            padding: 30px; width: 90%; max-width: 600px; margin: 60px auto;
-            text-align: center; box-shadow: 0 20px 0 #5D4037;
-        }
+.hero-title{
+  font-size:32px;font-weight:800;letter-spacing:-1.5px;
+  line-height:1;margin-bottom:8px;text-align:center;
+  background:linear-gradient(135deg,#fff 40%,var(--c-cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--c-text2);margin-bottom:36px;text-align:center;
+}
 
-        .theme-math { background: #263238; color: white; }
-        .math-wrapper { display: flex; align-items: center; justify-content: center; min-height: 100%; width: 100%; }
-        .math-bg-1 { background: linear-gradient(135deg, #0f2027, #2c5364); }
-        .math-bg-2 { background: linear-gradient(135deg, #11998e, #38ef7d); }
-        .math-bg-3 { background: linear-gradient(135deg, #00c6ff, #0072ff); }
-        .math-card { background: rgba(255,255,255,0.1); padding: 40px; border-radius: 30px; backdrop-filter: blur(10px); width: 90%; max-width: 500px; text-align: center; margin: auto; }
-    </style>
+/* Main CTA */
+.btn-main{
+  width:100%;height:56px;
+  border-radius:14px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--c-cyan),var(--c-purple));
+  color:#000;font-family:'Syne',sans-serif;
+  font-size:15px;font-weight:700;letter-spacing:0.5px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform 0.12s,box-shadow 0.12s;
+  box-shadow:0 0 40px rgba(0,229,255,0.2);
+  margin-bottom:12px;
+}
+.btn-main:active{transform:scale(0.97);box-shadow:none}
+.btn-main .btn-icon{font-size:20px}
+
+.btn-secondary{
+  width:100%;height:48px;
+  border-radius:12px;cursor:pointer;
+  background:transparent;
+  border:1px solid var(--c-border2);
+  color:var(--c-text2);
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:all 0.15s;
+  margin-bottom:32px;
+}
+.btn-secondary:active{background:var(--c-surface2);color:#fff}
+
+/* Feature cards */
+.features{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:10px;width:100%;margin-bottom:0;
+}
+.feat-card{
+  background:var(--c-surface);
+  border:1px solid var(--c-border);
+  border-radius:16px;padding:16px 14px;
+  display:flex;flex-direction:column;gap:8px;
+  position:relative;overflow:hidden;
+}
+.feat-card::before{
+  content:'';position:absolute;
+  top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,229,255,0.3),transparent);
+}
+.feat-icon{font-size:22px;line-height:1}
+.feat-title{font-size:12px;font-weight:700;color:#fff;line-height:1.3}
+.feat-desc{font-size:10px;color:var(--c-text3);line-height:1.4;font-family:'JetBrains Mono',monospace}
+
+/* ══════════════════════════════════════════════════════
+   SCREEN: PERMISSION
+══════════════════════════════════════════════════════ */
+#s-perm{
+  background:var(--c-bg);
+  align-items:center;justify-content:center;
+  padding:40px 32px;gap:20px;text-align:center;
+}
+.perm-icon{font-size:64px;animation:bounce 2s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.perm-title{font-size:24px;font-weight:800;letter-spacing:-0.5px}
+.perm-body{font-size:14px;color:var(--c-text2);line-height:1.7;max-width:280px}
+.perm-list{
+  display:flex;flex-direction:column;gap:10px;
+  width:100%;max-width:280px;
+}
+.perm-item{
+  display:flex;align-items:center;gap:12px;
+  background:var(--c-surface);border:1px solid var(--c-border);
+  border-radius:12px;padding:12px 16px;
+  font-size:13px;color:var(--c-text);text-align:left;
+}
+.perm-item-icon{font-size:20px;flex-shrink:0}
+
+/* ══════════════════════════════════════════════════════
+   SCREEN: CAMERA
+══════════════════════════════════════════════════════ */
+#s-cam{background:#000;position:relative}
+
+#videoEl{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+}
+
+/* Camera overlay layers */
+.cam-layer{
+  position:absolute;inset:0;z-index:10;
+  pointer-events:none;
+  display:flex;flex-direction:column;
+}
+.cam-layer.interactive{pointer-events:all}
+
+/* Top bar */
+.cam-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:calc(var(--safe-top) + 12px) 16px 12px;
+  background:linear-gradient(to bottom,rgba(0,0,0,0.75) 0%,transparent 100%);
+  pointer-events:all;
+  position:relative;z-index:20;
+}
+.cam-btn-back{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(0,0,0,0.5);
+  border:1px solid rgba(255,255,255,0.15);
+  backdrop-filter:blur(8px);
+  color:#fff;font-size:20px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
+.cam-title-wrap{display:flex;flex-direction:column;align-items:center;gap:2px}
+.cam-title-main{font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+.cam-title-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:var(--c-cyan);letter-spacing:2px;
+}
+.cam-btn-flip{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(0,0,0,0.5);
+  border:1px solid rgba(255,255,255,0.15);
+  backdrop-filter:blur(8px);
+  color:#fff;font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  transition:transform 0.4s;
+}
+.cam-btn-flip.flipping{transform:rotateY(360deg)}
+
+/* Progress track */
+.progress-track{
+  position:absolute;
+  top:calc(var(--safe-top) + 62px);
+  left:0;right:0;
+  height:2px;background:rgba(255,255,255,0.08);
+  z-index:20;
+}
+.progress-bar{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,var(--c-cyan),var(--c-purple));
+  transition:width 0.4s cubic-bezier(.4,0,.2,1);
+  position:relative;
+}
+.progress-bar::after{
+  content:'';
+  position:absolute;right:0;top:-2px;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--c-cyan);
+  box-shadow:0 0 8px var(--c-cyan);
+}
+
+/* Segment strip */
+.seg-strip{
+  position:absolute;
+  top:calc(var(--safe-top) + 72px);
+  left:12px;right:12px;
+  height:28px;
+  display:flex;gap:3px;
+  align-items:center;
+  z-index:20;
+}
+.seg{
+  flex:1;height:8px;border-radius:3px;
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.05);
+  transition:all 0.3s cubic-bezier(.4,0,.2,1);
+  position:relative;overflow:hidden;
+}
+.seg.done{
+  background:rgba(0,229,255,0.35);
+  border-color:rgba(0,229,255,0.5);
+}
+.seg.current{
+  background:var(--c-cyan);
+  border-color:var(--c-cyan);
+  box-shadow:0 0 10px rgba(0,229,255,0.7);
+  animation:seg-pulse 0.8s ease-in-out infinite;
+}
+@keyframes seg-pulse{0%,100%{opacity:1}50%{opacity:0.6}}
+
+.seg-labels{
+  position:absolute;
+  top:calc(var(--safe-top) + 104px);
+  left:12px;right:12px;
+  display:flex;justify-content:space-between;
+  z-index:20;
+}
+.seg-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;color:rgba(255,255,255,0.25);
+  letter-spacing:0.5px;
+}
+
+/* Center viewfinder */
+.viewfinder{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:200px;height:200px;
+  z-index:15;pointer-events:none;
+}
+.vf-ring-outer{
+  position:absolute;inset:0;border-radius:50%;
+  border:1px solid rgba(0,229,255,0.25);
+  animation:vf-breathe 4s ease-in-out infinite;
+}
+.vf-ring-inner{
+  position:absolute;inset:20px;border-radius:50%;
+  border:1px solid rgba(0,229,255,0.15);
+}
+@keyframes vf-breathe{
+  0%,100%{transform:scale(1);border-color:rgba(0,229,255,0.25)}
+  50%{transform:scale(1.03);border-color:rgba(0,229,255,0.5)}
+}
+.vf-crosshair-h{
+  position:absolute;top:50%;left:10px;right:10px;
+  height:1px;background:rgba(0,229,255,0.3);
+  transform:translateY(-50%);
+}
+.vf-crosshair-v{
+  position:absolute;left:50%;top:10px;bottom:10px;
+  width:1px;background:rgba(0,229,255,0.3);
+  transform:translateX(-50%);
+}
+.vf-dot{
+  position:absolute;top:50%;left:50%;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--c-cyan);
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 16px var(--c-cyan),0 0 4px #fff;
+}
+/* Corner brackets */
+.vf-corner{position:absolute;width:16px;height:16px;}
+.vf-corner::before,.vf-corner::after{
+  content:'';position:absolute;background:var(--c-cyan);
+  opacity:0.8;
+}
+.vf-corner::before{top:0;width:100%;height:2px;}
+.vf-corner::after{top:0;height:100%;width:2px;}
+.vf-tl{top:6px;left:6px}
+.vf-tr{top:6px;right:6px;transform:scaleX(-1)}
+.vf-bl{bottom:6px;left:6px;transform:scaleY(-1)}
+.vf-br{bottom:6px;right:6px;transform:scale(-1)}
+
+/* Direction arrows */
+.dir-arrows{
+  position:absolute;top:50%;
+  left:0;right:0;
+  transform:translateY(-50%);
+  display:flex;justify-content:space-between;
+  padding:0 12px;z-index:15;pointer-events:none;
+}
+.dir-arrow{
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(0,0,0,0.5);
+  border:1px solid rgba(255,255,255,0.15);
+  backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;color:rgba(255,255,255,0.6);
+  opacity:0;transition:opacity 0.3s;
+}
+.dir-arrow.show{opacity:1}
+.dir-arrow.pulse{animation:arrow-pulse 1s ease-in-out infinite}
+@keyframes arrow-pulse{0%,100%{opacity:0.6}50%{opacity:1}}
+
+/* Level indicator */
+.level-wrap{
+  position:absolute;
+  bottom:196px;left:50%;
+  transform:translateX(-50%);
+  z-index:20;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.level-bar{
+  width:140px;height:3px;
+  background:rgba(255,255,255,0.1);
+  border-radius:2px;position:relative;
+  overflow:visible;
+}
+.level-indicator{
+  position:absolute;top:50%;left:50%;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--c-green);
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 8px var(--c-green);
+  transition:left 0.08s,background 0.2s,box-shadow 0.2s;
+}
+.level-indicator.tilted{
+  background:var(--c-orange);
+  box-shadow:0 0 8px var(--c-orange);
+}
+.level-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;color:rgba(255,255,255,0.3);
+  letter-spacing:2px;text-transform:uppercase;
+}
+
+/* HUD pill */
+.cam-hud{
+  position:absolute;
+  top:calc(var(--safe-top) + 108px);
+  left:50%;transform:translateX(-50%);
+  z-index:20;
+  display:flex;align-items:center;gap:6px;
+  background:rgba(0,0,0,0.6);
+  border:1px solid rgba(0,229,255,0.2);
+  border-radius:20px;padding:5px 14px;
+  backdrop-filter:blur(8px);
+}
+.hud-angle{
+  font-family:'JetBrains Mono',monospace;
+  font-size:14px;font-weight:500;
+  color:var(--c-cyan);letter-spacing:1px;
+}
+.hud-sep{color:rgba(255,255,255,0.2);font-size:12px}
+.hud-coverage{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:rgba(255,255,255,0.5);
+}
+
+/* Toast */
+.cam-toast{
+  position:absolute;
+  bottom:196px;
+  left:16px;right:16px;
+  background:rgba(0,0,0,0.8);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:14px;padding:12px 16px;
+  font-size:13px;color:rgba(255,255,255,0.85);
+  text-align:center;line-height:1.5;
+  backdrop-filter:blur(12px);
+  z-index:25;
+  transition:opacity 0.4s,transform 0.4s;
+  pointer-events:none;
+}
+.cam-toast.hidden{opacity:0;transform:translateY(8px)}
+
+/* Bottom controls */
+.cam-bottom{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:16px 28px calc(var(--safe-bottom) + 28px);
+  background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%);
+  display:flex;align-items:center;justify-content:space-between;
+  z-index:20;pointer-events:all;
+}
+
+/* Gallery thumb */
+.btn-gallery{
+  width:54px;height:54px;border-radius:14px;
+  background:var(--c-surface2);
+  border:1px solid var(--c-border2);
+  overflow:hidden;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.btn-gallery img{width:100%;height:100%;object-fit:cover;display:none}
+.btn-gallery-ph{font-size:22px;color:var(--c-text2)}
+.btn-gallery .badge{
+  position:absolute;top:4px;right:4px;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--c-cyan);color:#000;
+  font-size:9px;font-weight:800;
+  display:none;align-items:center;justify-content:center;
+}
+
+/* Shutter */
+.shutter-wrap{position:relative}
+.shutter{
+  width:84px;height:84px;border-radius:50%;
+  background:rgba(255,255,255,0.1);
+  border:3px solid rgba(255,255,255,0.5);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform 0.1s;
+  position:relative;
+}
+.shutter:active{transform:scale(0.94)}
+.shutter-inner{
+  width:64px;height:64px;border-radius:50%;
+  background:#fff;
+  transition:all 0.15s cubic-bezier(.4,0,.2,1);
+}
+.shutter.recording .shutter-inner{
+  width:32px;height:32px;
+  border-radius:8px;background:var(--c-red);
+}
+.shutter-glow{
+  position:absolute;inset:-3px;border-radius:50%;
+  border:2px solid transparent;
+  transition:border-color 0.3s,box-shadow 0.3s;
+}
+.shutter.ready .shutter-glow{
+  border-color:var(--c-cyan);
+  box-shadow:0 0 20px rgba(0,229,255,0.4);
+}
+/* Shot count arc */
+.shutter-count{
+  position:absolute;
+  bottom:-18px;left:50%;transform:translateX(-50%);
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:rgba(255,255,255,0.5);
+  white-space:nowrap;letter-spacing:1px;
+}
+
+/* Stats row */
+.cam-stats{
+  display:flex;flex-direction:column;
+  align-items:center;gap:4px;
+}
+.stat-val{font-size:20px;font-weight:800;color:#fff;line-height:1}
+.stat-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--c-text3);letter-spacing:1px;text-transform:uppercase}
+
+/* Flash */
+.flash-fx{
+  position:absolute;inset:0;background:#fff;
+  opacity:0;pointer-events:none;z-index:99;
+  transition:opacity 0.06s;
+}
+.flash-fx.go{opacity:0.8}
+
+/* Scan line effect */
+.scanline{
+  position:absolute;inset:0;pointer-events:none;z-index:5;
+  background:repeating-linear-gradient(
+    0deg,
+    transparent,transparent 2px,
+    rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px
+  );
+  opacity:0.5;
+}
+
+/* ══════════════════════════════════════════════════════
+   SCREEN: PREVIEW (Panorama Viewer)
+══════════════════════════════════════════════════════ */
+#s-preview{
+  background:var(--c-bg);
+  flex-direction:column;
+}
+
+.preview-header{
+  display:flex;align-items:center;gap:10px;
+  padding:calc(var(--safe-top) + 14px) 16px 14px;
+  background:var(--c-surface);
+  border-bottom:1px solid var(--c-border);
+  flex-shrink:0;position:relative;z-index:10;
+}
+.preview-back{
+  width:38px;height:38px;border-radius:10px;
+  background:var(--c-surface2);
+  border:1px solid var(--c-border2);
+  color:#fff;font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;
+}
+.preview-title-wrap{flex:1}
+.preview-title{font-size:16px;font-weight:700;letter-spacing:-0.3px}
+.preview-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--c-text3);margin-top:2px}
+.preview-actions{display:flex;gap:8px}
+.preview-btn{
+  height:36px;padding:0 14px;border-radius:10px;
+  border:1px solid var(--c-border2);
+  background:var(--c-surface2);
+  color:var(--c-text2);
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:600;
+  cursor:pointer;display:flex;align-items:center;gap:6px;
+  transition:all 0.15s;
+}
+.preview-btn.primary{
+  background:linear-gradient(135deg,var(--c-cyan),var(--c-purple));
+  border-color:transparent;color:#000;
+}
+.preview-btn:active{opacity:0.8;transform:scale(0.97)}
+
+.viewer-wrap{
+  flex:1;background:#000;
+  position:relative;overflow:hidden;
+  touch-action:none;
+}
+#panoCanvas{
+  position:absolute;top:0;left:0;
+  cursor:grab;
+  transition:none;
+}
+#panoCanvas:active{cursor:grabbing}
+
+.viewer-ui{
+  position:absolute;inset:0;pointer-events:none;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:12px;
+}
+.viewer-compass{
+  align-self:center;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;color:rgba(255,255,255,0.4);
+  letter-spacing:3px;
+  background:rgba(0,0,0,0.5);
+  border-radius:20px;padding:4px 12px;
+}
+.viewer-hint{
+  align-self:center;
+  font-size:12px;color:rgba(255,255,255,0.4);
+  background:rgba(0,0,0,0.5);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:20px;padding:6px 14px;
+  display:flex;align-items:center;gap:6px;
+}
+.hint-arrow{animation:hint-sway 2s ease-in-out infinite}
+@keyframes hint-sway{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+
+/* Thumbnail strip */
+.thumb-strip{
+  height:86px;background:var(--c-surface);
+  border-top:1px solid var(--c-border);
+  display:flex;align-items:center;
+  padding:0 10px;gap:6px;
+  overflow-x:auto;flex-shrink:0;
+  -webkit-overflow-scrolling:touch;
+  scroll-snap-type:x mandatory;
+}
+.thumb-strip::-webkit-scrollbar{display:none}
+.thumb{
+  height:66px;min-width:102px;
+  border-radius:8px;overflow:hidden;
+  border:2px solid transparent;
+  cursor:pointer;flex-shrink:0;
+  position:relative;
+  scroll-snap-align:start;
+  transition:border-color 0.2s;
+}
+.thumb.sel{border-color:var(--c-cyan)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb-deg{
+  position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,0.75);border-radius:4px;
+  padding:1px 5px;
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:rgba(255,255,255,0.8);white-space:nowrap;
+}
+
+/* ══════════════════════════════════════════════════════
+   SCREEN: GALLERY
+══════════════════════════════════════════════════════ */
+#s-gallery{
+  background:var(--c-bg);
+  flex-direction:column;
+}
+.gallery-header{
+  display:flex;align-items:center;gap:10px;
+  padding:calc(var(--safe-top) + 14px) 16px 14px;
+  background:var(--c-surface);
+  border-bottom:1px solid var(--c-border);
+  flex-shrink:0;
+}
+.gallery-back{
+  width:38px;height:38px;border-radius:10px;
+  background:var(--c-surface2);border:1px solid var(--c-border2);
+  color:#fff;font-size:18px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+}
+.gallery-title{flex:1;font-size:17px;font-weight:700;letter-spacing:-0.3px}
+.gallery-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--c-text3)}
+
+.gallery-grid{
+  flex:1;overflow-y:auto;padding:16px;
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  -webkit-overflow-scrolling:touch;
+}
+.gal-item{
+  aspect-ratio:2/1;border-radius:12px;
+  overflow:hidden;cursor:pointer;
+  position:relative;
+  border:1px solid var(--c-border);
+  background:var(--c-surface);
+  transition:transform 0.15s;
+}
+.gal-item:active{transform:scale(0.97)}
+.gal-item img{width:100%;height:100%;object-fit:cover;display:block}
+.gal-info{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);
+  padding:16px 10px 8px;
+}
+.gal-date{font-size:10px;color:rgba(255,255,255,0.7);font-weight:600}
+.gal-shots{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.4);margin-top:2px}
+
+.gallery-empty{
+  grid-column:1/-1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:12px;padding:60px 20px;color:var(--c-text3);text-align:center;
+}
+.gallery-empty-icon{font-size:56px;opacity:0.3}
+
+/* ══════════════════════════════════════════════════════
+   GLOBAL OVERLAYS
+══════════════════════════════════════════════════════ */
+
+/* Loading */
+.loading{
+  position:fixed;inset:0;z-index:999;
+  background:rgba(5,5,8,0.92);
+  display:none;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:16px;backdrop-filter:blur(10px);
+}
+.loading.show{display:flex}
+.spinner{
+  width:48px;height:48px;border-radius:50%;
+  border:2px solid rgba(0,229,255,0.15);
+  border-top-color:var(--c-cyan);
+  animation:spin 0.7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;color:var(--c-text2);letter-spacing:2px;
+}
+
+/* Notification */
+.notif{
+  position:fixed;
+  bottom:calc(var(--safe-bottom) + 24px);
+  left:50%;transform:translateX(-50%) translateY(80px);
+  z-index:998;
+  background:var(--c-surface2);
+  border:1px solid var(--c-border2);
+  border-radius:14px;padding:12px 20px;
+  font-size:13px;color:#fff;
+  white-space:nowrap;
+  transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  pointer-events:none;
+  display:flex;align-items:center;gap:8px;
+  backdrop-filter:blur(12px);
+  max-width:calc(100vw - 32px);
+  white-space:normal;text-align:center;
+}
+.notif.show{transform:translateX(-50%) translateY(0)}
+.notif.success{border-color:rgba(0,230,118,0.4);color:var(--c-green)}
+.notif.error{border-color:rgba(255,23,68,0.4);color:var(--c-red)}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
+</style>
 </head>
 <body>
 
-    <div id="intro-overlay">
-        <div class="intro-text" id="intro-msg">...</div>
-        <button id="start-btn" onclick="enterSite()">🚀 Поехали!</button>
+<!-- ══ HOME ══ -->
+<div class="screen active" id="s-home">
+  <div class="home-noise"></div>
+  <div class="home-glow"></div>
+  <div class="home-inner">
+
+    <div class="hero-orb">
+      <svg viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- outer dashed ring -->
+        <circle class="orb-spin" cx="55" cy="55" r="50"
+          stroke="rgba(0,229,255,0.25)" stroke-width="1"
+          stroke-dasharray="8 5" transform-origin="55 55"/>
+        <!-- middle ring -->
+        <circle cx="55" cy="55" r="36" stroke="rgba(162,89,255,0.3)" stroke-width="1"/>
+        <!-- inner fill -->
+        <circle class="orb-pulse" cx="55" cy="55" r="20"
+          fill="rgba(0,229,255,0.05)" stroke="rgba(0,229,255,0.5)" stroke-width="1.5"/>
+        <!-- crosshair -->
+        <line x1="55" y1="10" x2="55" y2="100" stroke="rgba(0,229,255,0.2)" stroke-width="1"/>
+        <line x1="10" y1="55" x2="100" y2="55" stroke="rgba(0,229,255,0.2)" stroke-width="1"/>
+        <!-- center dot -->
+        <circle cx="55" cy="55" r="4" fill="#00e5ff"/>
+        <circle cx="55" cy="55" r="8" fill="rgba(0,229,255,0.2)"/>
+        <!-- tick marks -->
+        <line x1="55" y1="5" x2="55" y2="12" stroke="rgba(0,229,255,0.5)" stroke-width="2"/>
+        <line x1="55" y1="98" x2="55" y2="105" stroke="rgba(0,229,255,0.5)" stroke-width="2"/>
+        <line x1="5" y1="55" x2="12" y2="55" stroke="rgba(0,229,255,0.5)" stroke-width="2"/>
+        <line x1="98" y1="55" x2="105" y2="55" stroke="rgba(0,229,255,0.5)" stroke-width="2"/>
+        <!-- 45° ticks -->
+        <line x1="20" y1="20" x2="25" y2="25" stroke="rgba(162,89,255,0.4)" stroke-width="1.5"/>
+        <line x1="90" y1="20" x2="85" y2="25" stroke="rgba(162,89,255,0.4)" stroke-width="1.5"/>
+        <line x1="20" y1="90" x2="25" y2="85" stroke="rgba(162,89,255,0.4)" stroke-width="1.5"/>
+        <line x1="90" y1="90" x2="85" y2="85" stroke="rgba(162,89,255,0.4)" stroke-width="1.5"/>
+      </svg>
     </div>
 
-    <div class="container" id="main-menu">
-        <h1 style="text-align:center; color: #4A148C; margin-bottom: 40px;">Учебный Портал 🎓</h1>
-        
-        <h2 style="border-left: 5px solid orange; padding-left: 10px;">📚 Русский Язык</h2>
-        <div class="grid">
-            <div class="card" onclick="openPancakes()">
-                <span class="tag bg-ru">Фонетика</span>
-                <span class="card-emoji">🥞</span>
-                <h3>Печем Блинчики</h3>
-                <p>Ударения, Перенос, Звуки</p>
-            </div>
-            <div class="card" onclick="openProstokvashino()">
-                <span class="tag bg-ru">Грамматика</span>
-                <span class="card-emoji">🏡</span>
-                <h3>Простоквашино</h3>
-                <p>Падежи и окончания</p>
-            </div>
-        </div>
+    <h1 class="hero-title">ПАНОРАМА<br>360°</h1>
+    <p class="hero-sub">Camera · Gyro · Stitch</p>
 
-        <h2 style="border-left: 5px solid cyan; padding-left: 10px; margin-top: 40px;">🧮 Математика</h2>
-        <div class="grid">
-            <div class="card" onclick="openMath(1)">
-                <span class="tag bg-math">1 Класс</span>
-                <span class="card-emoji">🚀</span>
-                <h3>Космос</h3>
-                <p>Счет до 20</p>
-            </div>
-            <div class="card" onclick="openMath(2)">
-                <span class="tag bg-math">2 Класс</span>
-                <span class="card-emoji">🦁</span>
-                <h3>Джунгли</h3>
-                <p>Таблица умножения</p>
-            </div>
-            <div class="card" onclick="openMath(3)">
-                <span class="tag bg-math">3 Класс</span>
-                <span class="card-emoji">🌊</span>
-                <h3>Океан</h3>
-                <p>Деление и примеры</p>
-            </div>
-        </div>
+    <button class="btn-main" onclick="startCamera()">
+      <span class="btn-icon">📷</span>
+      Начать съёмку
+    </button>
+    <button class="btn-secondary" onclick="showGallery()">
+      🗂&nbsp;&nbsp;Открыть галерею
+    </button>
+
+    <div class="features">
+      <div class="feat-card">
+        <div class="feat-icon">🧭</div>
+        <div class="feat-title">Гироскоп-гид</div>
+        <div class="feat-desc">Авто-направление по датчику</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">⚡</div>
+        <div class="feat-title">Авто-съёмка</div>
+        <div class="feat-desc">Снимает при повороте</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔭</div>
+        <div class="feat-title">12 сегментов</div>
+        <div class="feat-desc">Полные 360° покрытие</div>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">💾</div>
+        <div class="feat-title">Сохранение</div>
+        <div class="feat-desc">JPEG + просмотр</div>
+      </div>
     </div>
 
-    <div id="game-pancakes" class="game-modal theme-pancakes">
-        <button class="close-btn" onclick="exitGame()">✖ Выход</button>
-        
-        <div id="pan-intro-screen" class="char-intro">
-            <div class="char-emoji">👨‍🍳</div>
-            <div class="speech-bubble">
-                <b>Привет! Я шеф-повар Коржик!</b><br><br>
-                Сегодня у нас много заказов на вкусные блинчики. Но чтобы блин не подгорел, тебе нужно правильно выполнить задания.<br><br>
-                Выбирай правильные ударения, переноси слова и угадывай звуки. Поможешь мне на кухне?
-            </div>
-            <button class="start-game-btn" onclick="showPanMenu()">Помочь повару!</button>
-        </div>
+  </div>
+</div>
 
-        <div id="pan-menu" style="text-align:center; display:none; margin-top: 80px;">
-            <h1 style="color:#E65100">Блинная Мастерская</h1>
-            <p style="font-size:1.3rem;">Какое тесто замешиваем?</p>
-            <button class="pan-btn" onclick="initPanGame('stress')">Ударения</button>
-            <button class="pan-btn" onclick="initPanGame('hyphen')">Перенос слов</button>
-            <button class="pan-btn" onclick="initPanGame('sounds')">Звуки</button>
-        </div>
+<!-- ══ PERMISSION ══ -->
+<div class="screen" id="s-perm">
+  <div class="perm-icon">🔐</div>
+  <h2 class="perm-title">Нужны разрешения</h2>
+  <p class="perm-body">Приложению нужен доступ к камере и датчикам для съёмки 360° панорамы</p>
+  <div class="perm-list">
+    <div class="perm-item">
+      <span class="perm-item-icon">📷</span>
+      <span>Камера — для съёмки кадров</span>
+    </div>
+    <div class="perm-item">
+      <span class="perm-item-icon">🧭</span>
+      <span>Датчики движения — для ориентации</span>
+    </div>
+  </div>
+  <button class="btn-main" style="max-width:280px;margin-top:8px" onclick="requestPerms()">
+    ✓&nbsp;&nbsp;Разрешить доступ
+  </button>
+</div>
 
-        <div id="pan-game" style="display:none; text-align:center; margin-top: 20px;">
-            <h2 style="margin: 5px;">Спечено блинов: <span id="pan-score" style="color:#E65100">0</span></h2>
-            
-            <div class="skillet">
-                <div class="skillet-handle"></div>
-                <div class="pan-plate">
-                    <div id="pan-content">Загрузка...</div>
-                </div>
-            </div>
+<!-- ══ CAMERA ══ -->
+<div class="screen" id="s-cam">
+  <video id="videoEl" autoplay playsinline muted></video>
+  <div class="scanline"></div>
 
-            <div id="pan-feedback" style="height: 30px; font-weight:bold; font-size:1.4rem;"></div>
-            <div id="pan-controls" style="margin-top:15px;"></div>
-            
-            <button class="pan-btn" id="pan-next-btn" style="display:none; margin-top:20px; background:#4CAF50; color:white; border-color:#2E7D32;" onclick="nextPanQuestion()">След. блин ➡</button>
-            <button class="pan-btn" id="pan-end-btn" style="display:none; margin-top:20px;" onclick="exitGame()">Вернуться в меню</button>
-        </div>
+  <!-- Flash effect -->
+  <div class="flash-fx" id="flashFx"></div>
+
+  <!-- Progress -->
+  <div class="progress-track">
+    <div class="progress-bar" id="progBar"></div>
+  </div>
+
+  <!-- Segment strip -->
+  <div class="seg-strip" id="segStrip"></div>
+  <div class="seg-labels">
+    <span class="seg-label">0°</span>
+    <span class="seg-label">90°</span>
+    <span class="seg-label">180°</span>
+    <span class="seg-label">270°</span>
+    <span class="seg-label">360°</span>
+  </div>
+
+  <!-- Top bar -->
+  <div class="cam-topbar">
+    <div class="cam-btn-back" onclick="exitCamera()">‹</div>
+    <div class="cam-title-wrap">
+      <div class="cam-title-main">Панорама</div>
+      <div class="cam-title-sub" id="camTitleSub">ГОТОВ К СЪЁМКЕ</div>
+    </div>
+    <div class="cam-btn-flip" id="btnFlip" onclick="flipCam()">⟳</div>
+  </div>
+
+  <!-- HUD pill -->
+  <div class="cam-hud">
+    <span class="hud-angle" id="hudAngle">0°</span>
+    <span class="hud-sep">·</span>
+    <span class="hud-coverage" id="hudCov">0 / 12</span>
+  </div>
+
+  <!-- Viewfinder -->
+  <div class="viewfinder">
+    <div class="vf-ring-outer"></div>
+    <div class="vf-ring-inner"></div>
+    <div class="vf-crosshair-h"></div>
+    <div class="vf-crosshair-v"></div>
+    <div class="vf-dot"></div>
+    <div class="vf-corner vf-tl"></div>
+    <div class="vf-corner vf-tr"></div>
+    <div class="vf-corner vf-bl"></div>
+    <div class="vf-corner vf-br"></div>
+  </div>
+
+  <!-- Direction arrows -->
+  <div class="dir-arrows">
+    <div class="dir-arrow" id="arrowL">◀</div>
+    <div class="dir-arrow" id="arrowR">▶</div>
+  </div>
+
+  <!-- Level -->
+  <div class="level-wrap">
+    <div class="level-bar">
+      <div class="level-indicator" id="levelDot"></div>
+    </div>
+    <div class="level-label">горизонталь</div>
+  </div>
+
+  <!-- Toast -->
+  <div class="cam-toast" id="camToast">
+    📱 Медленно поворачивайте телефон вправо
+  </div>
+
+  <!-- Bottom controls -->
+  <div class="cam-bottom">
+    <div class="btn-gallery" id="btnGallery" onclick="showGallery()">
+      <img id="thumbImg" alt="">
+      <div class="btn-gallery-ph">🗂</div>
+      <div class="badge" id="galBadge"></div>
     </div>
 
-    <div id="game-prosto" class="game-modal theme-prosto">
-        <button class="close-btn" onclick="exitGame()">✖ Выход</button>
-
-        <div id="prosto-intro-screen" class="char-intro">
-            <div class="char-emoji">🐱</div>
-            <div class="speech-bubble">
-                <b>Мяу! Я кот Матроскин!</b><br><br>
-                Мы в Простоквашино совсем запутались. Шарик пишет с ошибками, Печкин посылки путает, а Дядя Федор не может правильное слово подобрать.<br><br>
-                Вставь правильные окончания в предложения, чтобы у нас снова был порядок!
-            </div>
-            <button class="start-game-btn" onclick="initProstokvashino()">Навести порядок!</button>
-        </div>
-
-        <div id="prosto-game-screen" class="prosto-board" style="display:none;">
-            <h1 style="color:#5D4037; margin-top:0;">Простоквашино</h1>
-            <div style="font-size:5rem; margin:10px;">
-                <span id="pr-emoji">🐱</span>
-            </div>
-            <div id="pr-q" style="font-size:1.4rem; margin:20px 0; background:white; padding:15px; border-radius:10px;">
-                Загрузка...
-            </div>
-            <div id="pr-opts"></div>
-            <div id="pr-msg" style="height:30px; margin-top:10px; font-weight:bold;"></div>
-            <button id="pr-restart" class="pan-btn" style="display:none;" onclick="openProstokvashino()">Сыграть еще раз</button>
-        </div>
+    <div class="shutter-wrap">
+      <div class="shutter ready" id="shutter" onclick="captureManual()">
+        <div class="shutter-glow"></div>
+        <div class="shutter-inner"></div>
+      </div>
+      <div class="shutter-count" id="shutterCount">0 / 12</div>
     </div>
 
-    <div id="game-math" class="game-modal theme-math">
-        <button class="close-btn" onclick="exitGame()">✖ Выход</button>
-
-        <div id="math-intro-screen" class="char-intro" style="color:#333;">
-            <div class="char-emoji" id="math-intro-emoji">🚀</div>
-            <div class="speech-bubble" id="math-intro-text">
-                Текст
-            </div>
-            <button class="start-game-btn" onclick="startMathGame()">Я готов!</button>
-        </div>
-
-        <div id="math-game-screen" class="math-wrapper" style="display:none;">
-            <div class="math-card">
-                <div id="math-icon" style="font-size:5rem;">🚀</div>
-                <h2>Реши пример:</h2>
-                <div id="math-q" style="font-size:4rem; font-weight:bold; margin:20px 0;">2 + 2</div>
-                <div id="math-opts"></div>
-                <div id="math-msg" style="height:30px; font-weight:bold; margin-top:10px;"></div>
-            </div>
-        </div>
+    <div class="cam-stats">
+      <div class="stat-val" id="statPct">0%</div>
+      <div class="stat-label">покрытие</div>
     </div>
+  </div>
+</div>
 
-    <script>
-        const wait = ms => new Promise(r => setTimeout(r, ms));
-        
-        async function playIntro() {
-            const msg = document.getElementById('intro-msg');
-            msg.innerText = "Привет! 👋";
-            msg.classList.add('intro-visible');
-            await wait(1500);
-            msg.classList.remove('intro-visible');
-            await wait(500);
-            msg.innerText = "Добро пожаловать!";
-            msg.classList.add('intro-visible');
-            await wait(1500);
-            msg.style.display = 'none';
-            document.getElementById('start-btn').classList.add('show');
-        }
+<!-- ══ PREVIEW ══ -->
+<div class="screen" id="s-preview">
+  <div class="preview-header">
+    <div class="preview-back" onclick="closePreview()">‹</div>
+    <div class="preview-title-wrap">
+      <div class="preview-title">Просмотр панорамы</div>
+      <div class="preview-sub" id="previewSub">— кадров</div>
+    </div>
+    <div class="preview-actions">
+      <button class="preview-btn" onclick="savePano()">💾 Сохранить</button>
+      <button class="preview-btn primary" onclick="sharePano()">↗ Поделиться</button>
+    </div>
+  </div>
 
-        function enterSite() {
-            document.getElementById('intro-overlay').style.opacity = 0;
-            setTimeout(() => {
-                document.getElementById('intro-overlay').style.display = 'none';
-                document.getElementById('main-menu').style.display = 'block';
-                setTimeout(() => document.getElementById('main-menu').style.opacity = 1, 100);
-            }, 500);
-        }
+  <div class="viewer-wrap" id="viewerWrap">
+    <canvas id="panoCanvas"></canvas>
+    <div class="viewer-ui">
+      <div class="viewer-compass" id="viewerCompass">W · · · N · · · E · · · S · · · W</div>
+      <div class="viewer-hint">
+        <span>←</span>
+        <span>Тяните для обзора</span>
+        <span class="hint-arrow">→</span>
+      </div>
+    </div>
+  </div>
 
-        window.onload = playIntro;
+  <div class="thumb-strip" id="thumbStrip"></div>
+</div>
 
-        function exitGame() {
-            document.querySelectorAll('.game-modal').forEach(m => m.style.display = 'none');
-        }
+<!-- ══ GALLERY ══ -->
+<div class="screen" id="s-gallery">
+  <div class="gallery-header">
+    <div class="gallery-back" onclick="closeGallery()">‹</div>
+    <div class="gallery-title">Галерея</div>
+    <div class="gallery-count" id="galCount"></div>
+  </div>
+  <div class="gallery-grid" id="galGrid">
+    <div class="gallery-empty">
+      <div class="gallery-empty-icon">🌐</div>
+      <div style="font-size:15px;font-weight:700;color:var(--c-text2)">Нет панорам</div>
+      <div style="font-size:12px">Снимите первую 360° панораму</div>
+    </div>
+  </div>
+</div>
 
-        const panDB = {
-            stress: [
-                {w:"ТОРТЫ", i:1}, {w:"БАНТЫ", i:1}, {w:"ШАРФЫ", i:1},
-                {w:"ЗВОНИТ", i:4}, {w:"АРБУЗ", i:3}, {w:"АЛФАВИТ", i:5},
-                {w:"МАГАЗИН", i:5}, {w:"СТОЛЯР", i:4}, {w:"ПОРТФЕЛЬ", i:5},
-                {w:"ЩАВЕЛЬ", i:3}, {w:"ДОКУМЕНТ", i:5}, {w:"ИНСТРУМЕНТ", i:7}
-            ],
-            hyphen: [
-                {w:"МАЙКА", q:"МАЙ-КА", right:true},
-                {w:"ОСЕНЬ", q:"О-СЕНЬ", right:false},
-                {w:"ВАННА", q:"ВАН-НА", right:true},
-                {w:"УРОК", q:"У-РОК", right:false},
-                {w:"ПОДЪЕЗД", q:"ПОДЪ-ЕЗД", right:true},
-                {w:"ЧАЙНИК", q:"ЧАЙ-НИК", right:true},
-                {w:"ЮЛА", q:"Ю-ЛА", right:false},
-                {w:"КОЛЬЦО", q:"КОЛЬ-ЦО", right:true}
-            ],
-            sounds: [
-                {q:"ЛЫЖИ: Звук [Ж]", o:["🔵 Всегда Твердый", "🟢 Мягкий"], c:0},
-                {q:"ЧАЩА: Звук [Ч']", o:["🔵 Твердый", "🟢 Всегда Мягкий"], c:1},
-                {q:"ЙОД: Звук [Й']", o:["🔵 Твердый", "🟢 Всегда Мягкий"], c:1},
-                {q:"ШИНА: Звук [Ш]", o:["🔵 Всегда Твердый", "🟢 Мягкий"], c:0},
-                {q:"МЯЧ: Звук [М']", o:["🔵 Твердый", "🟢 Мягкий"], c:1},
-                {q:"ЛЕС: Звук [Л']", o:["🔵 Твердый", "🟢 Мягкий"], c:1},
-                {q:"СОК: Звук [С]", o:["🔵 Твердый", "🟢 Мягкий"], c:0}
-            ]
-        };
+<!-- ══ LOADING ══ -->
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <div class="loading-label" id="loadingLabel">ЗАГРУЗКА</div>
+</div>
 
-        let panQueue = []; 
-        let panCurrent = 0;
-        let panScoreVal = 0;
-        let panMode = '';
+<!-- ══ NOTIFICATION ══ -->
+<div class="notif" id="notif"></div>
 
-        function openPancakes() {
-            document.getElementById('game-pancakes').style.display = 'flex';
-            document.getElementById('pan-intro-screen').style.display = 'block';
-            document.getElementById('pan-menu').style.display = 'none';
-            document.getElementById('pan-game').style.display = 'none';
-        }
+<script>
+/* ═══════════════════════════════════════════════════
+   CONSTANTS
+═══════════════════════════════════════════════════ */
+const SEGS      = 12;
+const SEG_DEG   = 360 / SEGS;   // 30°
+const AUTO_DIST = 28;            // auto-capture every N degrees
 
-        function showPanMenu() {
-            document.getElementById('pan-intro-screen').style.display = 'none';
-            document.getElementById('pan-menu').style.display = 'block';
-        }
+/* ═══════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════ */
+let stream       = null;
+let camFacing    = 'environment';
+let gyroStarted  = false;
+let fakeMode     = false;
+let fakeAngle    = 0;
+let curAngle     = 0;
+let startAlpha   = null;
+let lastCapAngle = -999;
+let capSegs      = new Set();
+let capFrames    = [];   // indexed by segment
+let panoramas    = [];
+let curPanoIdx   = -1;
+let toastTimer   = null;
 
-        function initPanGame(mode) {
-            panMode = mode;
-            panQueue = [...panDB[mode]].sort(() => Math.random() - 0.5);
-            panCurrent = 0;
-            panScoreVal = 0;
-            
-            document.getElementById('pan-score').innerText = '0';
-            document.getElementById('pan-menu').style.display = 'none';
-            document.getElementById('pan-game').style.display = 'block';
-            document.getElementById('pan-end-btn').style.display = 'none';
-            
-            showPanQuestion();
-        }
+/* ═══════════════════════════════════════════════════
+   SCREEN ROUTER
+═══════════════════════════════════════════════════ */
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
 
-        function showPanQuestion() {
-            const content = document.getElementById('pan-content');
-            const controls = document.getElementById('pan-controls');
-            const feedback = document.getElementById('pan-feedback');
-            const nextBtn = document.getElementById('pan-next-btn');
+/* ═══════════════════════════════════════════════════
+   LOADING
+═══════════════════════════════════════════════════ */
+function showLoad(msg) {
+  document.getElementById('loadingLabel').textContent = (msg || 'ЗАГРУЗКА').toUpperCase();
+  document.getElementById('loading').classList.add('show');
+}
+function hideLoad() {
+  document.getElementById('loading').classList.remove('show');
+}
 
-            feedback.innerText = "";
-            controls.innerHTML = "";
-            nextBtn.style.display = 'none';
+/* ═══════════════════════════════════════════════════
+   NOTIFICATION
+═══════════════════════════════════════════════════ */
+let notifTimer;
+function notify(msg, type='') {
+  const el = document.getElementById('notif');
+  el.textContent = msg;
+  el.className = 'notif ' + type + ' show';
+  clearTimeout(notifTimer);
+  notifTimer = setTimeout(() => el.classList.remove('show'), 3000);
+}
 
-            if (panCurrent >= panQueue.length) {
-                content.innerText = "Готово!";
-                feedback.innerText = `Испечено: ${panScoreVal} из ${panQueue.length}`;
-                feedback.style.color = "#3E2723";
-                document.getElementById('pan-end-btn').style.display = 'inline-block';
-                return;
-            }
+/* ═══════════════════════════════════════════════════
+   TOAST (inside camera)
+═══════════════════════════════════════════════════ */
+function toast(msg) {
+  const el = document.getElementById('camToast');
+  el.textContent = msg;
+  el.classList.remove('hidden');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.add('hidden'), 4500);
+}
 
-            const task = panQueue[panCurrent];
+/* ═══════════════════════════════════════════════════
+   START CAMERA
+═══════════════════════════════════════════════════ */
+async function startCamera() {
+  showLoad('ЗАПРОС КАМЕРЫ');
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: camFacing, width: { ideal: 1920 }, height: { ideal: 1080 } },
+      audio: false
+    });
+    hideLoad();
+    launchCameraScreen();
+  } catch(e) {
+    hideLoad();
+    show('s-perm');
+  }
+}
 
-            if (panMode === 'stress') {
-                let html = "";
-                const vowels = "АЕЁИОУЫЭЮЯ";
-                for(let i=0; i<task.w.length; i++) {
-                    let char = task.w[i];
-                    if (vowels.includes(char)) {
-                        html += `<span class="vowel-btn" onclick="checkPanAnswer(this, ${i}, ${task.i})">${char}</span>`;
-                    } else {
-                        html += `<span class="cons-text">${char}</span>`;
-                    }
-                }
-                content.innerHTML = html + "<br><span style='font-size:1.1rem; color:#5D4037; font-weight:normal;'>Нажми на гласную</span>";
-            } else if (panMode === 'hyphen') {
-                content.innerHTML = `${task.q}<br><span style='font-size:1.1rem; color:#5D4037; font-weight:normal;'>Верно?</span>`;
-                controls.innerHTML = `
-                    <button class="pan-btn" onclick="checkPanAnswer(this, true, ${task.right})">✅ Да</button>
-                    <button class="pan-btn" onclick="checkPanAnswer(this, false, ${task.right})">❌ Нет</button>
-                `;
-            } else {
-                content.innerText = task.q;
-                task.o.forEach((opt, idx) => {
-                    controls.innerHTML += `<button class="pan-btn" onclick="checkPanAnswer(this, ${idx}, ${task.c})">${opt}</button>`;
-                });
-            }
-        }
+async function requestPerms() {
+  showLoad('ЗАПРОС ДОСТУПА');
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: camFacing }, audio: false });
+    // iOS gyro permission
+    if (typeof DeviceOrientationEvent !== 'undefined' && DeviceOrientationEvent.requestPermission) {
+      try { await DeviceOrientationEvent.requestPermission(); } catch(e) {}
+    }
+    hideLoad();
+    launchCameraScreen();
+  } catch(e) {
+    hideLoad();
+    notify('❌ Нет доступа к камере. Разрешите в настройках.', 'error');
+  }
+}
 
-        function checkPanAnswer(element, selected, correct) {
-            if(document.getElementById('pan-next-btn').style.display === 'inline-block') return;
+function launchCameraScreen() {
+  const video = document.getElementById('videoEl');
+  video.srcObject = stream;
+  video.play();
 
-            const feedback = document.getElementById('pan-feedback');
+  resetCapture();
+  buildSegStrip();
+  show('s-cam');
+  initGyro();
+  toast('📱 Медленно поворачивайте вправо — съёмка начнётся автоматически');
+  updateCamUI();
+}
 
-            if (selected === correct) {
-                panScoreVal++;
-                document.getElementById('pan-score').innerText = panScoreVal;
-                feedback.innerText = "Идеально! Вкусный блин! 🥞";
-                feedback.style.color = "#2E7D32";
-                if(panMode === 'stress') {
-                    element.style.background = "#4CAF50";
-                    element.style.color = "white";
-                }
-                if(panMode !== 'stress') element.style.background = "#C8E6C9";
-            } else {
-                feedback.innerText = "Ой! Блинчик подгорел! 🔥";
-                feedback.style.color = "#D32F2F";
-                if(panMode === 'stress') {
-                    element.style.background = "#F44336";
-                    element.style.color = "white";
-                }
-                if(panMode !== 'stress') element.style.background = "#FFCDD2";
-            }
+function exitCamera() {
+  stopStream();
+  window.removeEventListener('deviceorientation', onGyro);
+  show('s-home');
+}
 
-            document.getElementById('pan-next-btn').style.display = 'inline-block';
-        }
+function stopStream() {
+  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+}
 
-        function nextPanQuestion() {
-            panCurrent++;
-            showPanQuestion();
-        }
+/* ═══════════════════════════════════════════════════
+   FLIP CAMERA
+═══════════════════════════════════════════════════ */
+async function flipCam() {
+  const btn = document.getElementById('btnFlip');
+  btn.classList.add('flipping');
+  setTimeout(() => btn.classList.remove('flipping'), 400);
+  camFacing = camFacing === 'environment' ? 'user' : 'environment';
+  if (stream) {
+    stream.getTracks().forEach(t => t.stop());
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: camFacing }, audio: false });
+      document.getElementById('videoEl').srcObject = stream;
+    } catch(e) { camFacing = camFacing === 'environment' ? 'user' : 'environment'; }
+  }
+}
 
-        const prostoDB = [
-            {t:"Матроскин любит свою...", a:"КоровУ", b:"КоровА", e:"🐱"},
-            {t:"Шарик купил фото...", a:"РужьЁ", b:"РужьЯ", e:"📷"},
-            {t:"Печкин принес...", a:"ПосылкУ", b:"ПосылкА", e:"📦"},
-            {t:"Дядя Федор ест...", a:"БутерброД", b:"БутерброТ", e:"🥪"},
-            {t:"Галчонок спрашивает:...", a:"КтО там?", b:"КтА там?", e:"🦅"},
-            {t:"Мама надела...", a:"ПлатьЕ", b:"ПлатьЮ", e:"👗"},
-            {t:"Папа чинит...", a:"МашинУ", b:"МашинА", e:"🚗"},
-            {t:"Трактор Митя...", a:"ЕдЕТ", b:"ЕдУТ", e:"🚜"},
-            {t:"Корова дает...", a:"МолокО", b:"МолокА", e:"🥛"},
-            {t:"В лесу растут...", a:"ГрибЫ", b:"ГрибА", e:"🍄"},
-            {t:"Печкин едет на...", a:"ВелосипедЕ", b:"ВелосипедУ", e:"🚲"},
-            {t:"Шарик рисует...", a:"КарандашОМ", b:"КарандашЕМ", e:"✏️"},
-            {t:"Мы идем гулять в...", a:"ЛеС", b:"ЛеСУ", e:"🌲"},
-            {t:"Матроскин играет на...", a:"ГитарЕ", b:"ГитарИ", e:"🎸"},
-            {t:"Печка топится...", a:"ДровамИ", b:"ДровамЕ", e:"🔥"}
-        ];
-        
-        let prostoQueue = [];
-        let prostoCurr = 0;
+/* ═══════════════════════════════════════════════════
+   RESET
+═══════════════════════════════════════════════════ */
+function resetCapture() {
+  capSegs.clear();
+  capFrames = [];
+  lastCapAngle = -999;
+  startAlpha = null;
+  curAngle = 0;
+  fakeAngle = 0;
+}
 
-        function openProstokvashino() {
-            document.getElementById('game-prosto').style.display = 'flex';
-            document.getElementById('prosto-intro-screen').style.display = 'block';
-            document.getElementById('prosto-game-screen').style.display = 'none';
-        }
+function buildSegStrip() {
+  const strip = document.getElementById('segStrip');
+  strip.innerHTML = '';
+  for (let i = 0; i < SEGS; i++) {
+    const d = document.createElement('div');
+    d.className = 'seg';
+    d.id = 'seg_' + i;
+    strip.appendChild(d);
+  }
+}
 
-        function initProstokvashino() {
-            document.getElementById('prosto-intro-screen').style.display = 'none';
-            document.getElementById('prosto-game-screen').style.display = 'block';
-            
-            prostoQueue = [...prostoDB].sort(() => Math.random() - 0.5);
-            prostoCurr = 0;
-            document.getElementById('pr-restart').style.display = 'none';
-            showProsto();
-        }
+/* ═══════════════════════════════════════════════════
+   GYROSCOPE
+═══════════════════════════════════════════════════ */
+function initGyro() {
+  gyroStarted = false;
+  fakeMode = false;
+  window.addEventListener('deviceorientation', onGyro);
+  // If no gyro event in 1.5s, use fake/touch mode
+  setTimeout(() => {
+    if (!gyroStarted) enableFakeMode();
+  }, 1500);
+}
 
-        function showProsto() {
-            const qDiv = document.getElementById('pr-q');
-            const optDiv = document.getElementById('pr-opts');
-            const emoji = document.getElementById('pr-emoji');
-            const msg = document.getElementById('pr-msg');
-            
-            optDiv.innerHTML = '';
-            msg.innerText = '';
+function onGyro(e) {
+  if (e.alpha === null || e.alpha === undefined) {
+    if (!fakeMode) enableFakeMode();
+    return;
+  }
+  gyroStarted = true;
+  fakeMode = false;
 
-            if (prostoCurr >= prostoQueue.length) {
-                emoji.innerText = "🎉";
-                qDiv.innerText = "Порядок наведен! Ты настоящий знаток грамматики!";
-                document.getElementById('pr-restart').style.display = 'inline-block';
-                return;
-            }
+  if (startAlpha === null) startAlpha = e.alpha;
 
-            const item = prostoQueue[prostoCurr];
-            emoji.innerText = item.e;
-            qDiv.innerHTML = item.t.replace("...", " <span style='color:#795548; border-bottom:2px solid #795548'>???</span>");
+  let delta = e.alpha - startAlpha;
+  if (delta < 0) delta += 360;
+  if (delta > 360) delta -= 360;
 
-            let btns = [
-                {txt: item.a, cor: true}, 
-                {txt: item.b, cor: false}
-            ].sort(() => Math.random() - 0.5);
+  curAngle = delta;
+  updateAngle(delta, e.beta, e.gamma);
+  checkAutoCapture(delta);
+}
 
-            btns.forEach(b => {
-                let btn = document.createElement('button');
-                btn.className = 'pan-btn';
-                btn.innerText = b.txt;
-                btn.onclick = () => {
-                    if (b.cor) {
-                        btn.style.background = "#C8E6C9";
-                        qDiv.innerHTML = item.t.replace("...", ` <span style='color:green'>${item.a}</span>`);
-                        setTimeout(() => {
-                            prostoCurr++;
-                            showProsto();
-                        }, 1000);
-                    } else {
-                        btn.style.background = "#FFCDD2";
-                        msg.innerText = "Подумай еще!";
-                    }
-                };
-                optDiv.appendChild(btn);
-            });
-        }
+function enableFakeMode() {
+  fakeMode = true;
+  document.getElementById('camTitleSub').textContent = 'ТЯНИТЕ ЭКРАН ВПРАВО';
+  toast('👆 Гироскоп недоступен. Тяните пальцем по экрану влево для поворота');
+}
 
-        let mathLvl = 1;
-        function openMath(lvl) {
-            const modal = document.getElementById('game-math');
-            const introText = document.getElementById('math-intro-text');
-            const introEmoji = document.getElementById('math-intro-emoji');
-            
-            modal.style.display = 'flex'; 
-            modal.classList.remove('math-bg-1', 'math-bg-2', 'math-bg-3');
-            modal.classList.add('math-bg-' + lvl);
-            
-            document.getElementById('math-intro-screen').style.display = 'block';
-            document.getElementById('math-game-screen').style.display = 'none';
+/* ═══════════════════════════════════════════════════
+   ANGLE UPDATES
+═══════════════════════════════════════════════════ */
+function updateAngle(angle, beta, gamma) {
+  curAngle = angle;
+  const deg = Math.round(angle);
+  const segIdx = Math.floor(angle / SEG_DEG) % SEGS;
 
-            mathLvl = lvl;
+  // HUD
+  document.getElementById('hudAngle').textContent = deg + '°';
+  document.getElementById('hudCov').textContent = capSegs.size + ' / ' + SEGS;
 
-            if(lvl === 1) {
-                introEmoji.innerText = '🧑‍🚀';
-                introText.innerHTML = "<b>Прием! Я Космонавт Рома.</b><br><br>Мы летим на Марс! Но чтобы ракета летела быстро, нужно правильно считать топливо. Решай примеры на сложение и вычитание до 20. Поможешь мне?";
-            } else if(lvl === 2) {
-                introEmoji.innerText = '🦁';
-                introText.innerHTML = "<b>Ррр! Я Лев Алекс.</b><br><br>Ты в моих джунглях. Чтобы пройти через лианы, нужно знать таблицу умножения. Я приготовил для тебя примеры. Справишься?";
-            } else if(lvl === 3) {
-                introEmoji.innerText = '🐡';
-                introText.innerHTML = "<b>Буль-буль! Я Капитан Немо.</b><br><br>На самом дне океана спрятаны сокровища, но сундуки закрыты на математические замки. Тебя ждут деление и большие числа. Поможешь открыть?";
-            }
-        }
+  // Segment highlight
+  for (let i = 0; i < SEGS; i++) {
+    const s = document.getElementById('seg_' + i);
+    if (!s) continue;
+    if (capSegs.has(i)) s.className = 'seg done';
+    else if (i === segIdx) s.className = 'seg current';
+    else s.className = 'seg';
+  }
 
-        function startMathGame() {
-            document.getElementById('math-intro-screen').style.display = 'none';
-            document.getElementById('math-game-screen').style.display = 'flex';
-            nextMath();
-        }
+  // Arrows
+  const nextSeg = (segIdx + 1) % SEGS;
+  const arrowR = document.getElementById('arrowR');
+  const arrowL = document.getElementById('arrowL');
+  if (!capSegs.has(nextSeg)) {
+    arrowR.classList.add('show', 'pulse');
+    arrowL.classList.remove('show', 'pulse');
+  } else {
+    arrowR.classList.remove('show', 'pulse');
+    if (capSegs.size > 0) arrowL.classList.add('show');
+  }
 
-        function nextMath() {
-            const q = document.getElementById('math-q');
-            const opts = document.getElementById('math-opts');
-            const msg = document.getElementById('math-msg');
-            const icon = document.getElementById('math-icon');
-            opts.innerHTML = ''; msg.innerText = '';
+  // Level
+  if (gamma !== undefined && gamma !== null) {
+    const tilt = gamma;
+    const pos = 50 + Math.max(-40, Math.min(40, tilt)) * 0.8;
+    const dot = document.getElementById('levelDot');
+    dot.style.left = pos + '%';
+    dot.classList.toggle('tilted', Math.abs(tilt) > 12);
+  }
 
-            let n1, n2, ans, sign;
-            if(mathLvl === 1) {
-                icon.innerText = '🚀';
-                sign = Math.random()>0.5?'+':'-';
-                if(sign==='+'){n1=r(10);n2=r(10);ans=n1+n2;}
-                else{n1=r(10)+5;n2=r(5);ans=n1-n2;}
-            } else if(mathLvl === 2) {
-                icon.innerText = '🦁';
-                sign = '×'; n1=r(8)+1; n2=r(9)+1; ans=n1*n2;
-            } else {
-                icon.innerText = '🌊';
-                sign = ':'; n2=r(8)+2; ans=r(9)+1; n1=n2*ans;
-            }
+  updateCamUI();
+}
 
-            q.innerText = `${n1} ${sign} ${n2} = ?`;
-            
-            let arr = [ans];
-            while(arr.length < 4) {
-                let f = ans + r(10) - 5;
-                if(f!==ans && f>=0 && !arr.includes(f)) arr.push(f);
-            }
-            arr.sort(()=>Math.random()-0.5);
+/* ═══════════════════════════════════════════════════
+   AUTO-CAPTURE CHECK
+═══════════════════════════════════════════════════ */
+function checkAutoCapture(angle) {
+  const dist = Math.abs(angle - lastCapAngle);
+  if (dist >= AUTO_DIST || (lastCapAngle < 0 && angle < 5)) {
+    const segIdx = Math.floor(angle / SEG_DEG) % SEGS;
+    if (!capSegs.has(segIdx)) {
+      captureFrame(segIdx, angle, true);
+    }
+  }
+}
 
-            arr.forEach(val => {
-                let b = document.createElement('button');
-                b.className = 'pan-btn'; 
-                b.style.border = 'none';
-                b.style.fontSize = '2rem';
-                b.style.width = '80px';
-                b.style.height = '80px';
-                b.innerText = val;
-                b.onclick = () => {
-                    if(val === ans) {
-                        b.style.background = "#00E676";
-                        setTimeout(nextMath, 800);
-                    } else {
-                        b.style.background = "#FF5252";
-                        b.style.color = "white";
-                    }
-                };
-                opts.appendChild(b);
-            });
-        }
+/* ═══════════════════════════════════════════════════
+   MANUAL CAPTURE
+═══════════════════════════════════════════════════ */
+function captureManual() {
+  const segIdx = Math.floor(curAngle / SEG_DEG) % SEGS;
+  if (capSegs.has(segIdx)) {
+    toast('✓ Этот угол уже снят — поворачивайте дальше');
+    return;
+  }
+  captureFrame(segIdx, curAngle, false);
+}
 
-        function r(max) { return Math.floor(Math.random()*max)+1; }
+/* ═══════════════════════════════════════════════════
+   CAPTURE FRAME
+═══════════════════════════════════════════════════ */
+function captureFrame(segIdx, angle, auto) {
+  const video = document.getElementById('videoEl');
+  if (!video.videoWidth) return;
 
-    </script>
+  // Flash
+  const flash = document.getElementById('flashFx');
+  flash.classList.add('go');
+  setTimeout(() => flash.classList.remove('go'), 120);
+
+  // Shutter anim
+  const sh = document.getElementById('shutter');
+  sh.classList.add('recording');
+  setTimeout(() => sh.classList.remove('recording'), 250);
+
+  // Draw frame to canvas
+  const c = document.createElement('canvas');
+  c.width = video.videoWidth;
+  c.height = video.videoHeight;
+  c.getContext('2d').drawImage(video, 0, 0);
+  const dataURL = c.toDataURL('image/jpeg', 0.82);
+
+  capSegs.add(segIdx);
+  capFrames[segIdx] = { dataURL, angle: Math.round(angle) };
+  lastCapAngle = angle;
+
+  updateCamUI();
+
+  const remain = SEGS - capSegs.size;
+  if (capSegs.size === SEGS) {
+    document.getElementById('camTitleSub').textContent = 'ГОТОВО!';
+    toast('🎉 Все 12 кадров сняты! Собираем панораму...');
+    setTimeout(() => buildPanorama(), 600);
+  } else if (!auto) {
+    toast(`✓ Снято! Осталось ${remain} кадр${remain===1?'':'а'}`);
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   UPDATE CAMERA UI
+═══════════════════════════════════════════════════ */
+function updateCamUI() {
+  const count = capSegs.size;
+  const pct = Math.round(count / SEGS * 100);
+
+  document.getElementById('progBar').style.width = pct + '%';
+  document.getElementById('statPct').textContent = pct + '%';
+  document.getElementById('shutterCount').textContent = count + ' / ' + SEGS;
+
+  // Thumb preview
+  const firstFrame = capFrames.find(Boolean);
+  if (firstFrame) {
+    const img = document.getElementById('thumbImg');
+    img.src = firstFrame.dataURL;
+    img.style.display = 'block';
+    document.querySelector('.btn-gallery-ph').style.display = 'none';
+    const badge = document.getElementById('galBadge');
+    badge.textContent = count;
+    badge.style.display = 'flex';
+  }
+
+  // Gallery badge
+  const galBadge = document.getElementById('galBadge');
+  galBadge.textContent = panoramas.length || count;
+}
+
+/* ═══════════════════════════════════════════════════
+   BUILD PANORAMA
+═══════════════════════════════════════════════════ */
+async function buildPanorama() {
+  showLoad('СБОРКА ПАНОРАМЫ');
+  await new Promise(r => setTimeout(r, 80));
+
+  const frames = capFrames.filter(Boolean);
+  if (!frames.length) { hideLoad(); return; }
+
+  const pW = 4096, pH = 512;
+  const c = document.createElement('canvas');
+  c.width = pW; c.height = pH;
+  const ctx = c.getContext('2d');
+
+  ctx.fillStyle = '#0a0a0f';
+  ctx.fillRect(0, 0, pW, pH);
+
+  const sliceW = Math.ceil(pW / SEGS);
+  const sorted = [...capFrames]
+    .map((f, i) => f ? { ...f, idx: i } : null)
+    .filter(Boolean)
+    .sort((a, b) => a.idx - b.idx);
+
+  const loadImg = src => new Promise(res => {
+    const img = new Image(); img.onload = () => res(img); img.src = src;
+  });
+
+  for (const item of sorted) {
+    const img = await loadImg(item.dataURL);
+    const x = item.idx * sliceW;
+    // Take center 40% of each frame to minimize overlap distortion
+    const srcX = Math.floor(img.width * 0.3);
+    const srcW = Math.floor(img.width * 0.4);
+    ctx.drawImage(img, srcX, 0, srcW, img.height, x, 0, sliceW, pH);
+  }
+
+  // Blend seams
+  for (let i = 1; i < SEGS; i++) {
+    const x = i * sliceW;
+    const grd = ctx.createLinearGradient(x - 14, 0, x + 14, 0);
+    grd.addColorStop(0, 'rgba(0,0,0,0)');
+    grd.addColorStop(0.5, 'rgba(0,0,0,0.12)');
+    grd.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = grd;
+    ctx.fillRect(x - 14, 0, 28, pH);
+  }
+
+  // Subtle vignette
+  const vgrd = ctx.createLinearGradient(0, 0, 0, pH);
+  vgrd.addColorStop(0, 'rgba(0,0,0,0.3)');
+  vgrd.addColorStop(0.2, 'rgba(0,0,0,0)');
+  vgrd.addColorStop(0.8, 'rgba(0,0,0,0)');
+  vgrd.addColorStop(1, 'rgba(0,0,0,0.3)');
+  ctx.fillStyle = vgrd;
+  ctx.fillRect(0, 0, pW, pH);
+
+  const dataURL = c.toDataURL('image/jpeg', 0.92);
+  const pano = {
+    dataURL,
+    date: new Date().toLocaleDateString('ru-RU', { day: '2-digit', month: 'short', year: 'numeric' }),
+    shots: frames.length,
+    thumbs: sorted,
+    id: Date.now()
+  };
+  panoramas.unshift(pano);
+  curPanoIdx = 0;
+
+  hideLoad();
+  openPreview(pano);
+}
+
+/* ═══════════════════════════════════════════════════
+   PREVIEW
+═══════════════════════════════════════════════════ */
+function openPreview(pano) {
+  show('s-preview');
+  document.getElementById('previewSub').textContent = pano.shots + ' кадров · ' + pano.date;
+  buildThumbStrip(pano.thumbs);
+  initViewer(pano.dataURL);
+}
+
+function closePreview() {
+  cancelAnimationFrame(rafId);
+  if (stream) show('s-cam');
+  else show('s-home');
+}
+
+/* ── Viewer ── */
+let viewImg = null;
+let rafId = null;
+let panX = 0;
+let velX = 0;
+let isDragging = false;
+let dragLastX = 0;
+let viewW = 0, viewH = 0;
+
+function initViewer(src) {
+  const wrap = document.getElementById('viewerWrap');
+  const canvas = document.getElementById('panoCanvas');
+  viewW = wrap.clientWidth;
+  viewH = wrap.clientHeight;
+  canvas.width = viewW;
+  canvas.height = viewH;
+  canvas.style.width = viewW + 'px';
+  canvas.style.height = viewH + 'px';
+  panX = 0; velX = 0;
+
+  viewImg = new Image();
+  viewImg.onload = () => { renderPano(); startInertia(); };
+  viewImg.src = src;
+
+  // Touch events
+  canvas.addEventListener('touchstart', e => {
+    isDragging = true;
+    dragLastX = e.touches[0].clientX;
+    velX = 0;
+  }, { passive: true });
+  canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    const dx = e.touches[0].clientX - dragLastX;
+    panX -= dx * 2.2;
+    dragLastX = e.touches[0].clientX;
+    velX = -dx * 2.2;
+    renderPano();
+    updateCompass();
+  }, { passive: false });
+  canvas.addEventListener('touchend', () => { isDragging = false; });
+
+  // Mouse events
+  canvas.addEventListener('mousedown', e => { isDragging = true; dragLastX = e.clientX; velX = 0; });
+  window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    const dx = e.clientX - dragLastX;
+    panX -= dx * 2.2;
+    dragLastX = e.clientX;
+    velX = -dx * 2.2;
+    renderPano();
+    updateCompass();
+  });
+  window.addEventListener('mouseup', () => { isDragging = false; });
+}
+
+function renderPano() {
+  if (!viewImg || !viewImg.complete) return;
+  const canvas = document.getElementById('panoCanvas');
+  const ctx = canvas.getContext('2d');
+  const aspect = viewImg.width / viewImg.height;
+  const drawH = viewH;
+  const drawW = drawH * aspect;
+  const totalW = drawW;
+  const off = ((panX % totalW) + totalW) % totalW;
+  ctx.clearRect(0, 0, viewW, viewH);
+  ctx.drawImage(viewImg, totalW - off, 0, drawW, drawH);
+  ctx.drawImage(viewImg, -off, 0, drawW, drawH);
+}
+
+function startInertia() {
+  cancelAnimationFrame(rafId);
+  function loop() {
+    if (!isDragging) {
+      velX *= 0.94;
+      panX += velX;
+      if (Math.abs(velX) > 0.5) { renderPano(); updateCompass(); }
+    }
+    rafId = requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+function updateCompass() {
+  if (!viewImg || !viewImg.complete) return;
+  const aspect = viewImg.width / viewImg.height;
+  const drawW = viewH * aspect;
+  const totalW = drawW;
+  const off = ((panX % totalW) + totalW) % totalW;
+  const frac = off / totalW;
+  const deg = Math.round(frac * 360);
+  const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+  const idx = Math.round(deg / 45) % 8;
+  document.getElementById('viewerCompass').textContent = `← ${deg}° · ${dirs[idx]} →`;
+}
+
+function buildThumbStrip(thumbs) {
+  const strip = document.getElementById('thumbStrip');
+  strip.innerHTML = '';
+  thumbs.forEach((t, i) => {
+    const el = document.createElement('div');
+    el.className = 'thumb' + (i === 0 ? ' sel' : '');
+    el.innerHTML = `<img src="${t.dataURL}" alt=""><div class="thumb-deg">${t.angle}°</div>`;
+    el.onclick = () => {
+      strip.querySelectorAll('.thumb').forEach(x => x.classList.remove('sel'));
+      el.classList.add('sel');
+    };
+    strip.appendChild(el);
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   SAVE / SHARE
+═══════════════════════════════════════════════════ */
+function savePano() {
+  const pano = panoramas[curPanoIdx];
+  if (!pano) return;
+  const a = document.createElement('a');
+  a.href = pano.dataURL;
+  a.download = `panorama360_${pano.id}.jpg`;
+  a.click();
+  notify('💾 Панорама сохранена', 'success');
+}
+
+async function sharePano() {
+  const pano = panoramas[curPanoIdx];
+  if (!pano) return;
+  if (navigator.share && navigator.canShare) {
+    try {
+      const blob = await (await fetch(pano.dataURL)).blob();
+      const file = new File([blob], 'panorama360.jpg', { type: 'image/jpeg' });
+      if (navigator.canShare({ files: [file] })) {
+        await navigator.share({ title: 'Панорама 360°', files: [file] });
+        return;
+      }
+    } catch(e) {}
+  }
+  savePano();
+}
+
+/* ═══════════════════════════════════════════════════
+   GALLERY
+═══════════════════════════════════════════════════ */
+function showGallery() {
+  show('s-gallery');
+  renderGallery();
+}
+
+function closeGallery() {
+  if (stream) show('s-cam');
+  else show('s-home');
+}
+
+function renderGallery() {
+  const grid = document.getElementById('galGrid');
+  const cnt = document.getElementById('galCount');
+
+  if (!panoramas.length) {
+    grid.innerHTML = `
+      <div class="gallery-empty">
+        <div class="gallery-empty-icon">🌐</div>
+        <div style="font-size:15px;font-weight:700;color:var(--c-text2)">Нет панорам</div>
+        <div style="font-size:12px">Снимите первую 360° панораму</div>
+      </div>`;
+    cnt.textContent = '';
+    return;
+  }
+
+  cnt.textContent = panoramas.length + ' шт';
+  grid.innerHTML = '';
+  panoramas.forEach((p, i) => {
+    const el = document.createElement('div');
+    el.className = 'gal-item';
+    el.innerHTML = `
+      <img src="${p.dataURL}" alt="">
+      <div class="gal-info">
+        <div class="gal-date">${p.date}</div>
+        <div class="gal-shots">${p.shots} КАДРОВ</div>
+      </div>`;
+    el.onclick = () => { curPanoIdx = i; openPreview(p); };
+    grid.appendChild(el);
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   FAKE GYRO (touch/drag on camera screen)
+═══════════════════════════════════════════════════ */
+let camTouchX = null;
+const camEl = document.getElementById('s-cam');
+
+camEl.addEventListener('touchstart', e => {
+  // Only if touch not on a button
+  if (e.target.closest('.cam-btn-back,.cam-btn-flip,.shutter,.btn-gallery')) return;
+  camTouchX = e.touches[0].clientX;
+}, { passive: true });
+
+camEl.addEventListener('touchmove', e => {
+  if (!fakeMode || camTouchX === null) return;
+  const dx = e.touches[0].clientX - camTouchX;
+  // Dragging left = rotating right (phone moving right)
+  fakeAngle = ((fakeAngle - dx * 0.35) + 360) % 360;
+  curAngle = fakeAngle;
+  camTouchX = e.touches[0].clientX;
+  updateAngle(fakeAngle, 0, 0);
+  checkAutoCapture(fakeAngle);
+}, { passive: true });
+
+camEl.addEventListener('touchend', () => { camTouchX = null; });
+
+// Desktop mouse drag on camera
+let camMouseX = null;
+document.addEventListener('mousedown', e => {
+  if (!document.getElementById('s-cam').classList.contains('active')) return;
+  if (e.target.closest('.cam-btn-back,.cam-btn-flip,.shutter,.btn-gallery')) return;
+  camMouseX = e.clientX;
+});
+document.addEventListener('mousemove', e => {
+  if (!fakeMode || camMouseX === null) return;
+  if (!document.getElementById('s-cam').classList.contains('active')) return;
+  const dx = e.clientX - camMouseX;
+  fakeAngle = ((fakeAngle - dx * 0.5) + 360) % 360;
+  curAngle = fakeAngle;
+  camMouseX = e.clientX;
+  updateAngle(fakeAngle, 0, 0);
+  checkAutoCapture(fakeAngle);
+});
+document.addEventListener('mouseup', () => { camMouseX = null; });
+
+/* ═══════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════ */
+buildSegStrip();
+updateCamUI();
+</script>
 </body>
 </html>
