@@ -5,1654 +5,1413 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Панорама 360°</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ══════════════════════════════════════════════════════
-   RESET & BASE
-══════════════════════════════════════════════════════ */
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:100%;overflow:hidden;background:#050508;touch-action:none}
-body{font-family:'Syne',sans-serif;color:#fff;height:100dvh;display:flex;flex-direction:column;position:relative}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;touch-action:none}
+body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:#fff;height:100dvh}
 
-/* ══════════════════════════════════════════════════════
-   CSS VARIABLES
-══════════════════════════════════════════════════════ */
+/* ── CSS VARS ── */
 :root{
-  --c-bg:#050508;
-  --c-surface:#0d0d14;
-  --c-surface2:#15151f;
-  --c-surface3:#1e1e2c;
-  --c-border:rgba(255,255,255,0.07);
-  --c-border2:rgba(255,255,255,0.12);
-  --c-cyan:#00e5ff;
-  --c-purple:#a259ff;
-  --c-green:#00e676;
-  --c-orange:#ff6d00;
-  --c-red:#ff1744;
-  --c-text:rgba(255,255,255,0.9);
-  --c-text2:rgba(255,255,255,0.5);
-  --c-text3:rgba(255,255,255,0.25);
-  --safe-top:env(safe-area-inset-top,0px);
+  --cyan:#00e5ff;
+  --red:#ff3b30;
+  --green:#34c759;
+  --yellow:#ffd60a;
+  --safe-top:env(safe-area-inset-top,20px);
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 
-/* ══════════════════════════════════════════════════════
-   SCREENS
-══════════════════════════════════════════════════════ */
-.screen{
-  position:absolute;inset:0;
-  display:none;flex-direction:column;
-  overflow:hidden;
-}
+/* ── SCREENS ── */
+.screen{position:absolute;inset:0;display:none;flex-direction:column}
 .screen.active{display:flex}
 
-/* ══════════════════════════════════════════════════════
-   SCREEN: HOME
-══════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   HOME
+════════════════════════════════════════ */
 #s-home{
-  background:var(--c-bg);
-  align-items:center;justify-content:flex-start;
-  padding-top:calc(var(--safe-top) + 60px);
-  overflow-y:auto;
-}
-
-.home-noise{
-  position:fixed;inset:0;pointer-events:none;z-index:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  opacity:0.6;
-}
-.home-glow{
-  position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:
-    radial-gradient(ellipse 60% 40% at 20% 10%,rgba(0,229,255,0.06) 0%,transparent 60%),
-    radial-gradient(ellipse 50% 50% at 80% 80%,rgba(162,89,255,0.06) 0%,transparent 60%);
-}
-
-.home-inner{
-  position:relative;z-index:1;
-  width:100%;max-width:380px;
-  padding:0 24px 48px;
-  display:flex;flex-direction:column;align-items:center;
+  background:radial-gradient(ellipse 80% 60% at 50% 20%, #0d1f2d 0%, #000 70%);
+  align-items:center;justify-content:center;
   gap:0;
 }
 
-/* Logo / hero */
-.hero-orb{
-  width:110px;height:110px;
-  margin-bottom:28px;
-  position:relative;
-  flex-shrink:0;
+.home-brand{
+  display:flex;flex-direction:column;align-items:center;
+  gap:16px;margin-bottom:48px;
 }
-.hero-orb svg{width:100%;height:100%}
-.orb-spin{animation:orb-rotate 12s linear infinite}
-.orb-pulse{animation:orb-pulse 3s ease-in-out infinite}
-@keyframes orb-rotate{to{transform:rotate(360deg)}}
-@keyframes orb-pulse{0%,100%{opacity:0.5}50%{opacity:1}}
+.home-orb{
+  width:100px;height:100px;position:relative;
+}
+.orb-svg{width:100%;height:100%}
+.orb-ring1{
+  animation:spin 10s linear infinite;
+  transform-origin:50px 50px;
+}
+.orb-ring2{
+  animation:spin 6s linear infinite reverse;
+  transform-origin:50px 50px;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.home-title{
+  font-size:36px;font-weight:300;letter-spacing:8px;
+  text-transform:uppercase;color:#fff;
+  text-align:center;line-height:1;
+}
+.home-title span{
+  display:block;font-size:13px;font-weight:400;
+  letter-spacing:6px;color:rgba(255,255,255,0.4);
+  margin-top:6px;
+}
 
-.hero-title{
-  font-size:32px;font-weight:800;letter-spacing:-1.5px;
-  line-height:1;margin-bottom:8px;text-align:center;
-  background:linear-gradient(135deg,#fff 40%,var(--c-cyan));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
-}
-.hero-sub{
-  font-family:'JetBrains Mono',monospace;
-  font-size:11px;letter-spacing:3px;text-transform:uppercase;
-  color:var(--c-text2);margin-bottom:36px;text-align:center;
-}
-
-/* Main CTA */
-.btn-main{
-  width:100%;height:56px;
-  border-radius:14px;border:none;cursor:pointer;
-  background:linear-gradient(135deg,var(--c-cyan),var(--c-purple));
-  color:#000;font-family:'Syne',sans-serif;
-  font-size:15px;font-weight:700;letter-spacing:0.5px;
+.home-cta{
+  width:220px;height:56px;border-radius:28px;
+  background:linear-gradient(135deg,var(--cyan),#0077b6);
+  border:none;cursor:pointer;
+  font-size:16px;font-weight:600;letter-spacing:1px;
+  color:#000;
   display:flex;align-items:center;justify-content:center;gap:10px;
-  transition:transform 0.12s,box-shadow 0.12s;
-  box-shadow:0 0 40px rgba(0,229,255,0.2);
-  margin-bottom:12px;
+  margin-bottom:16px;
+  box-shadow:0 0 40px rgba(0,229,255,0.3);
+  transition:transform .1s,box-shadow .1s;
 }
-.btn-main:active{transform:scale(0.97);box-shadow:none}
-.btn-main .btn-icon{font-size:20px}
+.home-cta:active{transform:scale(0.96);box-shadow:none}
+.home-cta-icon{font-size:20px}
 
-.btn-secondary{
-  width:100%;height:48px;
-  border-radius:12px;cursor:pointer;
-  background:transparent;
-  border:1px solid var(--c-border2);
-  color:var(--c-text2);
-  font-family:'Syne',sans-serif;font-size:14px;font-weight:600;
+.home-gal{
+  background:transparent;border:1px solid rgba(255,255,255,0.2);
+  color:rgba(255,255,255,0.6);
+  width:220px;height:44px;border-radius:22px;
+  cursor:pointer;font-size:14px;
   display:flex;align-items:center;justify-content:center;gap:8px;
-  transition:all 0.15s;
-  margin-bottom:32px;
 }
-.btn-secondary:active{background:var(--c-surface2);color:#fff}
+.home-gal:active{background:rgba(255,255,255,0.08)}
 
-/* Feature cards */
-.features{
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:10px;width:100%;margin-bottom:0;
+.home-feats{
+  position:absolute;bottom:calc(var(--safe-bottom)+20px);
+  left:0;right:0;
+  display:flex;justify-content:center;gap:32px;
+  padding:0 20px;
 }
-.feat-card{
-  background:var(--c-surface);
-  border:1px solid var(--c-border);
-  border-radius:16px;padding:16px 14px;
-  display:flex;flex-direction:column;gap:8px;
-  position:relative;overflow:hidden;
+.home-feat{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  color:rgba(255,255,255,0.35);font-size:10px;letter-spacing:1px;
+  text-transform:uppercase;
 }
-.feat-card::before{
-  content:'';position:absolute;
-  top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(0,229,255,0.3),transparent);
-}
-.feat-icon{font-size:22px;line-height:1}
-.feat-title{font-size:12px;font-weight:700;color:#fff;line-height:1.3}
-.feat-desc{font-size:10px;color:var(--c-text3);line-height:1.4;font-family:'JetBrains Mono',monospace}
+.home-feat-icon{font-size:20px}
 
-/* ══════════════════════════════════════════════════════
-   SCREEN: PERMISSION
-══════════════════════════════════════════════════════ */
-#s-perm{
-  background:var(--c-bg);
-  align-items:center;justify-content:center;
-  padding:40px 32px;gap:20px;text-align:center;
-}
-.perm-icon{font-size:64px;animation:bounce 2s ease-in-out infinite}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-.perm-title{font-size:24px;font-weight:800;letter-spacing:-0.5px}
-.perm-body{font-size:14px;color:var(--c-text2);line-height:1.7;max-width:280px}
-.perm-list{
-  display:flex;flex-direction:column;gap:10px;
-  width:100%;max-width:280px;
-}
-.perm-item{
-  display:flex;align-items:center;gap:12px;
-  background:var(--c-surface);border:1px solid var(--c-border);
-  border-radius:12px;padding:12px 16px;
-  font-size:13px;color:var(--c-text);text-align:left;
-}
-.perm-item-icon{font-size:20px;flex-shrink:0}
-
-/* ══════════════════════════════════════════════════════
-   SCREEN: CAMERA
-══════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════
+   CAMERA
+════════════════════════════════════════ */
 #s-cam{background:#000;position:relative}
 
+/* video fills screen */
 #videoEl{
   position:absolute;inset:0;
   width:100%;height:100%;
   object-fit:cover;
 }
 
-/* Camera overlay layers */
-.cam-layer{
-  position:absolute;inset:0;z-index:10;
+/* ── TOP BAR ── */
+.cam-top{
+  position:absolute;
+  top:0;left:0;right:0;
+  padding-top:var(--safe-top);
+  z-index:30;
+  background:linear-gradient(to bottom,rgba(0,0,0,0.7) 0%,rgba(0,0,0,0) 100%);
+  padding-bottom:40px;
   pointer-events:none;
-  display:flex;flex-direction:column;
 }
-.cam-layer.interactive{pointer-events:all}
-
-/* Top bar */
-.cam-topbar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:calc(var(--safe-top) + 12px) 16px 12px;
-  background:linear-gradient(to bottom,rgba(0,0,0,0.75) 0%,transparent 100%);
+.cam-top-row{
+  display:flex;align-items:center;
+  justify-content:space-between;
+  padding:10px 16px 0;
   pointer-events:all;
-  position:relative;z-index:20;
 }
-.cam-btn-back{
+.cam-topbtn{
   width:38px;height:38px;border-radius:50%;
   background:rgba(0,0,0,0.5);
-  border:1px solid rgba(255,255,255,0.15);
-  backdrop-filter:blur(8px);
-  color:#fff;font-size:20px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-}
-.cam-title-wrap{display:flex;flex-direction:column;align-items:center;gap:2px}
-.cam-title-main{font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
-.cam-title-sub{
-  font-family:'JetBrains Mono',monospace;
-  font-size:10px;color:var(--c-cyan);letter-spacing:2px;
-}
-.cam-btn-flip{
-  width:38px;height:38px;border-radius:50%;
-  background:rgba(0,0,0,0.5);
-  border:1px solid rgba(255,255,255,0.15);
-  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.2);
   color:#fff;font-size:18px;
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-  transition:transform 0.4s;
+  cursor:pointer;backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
 }
-.cam-btn-flip.flipping{transform:rotateY(360deg)}
+.cam-top-info{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+}
+.cam-angle-display{
+  font-size:22px;font-weight:200;letter-spacing:2px;
+  color:#fff;line-height:1;font-variant-numeric:tabular-nums;
+}
+.cam-status-txt{
+  font-size:10px;letter-spacing:3px;text-transform:uppercase;
+  color:rgba(255,255,255,0.5);
+}
+.cam-status-txt.active-rec{color:var(--red);animation:blink 1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 
-/* Progress track */
-.progress-track{
-  position:absolute;
-  top:calc(var(--safe-top) + 62px);
-  left:0;right:0;
-  height:2px;background:rgba(255,255,255,0.08);
-  z-index:20;
-}
-.progress-bar{
-  height:100%;width:0%;
-  background:linear-gradient(90deg,var(--c-cyan),var(--c-purple));
-  transition:width 0.4s cubic-bezier(.4,0,.2,1);
-  position:relative;
-}
-.progress-bar::after{
-  content:'';
-  position:absolute;right:0;top:-2px;
-  width:6px;height:6px;border-radius:50%;
-  background:var(--c-cyan);
-  box-shadow:0 0 8px var(--c-cyan);
-}
-
-/* Segment strip */
-.seg-strip{
-  position:absolute;
-  top:calc(var(--safe-top) + 72px);
-  left:12px;right:12px;
-  height:28px;
-  display:flex;gap:3px;
-  align-items:center;
-  z-index:20;
-}
-.seg{
-  flex:1;height:8px;border-radius:3px;
-  background:rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.05);
-  transition:all 0.3s cubic-bezier(.4,0,.2,1);
-  position:relative;overflow:hidden;
-}
-.seg.done{
-  background:rgba(0,229,255,0.35);
-  border-color:rgba(0,229,255,0.5);
-}
-.seg.current{
-  background:var(--c-cyan);
-  border-color:var(--c-cyan);
-  box-shadow:0 0 10px rgba(0,229,255,0.7);
-  animation:seg-pulse 0.8s ease-in-out infinite;
-}
-@keyframes seg-pulse{0%,100%{opacity:1}50%{opacity:0.6}}
-
-.seg-labels{
-  position:absolute;
-  top:calc(var(--safe-top) + 104px);
-  left:12px;right:12px;
-  display:flex;justify-content:space-between;
-  z-index:20;
-}
-.seg-label{
-  font-family:'JetBrains Mono',monospace;
-  font-size:8px;color:rgba(255,255,255,0.25);
-  letter-spacing:0.5px;
-}
-
-/* Center viewfinder */
-.viewfinder{
+/* ── PROGRESS ARC ── */
+.cam-arc-wrap{
   position:absolute;
   top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:200px;height:200px;
-  z-index:15;pointer-events:none;
+  transform:translate(-50%,-55%);
+  z-index:20;pointer-events:none;
+  width:220px;height:220px;
 }
-.vf-ring-outer{
-  position:absolute;inset:0;border-radius:50%;
-  border:1px solid rgba(0,229,255,0.25);
-  animation:vf-breathe 4s ease-in-out infinite;
+.arc-svg{width:100%;height:100%}
+.arc-track{
+  fill:none;stroke:rgba(255,255,255,0.08);stroke-width:2;
 }
-.vf-ring-inner{
-  position:absolute;inset:20px;border-radius:50%;
-  border:1px solid rgba(0,229,255,0.15);
+.arc-progress{
+  fill:none;stroke:var(--cyan);stroke-width:2.5;
+  stroke-linecap:round;
+  stroke-dasharray:0 628;
+  transition:stroke-dasharray 0.15s linear;
 }
-@keyframes vf-breathe{
-  0%,100%{transform:scale(1);border-color:rgba(0,229,255,0.25)}
-  50%{transform:scale(1.03);border-color:rgba(0,229,255,0.5)}
+.arc-progress.recording{stroke:var(--red)}
+.arc-dot{
+  fill:var(--cyan);
+  transition:fill 0.2s;
 }
-.vf-crosshair-h{
-  position:absolute;top:50%;left:10px;right:10px;
-  height:1px;background:rgba(0,229,255,0.3);
-  transform:translateY(-50%);
-}
-.vf-crosshair-v{
-  position:absolute;left:50%;top:10px;bottom:10px;
-  width:1px;background:rgba(0,229,255,0.3);
-  transform:translateX(-50%);
-}
-.vf-dot{
+.arc-dot.recording{fill:var(--red)}
+
+/* Crosshair inside arc */
+.cam-crosshair{
   position:absolute;top:50%;left:50%;
-  width:6px;height:6px;border-radius:50%;
-  background:var(--c-cyan);
   transform:translate(-50%,-50%);
-  box-shadow:0 0 16px var(--c-cyan),0 0 4px #fff;
+  z-index:21;pointer-events:none;
 }
-/* Corner brackets */
-.vf-corner{position:absolute;width:16px;height:16px;}
-.vf-corner::before,.vf-corner::after{
-  content:'';position:absolute;background:var(--c-cyan);
-  opacity:0.8;
+.ch-h,.ch-v{position:absolute;background:rgba(255,255,255,0.6)}
+.ch-h{width:40px;height:1px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.ch-v{width:1px;height:40px;top:50%;left:50%;transform:translate(-50%,-50%)}
+.ch-center{
+  position:absolute;top:50%;left:50%;
+  width:8px;height:8px;border-radius:50%;
+  background:var(--cyan);
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 12px var(--cyan);
+  transition:background 0.2s,box-shadow 0.2s;
 }
-.vf-corner::before{top:0;width:100%;height:2px;}
-.vf-corner::after{top:0;height:100%;width:2px;}
-.vf-tl{top:6px;left:6px}
-.vf-tr{top:6px;right:6px;transform:scaleX(-1)}
-.vf-bl{bottom:6px;left:6px;transform:scaleY(-1)}
-.vf-br{bottom:6px;right:6px;transform:scale(-1)}
+.ch-center.recording{background:var(--red);box-shadow:0 0 12px var(--red)}
 
-/* Direction arrows */
-.dir-arrows{
-  position:absolute;top:50%;
-  left:0;right:0;
-  transform:translateY(-50%);
-  display:flex;justify-content:space-between;
-  padding:0 12px;z-index:15;pointer-events:none;
+/* corner brackets */
+.brackets{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:80px;height:80px;
+  pointer-events:none;z-index:21;
 }
-.dir-arrow{
-  width:36px;height:36px;border-radius:50%;
-  background:rgba(0,0,0,0.5);
-  border:1px solid rgba(255,255,255,0.15);
-  backdrop-filter:blur(4px);
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;color:rgba(255,255,255,0.6);
-  opacity:0;transition:opacity 0.3s;
-}
-.dir-arrow.show{opacity:1}
-.dir-arrow.pulse{animation:arrow-pulse 1s ease-in-out infinite}
-@keyframes arrow-pulse{0%,100%{opacity:0.6}50%{opacity:1}}
+.br{position:absolute;width:14px;height:14px}
+.br::before,.br::after{content:'';position:absolute;background:rgba(255,255,255,0.7)}
+.br::before{top:0;left:0;width:100%;height:1.5px}
+.br::after{top:0;left:0;width:1.5px;height:100%}
+.br.tr{top:0;right:0;transform:scaleX(-1)}
+.br.bl{bottom:0;left:0;transform:scaleY(-1)}
+.br.br2{bottom:0;right:0;transform:scale(-1)}
 
-/* Level indicator */
-.level-wrap{
+/* ── DIRECTION ARROW ── */
+.cam-arrow{
   position:absolute;
-  bottom:196px;left:50%;
-  transform:translateX(-50%);
-  z-index:20;
-  display:flex;flex-direction:column;align-items:center;gap:4px;
+  top:50%;
+  z-index:25;pointer-events:none;
+  font-size:28px;
+  transform:translateY(-50%);
+  transition:opacity 0.3s;
+  color:rgba(255,255,255,0.8);
+  text-shadow:0 0 20px rgba(255,255,255,0.5);
 }
-.level-bar{
-  width:140px;height:3px;
-  background:rgba(255,255,255,0.1);
+#arrowR{right:16px}
+#arrowL{left:16px;display:none}
+
+/* ── LEVEL BAR ── */
+.cam-level{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, 60px);
+  z-index:25;pointer-events:none;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+.level-track{
+  width:120px;height:2px;
+  background:rgba(255,255,255,0.12);
   border-radius:2px;position:relative;
-  overflow:visible;
 }
-.level-indicator{
-  position:absolute;top:50%;left:50%;
-  width:10px;height:10px;border-radius:50%;
-  background:var(--c-green);
+.level-ball{
+  position:absolute;
+  top:50%;left:50%;
+  width:8px;height:8px;border-radius:50%;
+  background:var(--green);
   transform:translate(-50%,-50%);
-  box-shadow:0 0 8px var(--c-green);
-  transition:left 0.08s,background 0.2s,box-shadow 0.2s;
+  box-shadow:0 0 8px var(--green);
+  transition:left 0.1s, background 0.2s;
 }
-.level-indicator.tilted{
-  background:var(--c-orange);
-  box-shadow:0 0 8px var(--c-orange);
-}
-.level-label{
-  font-family:'JetBrains Mono',monospace;
-  font-size:9px;color:rgba(255,255,255,0.3);
-  letter-spacing:2px;text-transform:uppercase;
-}
+.level-ball.warn{background:var(--yellow);box-shadow:0 0 8px var(--yellow)}
+.level-ball.bad{background:var(--red);box-shadow:0 0 8px var(--red)}
+.level-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3)}
 
-/* HUD pill */
-.cam-hud{
+/* ── LIVE STRIP PREVIEW ── */
+.live-strip-wrap{
   position:absolute;
-  top:calc(var(--safe-top) + 108px);
-  left:50%;transform:translateX(-50%);
-  z-index:20;
-  display:flex;align-items:center;gap:6px;
-  background:rgba(0,0,0,0.6);
-  border:1px solid rgba(0,229,255,0.2);
-  border-radius:20px;padding:5px 14px;
-  backdrop-filter:blur(8px);
-}
-.hud-angle{
-  font-family:'JetBrains Mono',monospace;
-  font-size:14px;font-weight:500;
-  color:var(--c-cyan);letter-spacing:1px;
-}
-.hud-sep{color:rgba(255,255,255,0.2);font-size:12px}
-.hud-coverage{
-  font-family:'JetBrains Mono',monospace;
-  font-size:11px;color:rgba(255,255,255,0.5);
-}
-
-/* Toast */
-.cam-toast{
-  position:absolute;
-  bottom:196px;
-  left:16px;right:16px;
-  background:rgba(0,0,0,0.8);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:14px;padding:12px 16px;
-  font-size:13px;color:rgba(255,255,255,0.85);
-  text-align:center;line-height:1.5;
-  backdrop-filter:blur(12px);
+  bottom:160px;
+  left:12px;right:12px;
   z-index:25;
-  transition:opacity 0.4s,transform 0.4s;
   pointer-events:none;
 }
-.cam-toast.hidden{opacity:0;transform:translateY(8px)}
+.live-strip-canvas-wrap{
+  height:50px;border-radius:8px;overflow:hidden;
+  border:1px solid rgba(255,255,255,0.1);
+  background:rgba(0,0,0,0.4);
+  position:relative;
+}
+#liveStripCanvas{
+  width:100%;height:100%;object-fit:fill;
+  display:block;
+}
+.live-strip-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to right,rgba(0,0,0,0.5) 0%,transparent 15%,transparent 85%,rgba(0,0,0,0.5) 100%);
+}
+/* cursor line */
+.live-cursor{
+  position:absolute;top:0;bottom:0;
+  width:2px;background:var(--red);
+  box-shadow:0 0 6px var(--red);
+  transition:left 0.1s linear;
+}
+.live-pct{
+  text-align:center;margin-top:4px;
+  font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.4);
+}
 
-/* Bottom controls */
+/* ── BOTTOM CONTROLS ── */
 .cam-bottom{
   position:absolute;
   bottom:0;left:0;right:0;
-  padding:16px 28px calc(var(--safe-bottom) + 28px);
-  background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%);
+  padding:12px 32px calc(var(--safe-bottom)+20px);
+  background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,rgba(0,0,0,0) 100%);
   display:flex;align-items:center;justify-content:space-between;
-  z-index:20;pointer-events:all;
+  z-index:30;
+  pointer-events:all;
 }
 
-/* Gallery thumb */
-.btn-gallery{
-  width:54px;height:54px;border-radius:14px;
-  background:var(--c-surface2);
-  border:1px solid var(--c-border2);
+/* Gallery button */
+.btn-gal{
+  width:54px;height:54px;border-radius:12px;
+  background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.15);
   overflow:hidden;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  position:relative;
-}
-.btn-gallery img{width:100%;height:100%;object-fit:cover;display:none}
-.btn-gallery-ph{font-size:22px;color:var(--c-text2)}
-.btn-gallery .badge{
-  position:absolute;top:4px;right:4px;
-  width:16px;height:16px;border-radius:50%;
-  background:var(--c-cyan);color:#000;
-  font-size:9px;font-weight:800;
-  display:none;align-items:center;justify-content:center;
-}
-
-/* Shutter */
-.shutter-wrap{position:relative}
-.shutter{
-  width:84px;height:84px;border-radius:50%;
-  background:rgba(255,255,255,0.1);
-  border:3px solid rgba(255,255,255,0.5);
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:transform 0.1s;
-  position:relative;
-}
-.shutter:active{transform:scale(0.94)}
-.shutter-inner{
-  width:64px;height:64px;border-radius:50%;
-  background:#fff;
-  transition:all 0.15s cubic-bezier(.4,0,.2,1);
-}
-.shutter.recording .shutter-inner{
-  width:32px;height:32px;
-  border-radius:8px;background:var(--c-red);
-}
-.shutter-glow{
-  position:absolute;inset:-3px;border-radius:50%;
-  border:2px solid transparent;
-  transition:border-color 0.3s,box-shadow 0.3s;
-}
-.shutter.ready .shutter-glow{
-  border-color:var(--c-cyan);
-  box-shadow:0 0 20px rgba(0,229,255,0.4);
-}
-/* Shot count arc */
-.shutter-count{
-  position:absolute;
-  bottom:-18px;left:50%;transform:translateX(-50%);
-  font-family:'JetBrains Mono',monospace;
-  font-size:10px;color:rgba(255,255,255,0.5);
-  white-space:nowrap;letter-spacing:1px;
-}
-
-/* Stats row */
-.cam-stats{
-  display:flex;flex-direction:column;
-  align-items:center;gap:4px;
-}
-.stat-val{font-size:20px;font-weight:800;color:#fff;line-height:1}
-.stat-label{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--c-text3);letter-spacing:1px;text-transform:uppercase}
-
-/* Flash */
-.flash-fx{
-  position:absolute;inset:0;background:#fff;
-  opacity:0;pointer-events:none;z-index:99;
-  transition:opacity 0.06s;
-}
-.flash-fx.go{opacity:0.8}
-
-/* Scan line effect */
-.scanline{
-  position:absolute;inset:0;pointer-events:none;z-index:5;
-  background:repeating-linear-gradient(
-    0deg,
-    transparent,transparent 2px,
-    rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px
-  );
-  opacity:0.5;
-}
-
-/* ══════════════════════════════════════════════════════
-   SCREEN: PREVIEW (Panorama Viewer)
-══════════════════════════════════════════════════════ */
-#s-preview{
-  background:var(--c-bg);
-  flex-direction:column;
-}
-
-.preview-header{
-  display:flex;align-items:center;gap:10px;
-  padding:calc(var(--safe-top) + 14px) 16px 14px;
-  background:var(--c-surface);
-  border-bottom:1px solid var(--c-border);
-  flex-shrink:0;position:relative;z-index:10;
-}
-.preview-back{
-  width:38px;height:38px;border-radius:10px;
-  background:var(--c-surface2);
-  border:1px solid var(--c-border2);
-  color:#fff;font-size:18px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;flex-shrink:0;
-}
-.preview-title-wrap{flex:1}
-.preview-title{font-size:16px;font-weight:700;letter-spacing:-0.3px}
-.preview-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--c-text3);margin-top:2px}
-.preview-actions{display:flex;gap:8px}
-.preview-btn{
-  height:36px;padding:0 14px;border-radius:10px;
-  border:1px solid var(--c-border2);
-  background:var(--c-surface2);
-  color:var(--c-text2);
-  font-family:'Syne',sans-serif;font-size:12px;font-weight:600;
-  cursor:pointer;display:flex;align-items:center;gap:6px;
-  transition:all 0.15s;
-}
-.preview-btn.primary{
-  background:linear-gradient(135deg,var(--c-cyan),var(--c-purple));
-  border-color:transparent;color:#000;
-}
-.preview-btn:active{opacity:0.8;transform:scale(0.97)}
-
-.viewer-wrap{
-  flex:1;background:#000;
-  position:relative;overflow:hidden;
-  touch-action:none;
-}
-#panoCanvas{
-  position:absolute;top:0;left:0;
-  cursor:grab;
-  transition:none;
-}
-#panoCanvas:active{cursor:grabbing}
-
-.viewer-ui{
-  position:absolute;inset:0;pointer-events:none;
-  display:flex;flex-direction:column;justify-content:space-between;
-  padding:12px;
-}
-.viewer-compass{
-  align-self:center;
-  font-family:'JetBrains Mono',monospace;
-  font-size:10px;color:rgba(255,255,255,0.4);
-  letter-spacing:3px;
-  background:rgba(0,0,0,0.5);
-  border-radius:20px;padding:4px 12px;
-}
-.viewer-hint{
-  align-self:center;
-  font-size:12px;color:rgba(255,255,255,0.4);
-  background:rgba(0,0,0,0.5);
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:20px;padding:6px 14px;
-  display:flex;align-items:center;gap:6px;
-}
-.hint-arrow{animation:hint-sway 2s ease-in-out infinite}
-@keyframes hint-sway{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
-
-/* Thumbnail strip */
-.thumb-strip{
-  height:86px;background:var(--c-surface);
-  border-top:1px solid var(--c-border);
-  display:flex;align-items:center;
-  padding:0 10px;gap:6px;
-  overflow-x:auto;flex-shrink:0;
-  -webkit-overflow-scrolling:touch;
-  scroll-snap-type:x mandatory;
-}
-.thumb-strip::-webkit-scrollbar{display:none}
-.thumb{
-  height:66px;min-width:102px;
-  border-radius:8px;overflow:hidden;
-  border:2px solid transparent;
-  cursor:pointer;flex-shrink:0;
-  position:relative;
-  scroll-snap-align:start;
-  transition:border-color 0.2s;
-}
-.thumb.sel{border-color:var(--c-cyan)}
-.thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.thumb-deg{
-  position:absolute;bottom:4px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,0.75);border-radius:4px;
-  padding:1px 5px;
-  font-family:'JetBrains Mono',monospace;font-size:9px;
-  color:rgba(255,255,255,0.8);white-space:nowrap;
-}
-
-/* ══════════════════════════════════════════════════════
-   SCREEN: GALLERY
-══════════════════════════════════════════════════════ */
-#s-gallery{
-  background:var(--c-bg);
-  flex-direction:column;
-}
-.gallery-header{
-  display:flex;align-items:center;gap:10px;
-  padding:calc(var(--safe-top) + 14px) 16px 14px;
-  background:var(--c-surface);
-  border-bottom:1px solid var(--c-border);
   flex-shrink:0;
 }
-.gallery-back{
-  width:38px;height:38px;border-radius:10px;
-  background:var(--c-surface2);border:1px solid var(--c-border2);
+.btn-gal img{width:100%;height:100%;object-fit:cover;display:none}
+.btn-gal-icon{font-size:22px;color:rgba(255,255,255,0.5)}
+.btn-gal .gal-badge{
+  display:none;position:absolute;
+  top:-4px;right:-4px;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--cyan);color:#000;
+  font-size:10px;font-weight:700;
+  align-items:center;justify-content:center;
+}
+.btn-gal-wrap{position:relative;flex-shrink:0}
+
+/* Record button */
+.record-btn-wrap{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.record-btn{
+  width:80px;height:80px;border-radius:50%;
+  background:rgba(255,255,255,0.12);
+  border:3px solid rgba(255,255,255,0.6);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform 0.12s;
+  position:relative;
+}
+.record-btn:active{transform:scale(0.93)}
+.record-inner{
+  width:58px;height:58px;border-radius:50%;
+  background:#ff3b30;
+  transition:all 0.2s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 0 20px rgba(255,59,48,0.5);
+}
+.record-btn.recording .record-inner{
+  width:28px;height:28px;border-radius:6px;
+  background:#ff3b30;
+}
+.record-lbl{
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,0.5);
+}
+.record-lbl.rec-active{color:var(--red)}
+
+/* Flip cam btn */
+.btn-flip{
+  width:54px;height:54px;border-radius:50%;
+  background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.15);
+  color:#fff;font-size:20px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;flex-shrink:0;
+  transition:transform 0.5s;
+}
+.btn-flip.spin{transform:rotateY(360deg)}
+
+/* ── TOAST ── */
+.cam-toast{
+  position:absolute;
+  bottom:165px;left:16px;right:16px;
+  background:rgba(0,0,0,0.75);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px;
+  padding:10px 14px;
+  font-size:13px;color:rgba(255,255,255,0.85);
+  text-align:center;line-height:1.5;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  z-index:40;
+  transition:opacity 0.4s,transform 0.4s;
+  pointer-events:none;
+}
+.cam-toast.hide{opacity:0;transform:translateY(6px);pointer-events:none}
+
+/* Flash */
+.flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:99;pointer-events:none;transition:opacity 0.05s}
+.flash.go{opacity:0.6}
+
+/* scan lines */
+.scanlines{
+  position:absolute;inset:0;z-index:5;pointer-events:none;
+  background:repeating-linear-gradient(
+    to bottom,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px
+  );
+}
+
+/* ════════════════════════════════════════
+   PREVIEW
+════════════════════════════════════════ */
+#s-preview{background:#050508}
+
+.prev-header{
+  display:flex;align-items:center;gap:10px;
+  padding:calc(var(--safe-top)+12px) 14px 12px;
+  background:rgba(0,0,0,0.4);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  flex-shrink:0;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+.prev-back{
+  width:36px;height:36px;border-radius:10px;
+  background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);
+  color:#fff;font-size:18px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  flex-shrink:0;
+}
+.prev-title{flex:1}
+.prev-title h2{font-size:16px;font-weight:600;letter-spacing:-0.3px}
+.prev-title p{font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px;font-variant-numeric:tabular-nums}
+.prev-btns{display:flex;gap:8px;flex-shrink:0}
+.prev-btn{
+  height:34px;padding:0 12px;border-radius:8px;
+  border:1px solid rgba(255,255,255,0.15);
+  background:rgba(255,255,255,0.06);
+  color:rgba(255,255,255,0.7);
+  font-size:12px;font-weight:600;cursor:pointer;
+  display:flex;align-items:center;gap:5px;
+  transition:all .15s;
+}
+.prev-btn.hi{
+  background:var(--cyan);border-color:transparent;color:#000;
+}
+.prev-btn:active{opacity:0.75;transform:scale(0.97)}
+
+/* viewer */
+.viewer-area{
+  flex:1;background:#000;position:relative;overflow:hidden;
+  touch-action:none;
+}
+#viewCanvas{
+  position:absolute;top:0;left:0;cursor:grab;
+}
+#viewCanvas:active{cursor:grabbing}
+.viewer-hud{
+  position:absolute;bottom:12px;
+  left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.1);
+  border-radius:20px;padding:5px 14px;
+  font-size:11px;letter-spacing:2px;color:rgba(255,255,255,0.5);
+  pointer-events:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:flex;align-items:center;gap:8px;
+}
+.drag-icon{animation:nudge 2s ease-in-out infinite}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+
+/* ════════════════════════════════════════
+   GALLERY
+════════════════════════════════════════ */
+#s-gallery{background:#050508;flex-direction:column}
+.gal-header{
+  display:flex;align-items:center;gap:10px;
+  padding:calc(var(--safe-top)+12px) 14px 12px;
+  background:rgba(0,0,0,0.4);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  flex-shrink:0;
+}
+.gal-back{
+  width:36px;height:36px;border-radius:10px;
+  background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);
   color:#fff;font-size:18px;
   display:flex;align-items:center;justify-content:center;cursor:pointer;
 }
-.gallery-title{flex:1;font-size:17px;font-weight:700;letter-spacing:-0.3px}
-.gallery-count{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--c-text3)}
-
-.gallery-grid{
-  flex:1;overflow-y:auto;padding:16px;
-  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+.gal-ttl{flex:1;font-size:17px;font-weight:600}
+.gal-cnt{font-size:12px;color:rgba(255,255,255,0.3);letter-spacing:1px}
+.gal-grid{
+  flex:1;overflow-y:auto;padding:14px;
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
   -webkit-overflow-scrolling:touch;
 }
 .gal-item{
-  aspect-ratio:2/1;border-radius:12px;
-  overflow:hidden;cursor:pointer;
-  position:relative;
-  border:1px solid var(--c-border);
-  background:var(--c-surface);
-  transition:transform 0.15s;
+  aspect-ratio:2.2/1;border-radius:10px;overflow:hidden;
+  position:relative;cursor:pointer;
+  border:1px solid rgba(255,255,255,0.06);
+  background:#111;
+  transition:transform .15s;
 }
 .gal-item:active{transform:scale(0.97)}
 .gal-item img{width:100%;height:100%;object-fit:cover;display:block}
-.gal-info{
+.gal-item-info{
   position:absolute;bottom:0;left:0;right:0;
   background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);
-  padding:16px 10px 8px;
+  padding:14px 8px 6px;
+  font-size:10px;color:rgba(255,255,255,0.6);
+  font-variant-numeric:tabular-nums;
 }
-.gal-date{font-size:10px;color:rgba(255,255,255,0.7);font-weight:600}
-.gal-shots{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,0.4);margin-top:2px}
-
-.gallery-empty{
-  grid-column:1/-1;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:12px;padding:60px 20px;color:var(--c-text3);text-align:center;
+.gal-empty{
+  grid-column:1/-1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;
+  padding:60px 20px;color:rgba(255,255,255,0.2);text-align:center;
 }
-.gallery-empty-icon{font-size:56px;opacity:0.3}
+.gal-empty-icon{font-size:52px}
+.gal-empty-ttl{font-size:16px;font-weight:600;color:rgba(255,255,255,0.4)}
+.gal-empty-sub{font-size:12px}
 
-/* ══════════════════════════════════════════════════════
-   GLOBAL OVERLAYS
-══════════════════════════════════════════════════════ */
-
-/* Loading */
+/* ════════════════════════════════════════
+   OVERLAYS
+════════════════════════════════════════ */
 .loading{
   position:fixed;inset:0;z-index:999;
-  background:rgba(5,5,8,0.92);
+  background:rgba(0,0,0,0.85);
   display:none;flex-direction:column;
-  align-items:center;justify-content:center;
-  gap:16px;backdrop-filter:blur(10px);
+  align-items:center;justify-content:center;gap:14px;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
-.loading.show{display:flex}
+.loading.on{display:flex}
 .spinner{
-  width:48px;height:48px;border-radius:50%;
+  width:44px;height:44px;border-radius:50%;
   border:2px solid rgba(0,229,255,0.15);
-  border-top-color:var(--c-cyan);
-  animation:spin 0.7s linear infinite;
+  border-top-color:var(--cyan);
+  animation:spin .7s linear infinite;
 }
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-label{
-  font-family:'JetBrains Mono',monospace;
-  font-size:12px;color:var(--c-text2);letter-spacing:2px;
-}
+.spin-lbl{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,0.4);text-transform:uppercase}
 
-/* Notification */
-.notif{
+.toast-global{
   position:fixed;
-  bottom:calc(var(--safe-bottom) + 24px);
-  left:50%;transform:translateX(-50%) translateY(80px);
+  bottom:calc(var(--safe-bottom)+20px);
+  left:50%;transform:translateX(-50%) translateY(60px);
   z-index:998;
-  background:var(--c-surface2);
-  border:1px solid var(--c-border2);
-  border-radius:14px;padding:12px 20px;
+  background:rgba(30,30,40,0.95);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:12px;padding:10px 18px;
   font-size:13px;color:#fff;
   white-space:nowrap;
-  transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
   pointer-events:none;
-  display:flex;align-items:center;gap:8px;
-  backdrop-filter:blur(12px);
-  max-width:calc(100vw - 32px);
-  white-space:normal;text-align:center;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  max-width:calc(100vw - 32px);white-space:normal;text-align:center;
 }
-.notif.show{transform:translateX(-50%) translateY(0)}
-.notif.success{border-color:rgba(0,230,118,0.4);color:var(--c-green)}
-.notif.error{border-color:rgba(255,23,68,0.4);color:var(--c-red)}
-
-/* Scrollbar */
-::-webkit-scrollbar{width:3px;height:3px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
+.toast-global.show{transform:translateX(-50%) translateY(0)}
+.toast-global.ok{border-color:rgba(52,199,89,.4);color:var(--green)}
+.toast-global.err{border-color:rgba(255,59,48,.4);color:var(--red)}
 </style>
 </head>
 <body>
 
 <!-- ══ HOME ══ -->
 <div class="screen active" id="s-home">
-  <div class="home-noise"></div>
-  <div class="home-glow"></div>
-  <div class="home-inner">
-
-    <div class="hero-orb">
-      <svg viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- outer dashed ring -->
-        <circle class="orb-spin" cx="55" cy="55" r="50"
-          stroke="rgba(0,229,255,0.25)" stroke-width="1"
-          stroke-dasharray="8 5" transform-origin="55 55"/>
+  <div class="home-brand">
+    <div class="home-orb">
+      <svg class="orb-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- outer rotating dashes -->
+        <circle class="orb-ring1" cx="50" cy="50" r="46"
+          stroke="rgba(0,229,255,0.2)" stroke-width="1"
+          stroke-dasharray="6 5"/>
         <!-- middle ring -->
-        <circle cx="55" cy="55" r="36" stroke="rgba(162,89,255,0.3)" stroke-width="1"/>
-        <!-- inner fill -->
-        <circle class="orb-pulse" cx="55" cy="55" r="20"
-          fill="rgba(0,229,255,0.05)" stroke="rgba(0,229,255,0.5)" stroke-width="1.5"/>
-        <!-- crosshair -->
-        <line x1="55" y1="10" x2="55" y2="100" stroke="rgba(0,229,255,0.2)" stroke-width="1"/>
-        <line x1="10" y1="55" x2="100" y2="55" stroke="rgba(0,229,255,0.2)" stroke-width="1"/>
-        <!-- center dot -->
-        <circle cx="55" cy="55" r="4" fill="#00e5ff"/>
-        <circle cx="55" cy="55" r="8" fill="rgba(0,229,255,0.2)"/>
+        <circle cx="50" cy="50" r="34" stroke="rgba(0,229,255,0.1)" stroke-width="1"/>
+        <!-- inner rotating -->
+        <circle class="orb-ring2" cx="50" cy="50" r="22"
+          stroke="rgba(0,229,255,0.3)" stroke-width="1.5"
+          stroke-dasharray="12 4"/>
+        <!-- cross -->
+        <line x1="50" y1="2" x2="50" y2="98" stroke="rgba(0,229,255,0.15)" stroke-width="1"/>
+        <line x1="2" y1="50" x2="98" y2="50" stroke="rgba(0,229,255,0.15)" stroke-width="1"/>
+        <!-- center -->
+        <circle cx="50" cy="50" r="5" fill="#00e5ff"/>
+        <circle cx="50" cy="50" r="12" fill="rgba(0,229,255,0.08)" stroke="rgba(0,229,255,0.4)" stroke-width="1"/>
         <!-- tick marks -->
-        <line x1="55" y1="5" x2="55" y2="12" stroke="rgba(0,229,255,0.5)" stroke-width="2"/>
-        <line x1="55" y1="98" x2="55" y2="105" stroke="rgba(0,229,255,0.5)" stroke-width="2"/>
-        <line x1="5" y1="55" x2="12" y2="55" stroke="rgba(0,229,255,0.5)" stroke-width="2"/>
-        <line x1="98" y1="55" x2="105" y2="55" stroke="rgba(0,229,255,0.5)" stroke-width="2"/>
-        <!-- 45° ticks -->
-        <line x1="20" y1="20" x2="25" y2="25" stroke="rgba(162,89,255,0.4)" stroke-width="1.5"/>
-        <line x1="90" y1="20" x2="85" y2="25" stroke="rgba(162,89,255,0.4)" stroke-width="1.5"/>
-        <line x1="20" y1="90" x2="25" y2="85" stroke="rgba(162,89,255,0.4)" stroke-width="1.5"/>
-        <line x1="90" y1="90" x2="85" y2="85" stroke="rgba(162,89,255,0.4)" stroke-width="1.5"/>
+        <line x1="50" y1="2" x2="50" y2="10" stroke="rgba(0,229,255,0.6)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="50" y1="90" x2="50" y2="98" stroke="rgba(0,229,255,0.6)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="2" y1="50" x2="10" y2="50" stroke="rgba(0,229,255,0.6)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="90" y1="50" x2="98" y2="50" stroke="rgba(0,229,255,0.6)" stroke-width="2" stroke-linecap="round"/>
       </svg>
     </div>
-
-    <h1 class="hero-title">ПАНОРАМА<br>360°</h1>
-    <p class="hero-sub">Camera · Gyro · Stitch</p>
-
-    <button class="btn-main" onclick="startCamera()">
-      <span class="btn-icon">📷</span>
-      Начать съёмку
-    </button>
-    <button class="btn-secondary" onclick="showGallery()">
-      🗂&nbsp;&nbsp;Открыть галерею
-    </button>
-
-    <div class="features">
-      <div class="feat-card">
-        <div class="feat-icon">🧭</div>
-        <div class="feat-title">Гироскоп-гид</div>
-        <div class="feat-desc">Авто-направление по датчику</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">⚡</div>
-        <div class="feat-title">Авто-съёмка</div>
-        <div class="feat-desc">Снимает при повороте</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">🔭</div>
-        <div class="feat-title">12 сегментов</div>
-        <div class="feat-desc">Полные 360° покрытие</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">💾</div>
-        <div class="feat-title">Сохранение</div>
-        <div class="feat-desc">JPEG + просмотр</div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ══ PERMISSION ══ -->
-<div class="screen" id="s-perm">
-  <div class="perm-icon">🔐</div>
-  <h2 class="perm-title">Нужны разрешения</h2>
-  <p class="perm-body">Приложению нужен доступ к камере и датчикам для съёмки 360° панорамы</p>
-  <div class="perm-list">
-    <div class="perm-item">
-      <span class="perm-item-icon">📷</span>
-      <span>Камера — для съёмки кадров</span>
-    </div>
-    <div class="perm-item">
-      <span class="perm-item-icon">🧭</span>
-      <span>Датчики движения — для ориентации</span>
+    <div class="home-title">
+      ПАНОРАМА
+      <span>360° Camera</span>
     </div>
   </div>
-  <button class="btn-main" style="max-width:280px;margin-top:8px" onclick="requestPerms()">
-    ✓&nbsp;&nbsp;Разрешить доступ
+
+  <button class="home-cta" onclick="startCamera()">
+    <span class="home-cta-icon">⏺</span> Начать съёмку
   </button>
+  <button class="home-gal" onclick="showScreen('s-gallery');renderGallery()">
+    📁&nbsp; Галерея
+  </button>
+
+  <div class="home-feats">
+    <div class="home-feat">
+      <span class="home-feat-icon">🧭</span>
+      <span>Гироскоп</span>
+    </div>
+    <div class="home-feat">
+      <span class="home-feat-icon">⚡</span>
+      <span>Запись</span>
+    </div>
+    <div class="home-feat">
+      <span class="home-feat-icon">🌐</span>
+      <span>360°</span>
+    </div>
+  </div>
 </div>
 
 <!-- ══ CAMERA ══ -->
 <div class="screen" id="s-cam">
   <video id="videoEl" autoplay playsinline muted></video>
-  <div class="scanline"></div>
+  <div class="scanlines"></div>
+  <div class="flash" id="flashEl"></div>
 
-  <!-- Flash effect -->
-  <div class="flash-fx" id="flashFx"></div>
-
-  <!-- Progress -->
-  <div class="progress-track">
-    <div class="progress-bar" id="progBar"></div>
-  </div>
-
-  <!-- Segment strip -->
-  <div class="seg-strip" id="segStrip"></div>
-  <div class="seg-labels">
-    <span class="seg-label">0°</span>
-    <span class="seg-label">90°</span>
-    <span class="seg-label">180°</span>
-    <span class="seg-label">270°</span>
-    <span class="seg-label">360°</span>
-  </div>
-
-  <!-- Top bar -->
-  <div class="cam-topbar">
-    <div class="cam-btn-back" onclick="exitCamera()">‹</div>
-    <div class="cam-title-wrap">
-      <div class="cam-title-main">Панорама</div>
-      <div class="cam-title-sub" id="camTitleSub">ГОТОВ К СЪЁМКЕ</div>
-    </div>
-    <div class="cam-btn-flip" id="btnFlip" onclick="flipCam()">⟳</div>
-  </div>
-
-  <!-- HUD pill -->
-  <div class="cam-hud">
-    <span class="hud-angle" id="hudAngle">0°</span>
-    <span class="hud-sep">·</span>
-    <span class="hud-coverage" id="hudCov">0 / 12</span>
-  </div>
-
-  <!-- Viewfinder -->
-  <div class="viewfinder">
-    <div class="vf-ring-outer"></div>
-    <div class="vf-ring-inner"></div>
-    <div class="vf-crosshair-h"></div>
-    <div class="vf-crosshair-v"></div>
-    <div class="vf-dot"></div>
-    <div class="vf-corner vf-tl"></div>
-    <div class="vf-corner vf-tr"></div>
-    <div class="vf-corner vf-bl"></div>
-    <div class="vf-corner vf-br"></div>
-  </div>
-
-  <!-- Direction arrows -->
-  <div class="dir-arrows">
-    <div class="dir-arrow" id="arrowL">◀</div>
-    <div class="dir-arrow" id="arrowR">▶</div>
-  </div>
-
-  <!-- Level -->
-  <div class="level-wrap">
-    <div class="level-bar">
-      <div class="level-indicator" id="levelDot"></div>
-    </div>
-    <div class="level-label">горизонталь</div>
-  </div>
-
-  <!-- Toast -->
-  <div class="cam-toast" id="camToast">
-    📱 Медленно поворачивайте телефон вправо
-  </div>
-
-  <!-- Bottom controls -->
-  <div class="cam-bottom">
-    <div class="btn-gallery" id="btnGallery" onclick="showGallery()">
-      <img id="thumbImg" alt="">
-      <div class="btn-gallery-ph">🗂</div>
-      <div class="badge" id="galBadge"></div>
-    </div>
-
-    <div class="shutter-wrap">
-      <div class="shutter ready" id="shutter" onclick="captureManual()">
-        <div class="shutter-glow"></div>
-        <div class="shutter-inner"></div>
+  <!-- TOP BAR -->
+  <div class="cam-top">
+    <div class="cam-top-row">
+      <div class="cam-topbtn" onclick="exitCamera()">‹</div>
+      <div class="cam-top-info">
+        <div class="cam-angle-display" id="angleDisplay">0°</div>
+        <div class="cam-status-txt" id="statusTxt">НАЖМИТЕ ЗАПИСЬ</div>
       </div>
-      <div class="shutter-count" id="shutterCount">0 / 12</div>
+      <div class="cam-topbtn" id="btnFlip" onclick="flipCam()">⟳</div>
+    </div>
+  </div>
+
+  <!-- ARC PROGRESS -->
+  <div class="cam-arc-wrap">
+    <svg class="arc-svg" viewBox="0 0 220 220">
+      <!-- track -->
+      <circle class="arc-track" cx="110" cy="110" r="100"
+        stroke-dasharray="628 628"
+        transform="rotate(-90 110 110)"/>
+      <!-- progress -->
+      <circle class="arc-progress" id="arcProgress" cx="110" cy="110" r="100"
+        transform="rotate(-90 110 110)"/>
+      <!-- dot indicator -->
+      <circle class="arc-dot" id="arcDot" cx="110" cy="10" r="4"/>
+    </svg>
+  </div>
+
+  <!-- CROSSHAIR & BRACKETS -->
+  <div class="cam-crosshair">
+    <div class="ch-h"></div>
+    <div class="ch-v"></div>
+    <div class="ch-center" id="chCenter"></div>
+  </div>
+  <div class="brackets">
+    <div class="br"></div>
+    <div class="br tr"></div>
+    <div class="br bl"></div>
+    <div class="br br2"></div>
+  </div>
+
+  <!-- DIRECTION ARROWS -->
+  <div class="cam-arrow" id="arrowR">›</div>
+  <div class="cam-arrow" id="arrowL">‹</div>
+
+  <!-- LEVEL BAR -->
+  <div class="cam-level">
+    <div class="level-track">
+      <div class="level-ball" id="levelBall"></div>
+    </div>
+    <div class="level-lbl">уровень</div>
+  </div>
+
+  <!-- LIVE STRIP PREVIEW -->
+  <div class="live-strip-wrap" id="liveStripWrap" style="display:none">
+    <div class="live-strip-canvas-wrap">
+      <canvas id="liveStripCanvas" height="50"></canvas>
+      <div class="live-strip-overlay"></div>
+      <div class="live-cursor" id="liveCursor" style="left:0%"></div>
+    </div>
+    <div class="live-pct" id="livePct">0% покрыто</div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="cam-toast" id="camToast">📱 Нажмите ● для записи, затем медленно крутите вправо</div>
+
+  <!-- BOTTOM -->
+  <div class="cam-bottom">
+    <div class="btn-gal-wrap">
+      <div class="btn-gal" id="btnGal" onclick="showScreen('s-gallery');renderGallery()">
+        <img id="galThumb" alt="">
+        <span class="btn-gal-icon">📁</span>
+        <span class="gal-badge" id="galBadge"></span>
+      </div>
     </div>
 
-    <div class="cam-stats">
-      <div class="stat-val" id="statPct">0%</div>
-      <div class="stat-label">покрытие</div>
+    <div class="record-btn-wrap">
+      <div class="record-btn" id="recordBtn" onclick="toggleRecord()">
+        <div class="record-inner" id="recordInner"></div>
+      </div>
+      <div class="record-lbl" id="recordLbl">ЗАПИСЬ</div>
     </div>
+
+    <div class="btn-flip" id="btnFlipBottom" onclick="flipCam()">⟳</div>
   </div>
 </div>
 
 <!-- ══ PREVIEW ══ -->
 <div class="screen" id="s-preview">
-  <div class="preview-header">
-    <div class="preview-back" onclick="closePreview()">‹</div>
-    <div class="preview-title-wrap">
-      <div class="preview-title">Просмотр панорамы</div>
-      <div class="preview-sub" id="previewSub">— кадров</div>
+  <div class="prev-header">
+    <div class="prev-back" onclick="closePreview()">‹</div>
+    <div class="prev-title">
+      <h2>Панорама 360°</h2>
+      <p id="prevSub">—</p>
     </div>
-    <div class="preview-actions">
-      <button class="preview-btn" onclick="savePano()">💾 Сохранить</button>
-      <button class="preview-btn primary" onclick="sharePano()">↗ Поделиться</button>
-    </div>
-  </div>
-
-  <div class="viewer-wrap" id="viewerWrap">
-    <canvas id="panoCanvas"></canvas>
-    <div class="viewer-ui">
-      <div class="viewer-compass" id="viewerCompass">W · · · N · · · E · · · S · · · W</div>
-      <div class="viewer-hint">
-        <span>←</span>
-        <span>Тяните для обзора</span>
-        <span class="hint-arrow">→</span>
-      </div>
+    <div class="prev-btns">
+      <button class="prev-btn" onclick="savePano()">💾</button>
+      <button class="prev-btn hi" onclick="sharePano()">↗ Поделиться</button>
     </div>
   </div>
-
-  <div class="thumb-strip" id="thumbStrip"></div>
+  <div class="viewer-area" id="viewerArea">
+    <canvas id="viewCanvas"></canvas>
+    <div class="viewer-hud">
+      <span id="compassTxt">— °</span>
+      <span class="drag-icon">→</span>
+      <span>тяните для обзора</span>
+    </div>
+  </div>
 </div>
 
 <!-- ══ GALLERY ══ -->
 <div class="screen" id="s-gallery">
-  <div class="gallery-header">
-    <div class="gallery-back" onclick="closeGallery()">‹</div>
-    <div class="gallery-title">Галерея</div>
-    <div class="gallery-count" id="galCount"></div>
+  <div class="gal-header">
+    <div class="gal-back" onclick="closeGallery()">‹</div>
+    <div class="gal-ttl">Галерея</div>
+    <div class="gal-cnt" id="galCnt"></div>
   </div>
-  <div class="gallery-grid" id="galGrid">
-    <div class="gallery-empty">
-      <div class="gallery-empty-icon">🌐</div>
-      <div style="font-size:15px;font-weight:700;color:var(--c-text2)">Нет панорам</div>
-      <div style="font-size:12px">Снимите первую 360° панораму</div>
-    </div>
-  </div>
+  <div class="gal-grid" id="galGrid"></div>
 </div>
 
 <!-- ══ LOADING ══ -->
 <div class="loading" id="loading">
   <div class="spinner"></div>
-  <div class="loading-label" id="loadingLabel">ЗАГРУЗКА</div>
+  <div class="spin-lbl" id="spinLbl">Обработка</div>
 </div>
 
-<!-- ══ NOTIFICATION ══ -->
-<div class="notif" id="notif"></div>
+<!-- ══ TOAST ══ -->
+<div class="toast-global" id="toastG"></div>
 
 <script>
-/* ═══════════════════════════════════════════════════
-   CONSTANTS
-═══════════════════════════════════════════════════ */
-const SEGS      = 12;
-const SEG_DEG   = 360 / SEGS;   // 30°
-const AUTO_DIST = 28;            // auto-capture every N degrees
+/* ═════════════════════════════════════════════════
+   CONSTANTS & CONFIG
+═════════════════════════════════════════════════ */
+const PANO_W  = 4096;   // panorama canvas width (pixels)
+const PANO_H  = 768;    // panorama canvas height
+const SLICE_W = 6;      // px drawn per degree (soft)
 
-/* ═══════════════════════════════════════════════════
+/* ═════════════════════════════════════════════════
    STATE
-═══════════════════════════════════════════════════ */
-let stream       = null;
-let camFacing    = 'environment';
-let gyroStarted  = false;
-let fakeMode     = false;
-let fakeAngle    = 0;
-let curAngle     = 0;
-let startAlpha   = null;
-let lastCapAngle = -999;
-let capSegs      = new Set();
-let capFrames    = [];   // indexed by segment
-let panoramas    = [];
-let curPanoIdx   = -1;
-let toastTimer   = null;
+═════════════════════════════════════════════════ */
+let videoStream   = null;
+let facingMode    = 'environment';
+let isRecording   = false;
+let gyroActive    = false;
+let touchMode     = false;
 
-/* ═══════════════════════════════════════════════════
+// Angle tracking (continuous, not clamped to 0-360)
+let prevAlpha     = null;
+let continuousAngle = 0;   // continuously accumulating degrees
+let recordStartAngle = 0;  // angle when recording started
+let angleSinceStart = 0;   // how many degrees rotated since rec start
+let lastDrawnAngle  = -1;  // last angle we drew a slice at
+
+// Panorama canvas (offscreen)
+let panoCanvas = null;
+let panoCtx    = null;
+
+// Render loop
+let rafRecord  = null;
+
+// Gallery
+let panoramas  = [];
+let curPanoIdx = -1;
+
+// Touch fake-gyro
+let touchStartX  = null;
+let touchFakeAngle = 0;
+
+/* ═════════════════════════════════════════════════
    SCREEN ROUTER
-═══════════════════════════════════════════════════ */
-function show(id) {
+═════════════════════════════════════════════════ */
+function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
 
-/* ═══════════════════════════════════════════════════
+/* ═════════════════════════════════════════════════
    LOADING
-═══════════════════════════════════════════════════ */
+═════════════════════════════════════════════════ */
 function showLoad(msg) {
-  document.getElementById('loadingLabel').textContent = (msg || 'ЗАГРУЗКА').toUpperCase();
-  document.getElementById('loading').classList.add('show');
+  document.getElementById('spinLbl').textContent = (msg || 'Обработка').toUpperCase();
+  document.getElementById('loading').classList.add('on');
 }
 function hideLoad() {
-  document.getElementById('loading').classList.remove('show');
+  document.getElementById('loading').classList.remove('on');
 }
 
-/* ═══════════════════════════════════════════════════
-   NOTIFICATION
-═══════════════════════════════════════════════════ */
-let notifTimer;
-function notify(msg, type='') {
-  const el = document.getElementById('notif');
+/* ═════════════════════════════════════════════════
+   TOAST
+═════════════════════════════════════════════════ */
+let toastTimer;
+function gToast(msg, type='') {
+  const el = document.getElementById('toastG');
   el.textContent = msg;
-  el.className = 'notif ' + type + ' show';
-  clearTimeout(notifTimer);
-  notifTimer = setTimeout(() => el.classList.remove('show'), 3000);
+  el.className = 'toast-global show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
 }
 
-/* ═══════════════════════════════════════════════════
-   TOAST (inside camera)
-═══════════════════════════════════════════════════ */
-function toast(msg) {
+let camToastTimer;
+function camToast(msg) {
   const el = document.getElementById('camToast');
   el.textContent = msg;
-  el.classList.remove('hidden');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.add('hidden'), 4500);
+  el.classList.remove('hide');
+  clearTimeout(camToastTimer);
+  camToastTimer = setTimeout(() => el.classList.add('hide'), 5000);
 }
 
-/* ═══════════════════════════════════════════════════
-   START CAMERA
-═══════════════════════════════════════════════════ */
+/* ═════════════════════════════════════════════════
+   CAMERA START / STOP
+═════════════════════════════════════════════════ */
 async function startCamera() {
-  showLoad('ЗАПРОС КАМЕРЫ');
+  showLoad('Запуск камеры');
   try {
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: camFacing, width: { ideal: 1920 }, height: { ideal: 1080 } },
+    videoStream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode,
+        width:  { ideal: 1920 },
+        height: { ideal: 1080 }
+      },
       audio: false
     });
+    const vid = document.getElementById('videoEl');
+    vid.srcObject = videoStream;
+    await vid.play();
     hideLoad();
-    launchCameraScreen();
+    showScreen('s-cam');
+    initGyro();
+    updateArcUI(0);
+    camToast('📱 Нажмите ● для начала записи, затем медленно поворачивайте вправо');
   } catch(e) {
     hideLoad();
-    show('s-perm');
+    gToast('❌ Нет доступа к камере. Разрешите в настройках браузера.', 'err');
   }
-}
-
-async function requestPerms() {
-  showLoad('ЗАПРОС ДОСТУПА');
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: camFacing }, audio: false });
-    // iOS gyro permission
-    if (typeof DeviceOrientationEvent !== 'undefined' && DeviceOrientationEvent.requestPermission) {
-      try { await DeviceOrientationEvent.requestPermission(); } catch(e) {}
-    }
-    hideLoad();
-    launchCameraScreen();
-  } catch(e) {
-    hideLoad();
-    notify('❌ Нет доступа к камере. Разрешите в настройках.', 'error');
-  }
-}
-
-function launchCameraScreen() {
-  const video = document.getElementById('videoEl');
-  video.srcObject = stream;
-  video.play();
-
-  resetCapture();
-  buildSegStrip();
-  show('s-cam');
-  initGyro();
-  toast('📱 Медленно поворачивайте вправо — съёмка начнётся автоматически');
-  updateCamUI();
 }
 
 function exitCamera() {
+  stopRec(true);
   stopStream();
   window.removeEventListener('deviceorientation', onGyro);
-  show('s-home');
+  showScreen('s-home');
 }
 
 function stopStream() {
-  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; }
+  if (videoStream) {
+    videoStream.getTracks().forEach(t => t.stop());
+    videoStream = null;
+  }
 }
 
-/* ═══════════════════════════════════════════════════
-   FLIP CAMERA
-═══════════════════════════════════════════════════ */
 async function flipCam() {
   const btn = document.getElementById('btnFlip');
-  btn.classList.add('flipping');
-  setTimeout(() => btn.classList.remove('flipping'), 400);
-  camFacing = camFacing === 'environment' ? 'user' : 'environment';
-  if (stream) {
-    stream.getTracks().forEach(t => t.stop());
+  btn.classList.add('spin');
+  setTimeout(() => btn.classList.remove('spin'), 500);
+  facingMode = facingMode === 'environment' ? 'user' : 'environment';
+  if (videoStream) {
+    videoStream.getTracks().forEach(t => t.stop());
     try {
-      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: camFacing }, audio: false });
-      document.getElementById('videoEl').srcObject = stream;
-    } catch(e) { camFacing = camFacing === 'environment' ? 'user' : 'environment'; }
+      videoStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode }, audio: false
+      });
+      document.getElementById('videoEl').srcObject = videoStream;
+    } catch(e) {
+      facingMode = facingMode === 'environment' ? 'user' : 'environment';
+    }
   }
 }
 
-/* ═══════════════════════════════════════════════════
-   RESET
-═══════════════════════════════════════════════════ */
-function resetCapture() {
-  capSegs.clear();
-  capFrames = [];
-  lastCapAngle = -999;
-  startAlpha = null;
-  curAngle = 0;
-  fakeAngle = 0;
-}
-
-function buildSegStrip() {
-  const strip = document.getElementById('segStrip');
-  strip.innerHTML = '';
-  for (let i = 0; i < SEGS; i++) {
-    const d = document.createElement('div');
-    d.className = 'seg';
-    d.id = 'seg_' + i;
-    strip.appendChild(d);
-  }
-}
-
-/* ═══════════════════════════════════════════════════
+/* ═════════════════════════════════════════════════
    GYROSCOPE
-═══════════════════════════════════════════════════ */
+═════════════════════════════════════════════════ */
 function initGyro() {
-  gyroStarted = false;
-  fakeMode = false;
-  window.addEventListener('deviceorientation', onGyro);
-  // If no gyro event in 1.5s, use fake/touch mode
-  setTimeout(() => {
-    if (!gyroStarted) enableFakeMode();
-  }, 1500);
+  prevAlpha = null;
+  continuousAngle = 0;
+  touchFakeAngle = 0;
+  gyroActive = false;
+  touchMode = false;
+
+  // iOS 13+ needs permission
+  if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+    DeviceOrientationEvent.requestPermission()
+      .then(state => {
+        if (state === 'granted') {
+          window.addEventListener('deviceorientation', onGyro, true);
+        } else {
+          enableTouchMode();
+        }
+      })
+      .catch(() => enableTouchMode());
+  } else {
+    window.addEventListener('deviceorientation', onGyro, true);
+    // If no event fires in 1.5s → touch mode
+    setTimeout(() => { if (!gyroActive) enableTouchMode(); }, 1500);
+  }
 }
 
 function onGyro(e) {
   if (e.alpha === null || e.alpha === undefined) {
-    if (!fakeMode) enableFakeMode();
+    if (!gyroActive && !touchMode) enableTouchMode();
     return;
   }
-  gyroStarted = true;
-  fakeMode = false;
+  gyroActive = true;
 
-  if (startAlpha === null) startAlpha = e.alpha;
-
-  let delta = e.alpha - startAlpha;
-  if (delta < 0) delta += 360;
-  if (delta > 360) delta -= 360;
-
-  curAngle = delta;
-  updateAngle(delta, e.beta, e.gamma);
-  checkAutoCapture(delta);
-}
-
-function enableFakeMode() {
-  fakeMode = true;
-  document.getElementById('camTitleSub').textContent = 'ТЯНИТЕ ЭКРАН ВПРАВО';
-  toast('👆 Гироскоп недоступен. Тяните пальцем по экрану влево для поворота');
-}
-
-/* ═══════════════════════════════════════════════════
-   ANGLE UPDATES
-═══════════════════════════════════════════════════ */
-function updateAngle(angle, beta, gamma) {
-  curAngle = angle;
-  const deg = Math.round(angle);
-  const segIdx = Math.floor(angle / SEG_DEG) % SEGS;
-
-  // HUD
-  document.getElementById('hudAngle').textContent = deg + '°';
-  document.getElementById('hudCov').textContent = capSegs.size + ' / ' + SEGS;
-
-  // Segment highlight
-  for (let i = 0; i < SEGS; i++) {
-    const s = document.getElementById('seg_' + i);
-    if (!s) continue;
-    if (capSegs.has(i)) s.className = 'seg done';
-    else if (i === segIdx) s.className = 'seg current';
-    else s.className = 'seg';
+  if (prevAlpha === null) {
+    prevAlpha = e.alpha;
+    return;
   }
 
-  // Arrows
-  const nextSeg = (segIdx + 1) % SEGS;
-  const arrowR = document.getElementById('arrowR');
-  const arrowL = document.getElementById('arrowL');
-  if (!capSegs.has(nextSeg)) {
-    arrowR.classList.add('show', 'pulse');
-    arrowL.classList.remove('show', 'pulse');
+  // Delta with wrap-around handling
+  let delta = e.alpha - prevAlpha;
+  if (delta >  180) delta -= 360;
+  if (delta < -180) delta += 360;
+
+  // Most phones: rotating RIGHT increases alpha, rotating LEFT decreases.
+  // We want rightward rotation to advance the panorama positively.
+  continuousAngle += delta;
+  prevAlpha = e.alpha;
+
+  // Level from beta/gamma
+  updateLevel(e.gamma);
+  processAngle();
+}
+
+function enableTouchMode() {
+  touchMode = true;
+  document.getElementById('statusTxt').textContent = 'ТЯНИТЕ ЭКРАН ВЛЕВО';
+  camToast('👆 Гироскоп недоступен — тяните экран пальцем влево для поворота');
+}
+
+/* ═════════════════════════════════════════════════
+   PROCESS ANGLE (called from gyro or touch)
+═════════════════════════════════════════════════ */
+function processAngle() {
+  // angleSinceStart: how much we've rotated since recording started
+  angleSinceStart = continuousAngle - recordStartAngle;
+  // clamp display to 0–360
+  const displayAngle = Math.abs(angleSinceStart) % 360;
+
+  // Update UI
+  document.getElementById('angleDisplay').textContent =
+    Math.round(Math.abs(angleSinceStart)) + '°';
+  updateArcUI(displayAngle);
+
+  // Arrow direction
+  const arR = document.getElementById('arrowR');
+  const arL = document.getElementById('arrowL');
+  if (angleSinceStart >= 0) {
+    arR.style.display = 'flex'; arL.style.display = 'none';
   } else {
-    arrowR.classList.remove('show', 'pulse');
-    if (capSegs.size > 0) arrowL.classList.add('show');
+    arL.style.display = 'flex'; arR.style.display = 'none';
   }
 
-  // Level
-  if (gamma !== undefined && gamma !== null) {
-    const tilt = gamma;
-    const pos = 50 + Math.max(-40, Math.min(40, tilt)) * 0.8;
-    const dot = document.getElementById('levelDot');
-    dot.style.left = pos + '%';
-    dot.classList.toggle('tilted', Math.abs(tilt) > 12);
-  }
-
-  updateCamUI();
-}
-
-/* ═══════════════════════════════════════════════════
-   AUTO-CAPTURE CHECK
-═══════════════════════════════════════════════════ */
-function checkAutoCapture(angle) {
-  const dist = Math.abs(angle - lastCapAngle);
-  if (dist >= AUTO_DIST || (lastCapAngle < 0 && angle < 5)) {
-    const segIdx = Math.floor(angle / SEG_DEG) % SEGS;
-    if (!capSegs.has(segIdx)) {
-      captureFrame(segIdx, angle, true);
-    }
-  }
-}
-
-/* ═══════════════════════════════════════════════════
-   MANUAL CAPTURE
-═══════════════════════════════════════════════════ */
-function captureManual() {
-  const segIdx = Math.floor(curAngle / SEG_DEG) % SEGS;
-  if (capSegs.has(segIdx)) {
-    toast('✓ Этот угол уже снят — поворачивайте дальше');
+  // Auto-complete at 360°
+  if (isRecording && Math.abs(angleSinceStart) >= 360) {
+    stopRec(false);
     return;
   }
-  captureFrame(segIdx, curAngle, false);
 }
 
-/* ═══════════════════════════════════════════════════
-   CAPTURE FRAME
-═══════════════════════════════════════════════════ */
-function captureFrame(segIdx, angle, auto) {
-  const video = document.getElementById('videoEl');
-  if (!video.videoWidth) return;
+/* ═════════════════════════════════════════════════
+   ARC UI
+═════════════════════════════════════════════════ */
+function updateArcUI(deg) {
+  const pct = Math.min(deg / 360, 1);
+  const circumference = 2 * Math.PI * 100; // r=100
+  const progress = pct * circumference;
 
-  // Flash
-  const flash = document.getElementById('flashFx');
-  flash.classList.add('go');
-  setTimeout(() => flash.classList.remove('go'), 120);
+  const arc = document.getElementById('arcProgress');
+  arc.setAttribute('stroke-dasharray', progress + ' ' + circumference);
 
-  // Shutter anim
-  const sh = document.getElementById('shutter');
-  sh.classList.add('recording');
-  setTimeout(() => sh.classList.remove('recording'), 250);
+  // Rotate dot along arc
+  const angleDeg = pct * 360 - 90; // -90 = start at top
+  const radians  = (angleDeg) * Math.PI / 180;
+  const cx = 110 + 100 * Math.cos(radians);
+  const cy = 110 + 100 * Math.sin(radians);
+  const dot = document.getElementById('arcDot');
+  dot.setAttribute('cx', cx.toFixed(1));
+  dot.setAttribute('cy', cy.toFixed(1));
 
-  // Draw frame to canvas
-  const c = document.createElement('canvas');
-  c.width = video.videoWidth;
-  c.height = video.videoHeight;
-  c.getContext('2d').drawImage(video, 0, 0);
-  const dataURL = c.toDataURL('image/jpeg', 0.82);
+  // Live strip cursor
+  const cursor = document.getElementById('liveCursor');
+  cursor.style.left = (pct * 100).toFixed(1) + '%';
+  const pctEl = document.getElementById('livePct');
+  if (pctEl) pctEl.textContent = Math.round(pct * 100) + '% покрыто';
+}
 
-  capSegs.add(segIdx);
-  capFrames[segIdx] = { dataURL, angle: Math.round(angle) };
-  lastCapAngle = angle;
+function updateLevel(gamma) {
+  if (gamma === null || gamma === undefined) return;
+  const tilt = Math.max(-45, Math.min(45, gamma));
+  const pos  = 50 + (tilt / 45) * 40; // 10%–90%
+  const ball = document.getElementById('levelBall');
+  ball.style.left = pos + '%';
+  const abs = Math.abs(tilt);
+  ball.className = 'level-ball' + (abs > 25 ? ' bad' : abs > 12 ? ' warn' : '');
+}
 
-  updateCamUI();
-
-  const remain = SEGS - capSegs.size;
-  if (capSegs.size === SEGS) {
-    document.getElementById('camTitleSub').textContent = 'ГОТОВО!';
-    toast('🎉 Все 12 кадров сняты! Собираем панораму...');
-    setTimeout(() => buildPanorama(), 600);
-  } else if (!auto) {
-    toast(`✓ Снято! Осталось ${remain} кадр${remain===1?'':'а'}`);
+/* ═════════════════════════════════════════════════
+   RECORD START / STOP
+═════════════════════════════════════════════════ */
+function toggleRecord() {
+  if (isRecording) {
+    stopRec(false);
+  } else {
+    startRec();
   }
 }
 
-/* ═══════════════════════════════════════════════════
-   UPDATE CAMERA UI
-═══════════════════════════════════════════════════ */
-function updateCamUI() {
-  const count = capSegs.size;
-  const pct = Math.round(count / SEGS * 100);
+function startRec() {
+  isRecording = true;
+  recordStartAngle = continuousAngle;
+  angleSinceStart  = 0;
+  lastDrawnAngle   = -1;
 
-  document.getElementById('progBar').style.width = pct + '%';
-  document.getElementById('statPct').textContent = pct + '%';
-  document.getElementById('shutterCount').textContent = count + ' / ' + SEGS;
+  // Create offscreen panorama canvas
+  panoCanvas = document.createElement('canvas');
+  panoCanvas.width  = PANO_W;
+  panoCanvas.height = PANO_H;
+  panoCtx = panoCanvas.getContext('2d');
+  panoCtx.fillStyle = '#0a0a0e';
+  panoCtx.fillRect(0, 0, PANO_W, PANO_H);
 
-  // Thumb preview
-  const firstFrame = capFrames.find(Boolean);
-  if (firstFrame) {
-    const img = document.getElementById('thumbImg');
-    img.src = firstFrame.dataURL;
-    img.style.display = 'block';
-    document.querySelector('.btn-gallery-ph').style.display = 'none';
-    const badge = document.getElementById('galBadge');
-    badge.textContent = count;
-    badge.style.display = 'flex';
-  }
+  // Show live strip
+  const sw = document.getElementById('liveStripWrap');
+  sw.style.display = 'block';
+  // Resize liveStripCanvas to parent
+  const lsc = document.getElementById('liveStripCanvas');
+  lsc.width  = sw.querySelector('.live-strip-canvas-wrap').clientWidth || 340;
+  lsc.height = 50;
 
-  // Gallery badge
-  const galBadge = document.getElementById('galBadge');
-  galBadge.textContent = panoramas.length || count;
+  // Update UI
+  document.getElementById('recordBtn').classList.add('recording');
+  document.getElementById('recordLbl').textContent = '■ СТОП';
+  document.getElementById('recordLbl').classList.add('rec-active');
+  document.getElementById('statusTxt').textContent = '● ЗАПИСЬ';
+  document.getElementById('statusTxt').classList.add('active-rec');
+  document.getElementById('arcProgress').classList.add('recording');
+  document.getElementById('arcDot').classList.add('recording');
+  document.getElementById('chCenter').classList.add('recording');
+  updateArcUI(0);
+
+  // Start stitching loop
+  rafRecord = requestAnimationFrame(stitchLoop);
+
+  // Toast
+  camToast('🔴 Запись! Медленно поворачивайтесь вправо на 360°');
 }
 
-/* ═══════════════════════════════════════════════════
-   BUILD PANORAMA
-═══════════════════════════════════════════════════ */
-async function buildPanorama() {
-  showLoad('СБОРКА ПАНОРАМЫ');
-  await new Promise(r => setTimeout(r, 80));
+function stopRec(cancel) {
+  if (!isRecording) return;
+  isRecording = false;
+  cancelAnimationFrame(rafRecord);
 
-  const frames = capFrames.filter(Boolean);
-  if (!frames.length) { hideLoad(); return; }
+  // Update UI
+  document.getElementById('recordBtn').classList.remove('recording');
+  document.getElementById('recordLbl').textContent = 'ЗАПИСЬ';
+  document.getElementById('recordLbl').classList.remove('rec-active');
+  document.getElementById('statusTxt').textContent = touchMode ? 'ТЯНИТЕ ЭКРАН ВЛЕВО' : 'НАЖМИТЕ ЗАПИСЬ';
+  document.getElementById('statusTxt').classList.remove('active-rec');
+  document.getElementById('arcProgress').classList.remove('recording');
+  document.getElementById('arcDot').classList.remove('recording');
+  document.getElementById('chCenter').classList.remove('recording');
 
-  const pW = 4096, pH = 512;
-  const c = document.createElement('canvas');
-  c.width = pW; c.height = pH;
-  const ctx = c.getContext('2d');
+  if (cancel || !panoCanvas) return;
 
-  ctx.fillStyle = '#0a0a0f';
-  ctx.fillRect(0, 0, pW, pH);
-
-  const sliceW = Math.ceil(pW / SEGS);
-  const sorted = [...capFrames]
-    .map((f, i) => f ? { ...f, idx: i } : null)
-    .filter(Boolean)
-    .sort((a, b) => a.idx - b.idx);
-
-  const loadImg = src => new Promise(res => {
-    const img = new Image(); img.onload = () => res(img); img.src = src;
-  });
-
-  for (const item of sorted) {
-    const img = await loadImg(item.dataURL);
-    const x = item.idx * sliceW;
-    // Take center 40% of each frame to minimize overlap distortion
-    const srcX = Math.floor(img.width * 0.3);
-    const srcW = Math.floor(img.width * 0.4);
-    ctx.drawImage(img, srcX, 0, srcW, img.height, x, 0, sliceW, pH);
+  const degs = Math.abs(angleSinceStart);
+  if (degs < 15) {
+    gToast('⚠️ Слишком мало движения — поверните хотя бы на 15°', 'err');
+    document.getElementById('liveStripWrap').style.display = 'none';
+    return;
   }
 
-  // Blend seams
-  for (let i = 1; i < SEGS; i++) {
-    const x = i * sliceW;
-    const grd = ctx.createLinearGradient(x - 14, 0, x + 14, 0);
-    grd.addColorStop(0, 'rgba(0,0,0,0)');
-    grd.addColorStop(0.5, 'rgba(0,0,0,0.12)');
-    grd.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = grd;
-    ctx.fillRect(x - 14, 0, 28, pH);
+  buildFinalPano();
+}
+
+/* ═════════════════════════════════════════════════
+   REAL-TIME STITCH LOOP
+═════════════════════════════════════════════════ */
+function stitchLoop() {
+  if (!isRecording) return;
+
+  // How far we've rotated since last draw
+  const sinceLast = Math.abs(angleSinceStart) -
+                    (lastDrawnAngle < 0 ? 0 : Math.abs(lastDrawnAngle));
+
+  if (sinceLast >= 0.3) {
+    drawPanoSlice();
   }
 
-  // Subtle vignette
-  const vgrd = ctx.createLinearGradient(0, 0, 0, pH);
-  vgrd.addColorStop(0, 'rgba(0,0,0,0.3)');
-  vgrd.addColorStop(0.2, 'rgba(0,0,0,0)');
-  vgrd.addColorStop(0.8, 'rgba(0,0,0,0)');
-  vgrd.addColorStop(1, 'rgba(0,0,0,0.3)');
-  ctx.fillStyle = vgrd;
-  ctx.fillRect(0, 0, pW, pH);
+  rafRecord = requestAnimationFrame(stitchLoop);
+}
 
-  const dataURL = c.toDataURL('image/jpeg', 0.92);
+function drawPanoSlice() {
+  const vid = document.getElementById('videoEl');
+  if (!vid.videoWidth || !panoCtx) return;
+
+  const normalizedAngle = Math.abs(angleSinceStart) % 360;
+
+  // X position on panorama (0–360 maps to 0–PANO_W)
+  const x = (normalizedAngle / 360) * PANO_W;
+
+  // Width of slice to draw (based on angle delta)
+  const prevNorm = lastDrawnAngle < 0 ? 0 : (Math.abs(lastDrawnAngle) % 360);
+  let sliceW = Math.abs(normalizedAngle - prevNorm) / 360 * PANO_W;
+  sliceW = Math.max(2, Math.ceil(sliceW) + 1);
+
+  // Source region: center 20% of the video frame (reduces fisheye edges)
+  const srcX = Math.floor(vid.videoWidth  * 0.4);
+  const srcW = Math.max(2, Math.floor(vid.videoWidth * 0.2));
+
+  // Draw to panorama
+  panoCtx.drawImage(
+    vid,
+    srcX, 0, srcW, vid.videoHeight,
+    x - sliceW / 2, 0, sliceW, PANO_H
+  );
+
+  // Handle wrap-around overlap
+  if (x + sliceW > PANO_W) {
+    panoCtx.drawImage(
+      vid,
+      srcX, 0, srcW, vid.videoHeight,
+      x - sliceW / 2 - PANO_W, 0, sliceW, PANO_H
+    );
+  }
+  if (x - sliceW / 2 < 0) {
+    panoCtx.drawImage(
+      vid,
+      srcX, 0, srcW, vid.videoHeight,
+      x - sliceW / 2 + PANO_W, 0, sliceW, PANO_H
+    );
+  }
+
+  lastDrawnAngle = angleSinceStart;
+
+  // Update live strip preview
+  updateLiveStrip(normalizedAngle);
+}
+
+function updateLiveStrip(currentDeg) {
+  const lsc = document.getElementById('liveStripCanvas');
+  if (!lsc || !panoCanvas) return;
+  const ctx = lsc.getContext('2d');
+  ctx.drawImage(panoCanvas, 0, 0, PANO_W, PANO_H, 0, 0, lsc.width, 50);
+
+  // Update coverage %
+  updateArcUI(currentDeg);
+}
+
+/* ═════════════════════════════════════════════════
+   BUILD FINAL PANORAMA
+═════════════════════════════════════════════════ */
+async function buildFinalPano() {
+  showLoad('Сборка панорамы');
+  await new Promise(r => setTimeout(r, 60));
+
+  // Crop panorama to covered angle
+  const coveredAngle = Math.min(Math.abs(angleSinceStart), 360);
+  const cropW = Math.round((coveredAngle / 360) * PANO_W);
+
+  const finalC = document.createElement('canvas');
+  finalC.width  = Math.max(cropW, 100);
+  finalC.height = PANO_H;
+  const fCtx = finalC.getContext('2d');
+
+  // Copy from panoCanvas (starting from x=0)
+  fCtx.drawImage(panoCanvas, 0, 0, cropW, PANO_H, 0, 0, cropW, PANO_H);
+
+  // Subtle vignette top/bottom
+  const vg = fCtx.createLinearGradient(0, 0, 0, PANO_H);
+  vg.addColorStop(0,   'rgba(0,0,0,0.35)');
+  vg.addColorStop(0.15,'rgba(0,0,0,0)');
+  vg.addColorStop(0.85,'rgba(0,0,0,0)');
+  vg.addColorStop(1,   'rgba(0,0,0,0.35)');
+  fCtx.fillStyle = vg;
+  fCtx.fillRect(0, 0, cropW, PANO_H);
+
+  // Left/right fade for non-360 panos
+  if (coveredAngle < 355) {
+    const lrG = fCtx.createLinearGradient(0, 0, cropW, 0);
+    lrG.addColorStop(0,    'rgba(0,0,0,0.4)');
+    lrG.addColorStop(0.04, 'rgba(0,0,0,0)');
+    lrG.addColorStop(0.96, 'rgba(0,0,0,0)');
+    lrG.addColorStop(1,    'rgba(0,0,0,0.4)');
+    fCtx.fillStyle = lrG;
+    fCtx.fillRect(0, 0, cropW, PANO_H);
+  }
+
+  const dataURL = finalC.toDataURL('image/jpeg', 0.92);
   const pano = {
     dataURL,
-    date: new Date().toLocaleDateString('ru-RU', { day: '2-digit', month: 'short', year: 'numeric' }),
-    shots: frames.length,
-    thumbs: sorted,
-    id: Date.now()
+    date : new Date().toLocaleString('ru-RU', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }),
+    angle: Math.round(coveredAngle),
+    id   : Date.now(),
+    w    : cropW,
+    h    : PANO_H
   };
   panoramas.unshift(pano);
   curPanoIdx = 0;
 
+  document.getElementById('liveStripWrap').style.display = 'none';
+  updateArcUI(0);
+  document.getElementById('angleDisplay').textContent = '0°';
+
   hideLoad();
+  updateGalThumb(dataURL);
   openPreview(pano);
 }
 
-/* ═══════════════════════════════════════════════════
-   PREVIEW
-═══════════════════════════════════════════════════ */
+/* ═════════════════════════════════════════════════
+   GALLERY THUMB (in camera button)
+═════════════════════════════════════════════════ */
+function updateGalThumb(src) {
+  const img = document.getElementById('galThumb');
+  img.src = src;
+  img.style.display = 'block';
+  document.querySelector('.btn-gal-icon').style.display = 'none';
+  const badge = document.getElementById('galBadge');
+  badge.textContent = panoramas.length;
+  badge.style.display = 'flex';
+}
+
+/* ═════════════════════════════════════════════════
+   PREVIEW VIEWER
+═════════════════════════════════════════════════ */
+let viewImg = null, viewRaf = null;
+let panX = 0, velX = 0, dragging = false, lastDragX = 0;
+let vW = 0, vH = 0;
+
 function openPreview(pano) {
-  show('s-preview');
-  document.getElementById('previewSub').textContent = pano.shots + ' кадров · ' + pano.date;
-  buildThumbStrip(pano.thumbs);
-  initViewer(pano.dataURL);
-}
+  showScreen('s-preview');
+  document.getElementById('prevSub').textContent =
+    pano.angle + '° · ' + pano.date;
 
-function closePreview() {
-  cancelAnimationFrame(rafId);
-  if (stream) show('s-cam');
-  else show('s-home');
-}
-
-/* ── Viewer ── */
-let viewImg = null;
-let rafId = null;
-let panX = 0;
-let velX = 0;
-let isDragging = false;
-let dragLastX = 0;
-let viewW = 0, viewH = 0;
-
-function initViewer(src) {
-  const wrap = document.getElementById('viewerWrap');
-  const canvas = document.getElementById('panoCanvas');
-  viewW = wrap.clientWidth;
-  viewH = wrap.clientHeight;
-  canvas.width = viewW;
-  canvas.height = viewH;
-  canvas.style.width = viewW + 'px';
-  canvas.style.height = viewH + 'px';
+  const area = document.getElementById('viewerArea');
+  const canvas = document.getElementById('viewCanvas');
+  vW = area.clientWidth;
+  vH = area.clientHeight;
+  canvas.width  = vW;
+  canvas.height = vH;
+  canvas.style.width  = vW + 'px';
+  canvas.style.height = vH + 'px';
   panX = 0; velX = 0;
 
   viewImg = new Image();
-  viewImg.onload = () => { renderPano(); startInertia(); };
-  viewImg.src = src;
+  viewImg.onload = () => { renderView(); startViewInertia(); };
+  viewImg.src = pano.dataURL;
 
-  // Touch events
+  // Touch
   canvas.addEventListener('touchstart', e => {
-    isDragging = true;
-    dragLastX = e.touches[0].clientX;
-    velX = 0;
-  }, { passive: true });
+    dragging = true; lastDragX = e.touches[0].clientX; velX = 0;
+  }, { passive:true });
   canvas.addEventListener('touchmove', e => {
     e.preventDefault();
-    const dx = e.touches[0].clientX - dragLastX;
-    panX -= dx * 2.2;
-    dragLastX = e.touches[0].clientX;
-    velX = -dx * 2.2;
-    renderPano();
-    updateCompass();
-  }, { passive: false });
-  canvas.addEventListener('touchend', () => { isDragging = false; });
-
-  // Mouse events
-  canvas.addEventListener('mousedown', e => { isDragging = true; dragLastX = e.clientX; velX = 0; });
+    const dx = e.touches[0].clientX - lastDragX;
+    panX -= dx * 2.5; lastDragX = e.touches[0].clientX; velX = -dx * 2.5;
+    renderView(); updateCompass();
+  }, { passive:false });
+  canvas.addEventListener('touchend', () => { dragging = false; });
+  // Mouse
+  canvas.addEventListener('mousedown', e => { dragging=true; lastDragX=e.clientX; velX=0; });
   window.addEventListener('mousemove', e => {
-    if (!isDragging) return;
-    const dx = e.clientX - dragLastX;
-    panX -= dx * 2.2;
-    dragLastX = e.clientX;
-    velX = -dx * 2.2;
-    renderPano();
-    updateCompass();
+    if (!dragging||!document.getElementById('s-preview').classList.contains('active')) return;
+    const dx = e.clientX - lastDragX;
+    panX -= dx * 2.5; lastDragX = e.clientX; velX = -dx * 2.5;
+    renderView(); updateCompass();
   });
-  window.addEventListener('mouseup', () => { isDragging = false; });
+  window.addEventListener('mouseup', () => { dragging = false; });
 }
 
-function renderPano() {
-  if (!viewImg || !viewImg.complete) return;
-  const canvas = document.getElementById('panoCanvas');
+function renderView() {
+  if (!viewImg||!viewImg.complete) return;
+  const canvas = document.getElementById('viewCanvas');
   const ctx = canvas.getContext('2d');
-  const aspect = viewImg.width / viewImg.height;
-  const drawH = viewH;
-  const drawW = drawH * aspect;
-  const totalW = drawW;
+  const aspect  = viewImg.width / viewImg.height;
+  const drawH   = vH;
+  const drawW   = drawH * aspect;
+  const totalW  = drawW;
   const off = ((panX % totalW) + totalW) % totalW;
-  ctx.clearRect(0, 0, viewW, viewH);
-  ctx.drawImage(viewImg, totalW - off, 0, drawW, drawH);
-  ctx.drawImage(viewImg, -off, 0, drawW, drawH);
+  ctx.clearRect(0, 0, vW, vH);
+  ctx.drawImage(viewImg,  totalW - off, 0, drawW, drawH);
+  ctx.drawImage(viewImg, -off,          0, drawW, drawH);
 }
 
-function startInertia() {
-  cancelAnimationFrame(rafId);
+function startViewInertia() {
+  cancelAnimationFrame(viewRaf);
   function loop() {
-    if (!isDragging) {
-      velX *= 0.94;
-      panX += velX;
-      if (Math.abs(velX) > 0.5) { renderPano(); updateCompass(); }
+    if (!dragging) {
+      velX *= 0.93; panX += velX;
+      if (Math.abs(velX) > 0.4) { renderView(); updateCompass(); }
     }
-    rafId = requestAnimationFrame(loop);
+    viewRaf = requestAnimationFrame(loop);
   }
   loop();
 }
 
 function updateCompass() {
-  if (!viewImg || !viewImg.complete) return;
+  if (!viewImg||!viewImg.complete) return;
   const aspect = viewImg.width / viewImg.height;
-  const drawW = viewH * aspect;
-  const totalW = drawW;
-  const off = ((panX % totalW) + totalW) % totalW;
-  const frac = off / totalW;
-  const deg = Math.round(frac * 360);
-  const dirs = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-  const idx = Math.round(deg / 45) % 8;
-  document.getElementById('viewerCompass').textContent = `← ${deg}° · ${dirs[idx]} →`;
+  const drawW  = vH * aspect;
+  const off    = ((panX % drawW) + drawW) % drawW;
+  const frac   = off / drawW;
+  const deg    = Math.round(frac * (panoramas[curPanoIdx]?.angle || 360));
+  document.getElementById('compassTxt').textContent = deg + '°';
 }
 
-function buildThumbStrip(thumbs) {
-  const strip = document.getElementById('thumbStrip');
-  strip.innerHTML = '';
-  thumbs.forEach((t, i) => {
-    const el = document.createElement('div');
-    el.className = 'thumb' + (i === 0 ? ' sel' : '');
-    el.innerHTML = `<img src="${t.dataURL}" alt=""><div class="thumb-deg">${t.angle}°</div>`;
-    el.onclick = () => {
-      strip.querySelectorAll('.thumb').forEach(x => x.classList.remove('sel'));
-      el.classList.add('sel');
-    };
-    strip.appendChild(el);
-  });
+function closePreview() {
+  cancelAnimationFrame(viewRaf);
+  showScreen(videoStream ? 's-cam' : 's-home');
 }
 
-/* ═══════════════════════════════════════════════════
+/* ═════════════════════════════════════════════════
    SAVE / SHARE
-═══════════════════════════════════════════════════ */
+═════════════════════════════════════════════════ */
 function savePano() {
-  const pano = panoramas[curPanoIdx];
-  if (!pano) return;
+  const p = panoramas[curPanoIdx]; if (!p) return;
   const a = document.createElement('a');
-  a.href = pano.dataURL;
-  a.download = `panorama360_${pano.id}.jpg`;
+  a.href = p.dataURL;
+  a.download = 'panorama360_' + p.id + '.jpg';
   a.click();
-  notify('💾 Панорама сохранена', 'success');
+  gToast('💾 Сохранено в загрузки', 'ok');
 }
 
 async function sharePano() {
-  const pano = panoramas[curPanoIdx];
-  if (!pano) return;
-  if (navigator.share && navigator.canShare) {
-    try {
-      const blob = await (await fetch(pano.dataURL)).blob();
-      const file = new File([blob], 'panorama360.jpg', { type: 'image/jpeg' });
-      if (navigator.canShare({ files: [file] })) {
-        await navigator.share({ title: 'Панорама 360°', files: [file] });
-        return;
-      }
-    } catch(e) {}
-  }
+  const p = panoramas[curPanoIdx]; if (!p) return;
+  try {
+    const blob = await (await fetch(p.dataURL)).blob();
+    const file = new File([blob], 'panorama360.jpg', { type:'image/jpeg' });
+    if (navigator.share && navigator.canShare?.({ files:[file] })) {
+      await navigator.share({ title:'Панорама 360°', files:[file] });
+      return;
+    }
+  } catch(e){}
   savePano();
 }
 
-/* ═══════════════════════════════════════════════════
+/* ═════════════════════════════════════════════════
    GALLERY
-═══════════════════════════════════════════════════ */
-function showGallery() {
-  show('s-gallery');
-  renderGallery();
-}
-
-function closeGallery() {
-  if (stream) show('s-cam');
-  else show('s-home');
-}
-
+═════════════════════════════════════════════════ */
 function renderGallery() {
   const grid = document.getElementById('galGrid');
-  const cnt = document.getElementById('galCount');
-
+  const cnt  = document.getElementById('galCnt');
   if (!panoramas.length) {
-    grid.innerHTML = `
-      <div class="gallery-empty">
-        <div class="gallery-empty-icon">🌐</div>
-        <div style="font-size:15px;font-weight:700;color:var(--c-text2)">Нет панорам</div>
-        <div style="font-size:12px">Снимите первую 360° панораму</div>
-      </div>`;
     cnt.textContent = '';
+    grid.innerHTML = `
+      <div class="gal-empty">
+        <div class="gal-empty-icon">🌐</div>
+        <div class="gal-empty-ttl">Нет панорам</div>
+        <div class="gal-empty-sub">Снимите свою первую 360°</div>
+      </div>`;
     return;
   }
-
   cnt.textContent = panoramas.length + ' шт';
   grid.innerHTML = '';
   panoramas.forEach((p, i) => {
     const el = document.createElement('div');
     el.className = 'gal-item';
-    el.innerHTML = `
-      <img src="${p.dataURL}" alt="">
-      <div class="gal-info">
-        <div class="gal-date">${p.date}</div>
-        <div class="gal-shots">${p.shots} КАДРОВ</div>
-      </div>`;
+    el.innerHTML = `<img src="${p.dataURL}" alt="">
+      <div class="gal-item-info">${p.date} · ${p.angle}°</div>`;
     el.onclick = () => { curPanoIdx = i; openPreview(p); };
     grid.appendChild(el);
   });
 }
 
-/* ═══════════════════════════════════════════════════
-   FAKE GYRO (touch/drag on camera screen)
-═══════════════════════════════════════════════════ */
-let camTouchX = null;
+function closeGallery() {
+  showScreen(videoStream ? 's-cam' : 's-home');
+}
+
+function showGallery() {
+  showScreen('s-gallery');
+  renderGallery();
+}
+
+/* ═════════════════════════════════════════════════
+   TOUCH / FAKE GYRO on camera screen
+═════════════════════════════════════════════════ */
 const camEl = document.getElementById('s-cam');
 
 camEl.addEventListener('touchstart', e => {
-  // Only if touch not on a button
-  if (e.target.closest('.cam-btn-back,.cam-btn-flip,.shutter,.btn-gallery')) return;
-  camTouchX = e.touches[0].clientX;
-}, { passive: true });
+  if (e.target.closest('#recordBtn,.cam-topbtn,#btnFlipBottom,.btn-gal')) return;
+  touchStartX = e.touches[0].clientX;
+}, { passive:true });
 
 camEl.addEventListener('touchmove', e => {
-  if (!fakeMode || camTouchX === null) return;
-  const dx = e.touches[0].clientX - camTouchX;
-  // Dragging left = rotating right (phone moving right)
-  fakeAngle = ((fakeAngle - dx * 0.35) + 360) % 360;
-  curAngle = fakeAngle;
-  camTouchX = e.touches[0].clientX;
-  updateAngle(fakeAngle, 0, 0);
-  checkAutoCapture(fakeAngle);
-}, { passive: true });
+  if (!touchMode || touchStartX === null) return;
+  const dx = e.touches[0].clientX - touchStartX;
+  // Drag left = rotate right = increase angle
+  const delta = -dx * 0.45;
+  continuousAngle += delta;
+  touchFakeAngle = continuousAngle;
+  touchStartX = e.touches[0].clientX;
+  processAngle();
+  if (isRecording) drawPanoSlice();
+  updateLevel(0);
+}, { passive:true });
 
-camEl.addEventListener('touchend', () => { camTouchX = null; });
+camEl.addEventListener('touchend', () => { touchStartX = null; });
 
-// Desktop mouse drag on camera
-let camMouseX = null;
+// Mouse drag (desktop)
+let mDragX = null;
 document.addEventListener('mousedown', e => {
   if (!document.getElementById('s-cam').classList.contains('active')) return;
-  if (e.target.closest('.cam-btn-back,.cam-btn-flip,.shutter,.btn-gallery')) return;
-  camMouseX = e.clientX;
+  if (e.target.closest('#recordBtn,.cam-topbtn,#btnFlipBottom,.btn-gal')) return;
+  mDragX = e.clientX;
 });
 document.addEventListener('mousemove', e => {
-  if (!fakeMode || camMouseX === null) return;
+  if (!touchMode || mDragX === null) return;
   if (!document.getElementById('s-cam').classList.contains('active')) return;
-  const dx = e.clientX - camMouseX;
-  fakeAngle = ((fakeAngle - dx * 0.5) + 360) % 360;
-  curAngle = fakeAngle;
-  camMouseX = e.clientX;
-  updateAngle(fakeAngle, 0, 0);
-  checkAutoCapture(fakeAngle);
+  const dx = e.clientX - mDragX;
+  continuousAngle += -dx * 0.5;
+  mDragX = e.clientX;
+  processAngle();
+  if (isRecording) drawPanoSlice();
 });
-document.addEventListener('mouseup', () => { camMouseX = null; });
-
-/* ═══════════════════════════════════════════════════
-   INIT
-═══════════════════════════════════════════════════ */
-buildSegStrip();
-updateCamUI();
+document.addEventListener('mouseup', () => { mDragX = null; });
 </script>
 </body>
 </html>
