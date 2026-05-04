@@ -8,1023 +8,580 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <title>Панорама 360°</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
-html,body{width:100%;height:100%;overflow:hidden;background:#000}
-body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;color:#fff;height:100dvh}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;touch-action:none}
+body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;color:#fff}
 
 :root{
   --cyan:#00e5ff;
   --red:#ff3b30;
-  --green:#30d158;
-  --safe-top:env(safe-area-inset-top,0px);
-  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --green:#34c759;
+  --yellow:#ffd60a;
+  --st:env(safe-area-inset-top,0px);
+  --sb:env(safe-area-inset-bottom,0px);
 }
 
-/* SCREENS */
-.screen{position:absolute;inset:0;display:none}
+.screen{position:fixed;inset:0;display:none}
 .screen.active{display:block}
 
-/* ═══════ HOME ═══════ */
-#home{
-  background:#000;
-  display:none;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:0;
-}
-#home.active{display:flex}
-
-.home-logo{
-  width:90px;height:90px;margin-bottom:24px;
-}
-.home-logo svg{width:100%;height:100%}
-.spin1{animation:spin 8s linear infinite;transform-origin:45px 45px}
-.spin2{animation:spin 5s linear infinite reverse;transform-origin:45px 45px}
+/* ══ HOME ══ */
+#s-home{background:radial-gradient(ellipse 80% 60% at 50% 20%,#0d1f2d,#000 70%)}
+.home-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.orb{width:96px;height:96px;margin-bottom:20px}
+.orb svg{width:100%;height:100%}
+.r1{animation:spin 10s linear infinite;transform-origin:48px 48px}
+.r2{animation:spin 6s linear infinite reverse;transform-origin:48px 48px}
 @keyframes spin{to{transform:rotate(360deg)}}
+.home-title{font-size:34px;font-weight:300;letter-spacing:8px;text-transform:uppercase;text-align:center;line-height:1}
+.home-sub{font-size:12px;letter-spacing:5px;color:rgba(255,255,255,.35);text-transform:uppercase;margin:6px 0 40px;text-align:center}
+.btn-main{width:210px;height:54px;border-radius:27px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--cyan),#0077b6);color:#000;font-size:15px;font-weight:600;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px;box-shadow:0 0 40px rgba(0,229,255,.25);transition:transform .1s}
+.btn-main:active{transform:scale(0.96)}
+.btn-sec{width:210px;height:44px;border-radius:22px;cursor:pointer;background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-sec:active{background:rgba(255,255,255,.08)}
 
-.home-title{
-  font-size:38px;font-weight:200;letter-spacing:10px;
-  text-transform:uppercase;text-align:center;margin-bottom:6px;
-}
-.home-sub{
-  font-size:12px;letter-spacing:5px;color:rgba(255,255,255,0.35);
-  text-transform:uppercase;margin-bottom:48px;text-align:center;
-}
+/* ══ CAMERA ══ */
+#s-cam{background:#000}
+#vid{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.scan{position:absolute;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(to bottom,transparent,transparent 2px,rgba(0,0,0,.04) 2px,rgba(0,0,0,.04) 4px)}
+#flash{position:absolute;inset:0;z-index:3;background:#fff;opacity:0;pointer-events:none;transition:opacity .05s}
+#flash.go{opacity:.55}
 
-.home-btn{
-  width:200px;height:52px;border-radius:26px;border:none;cursor:pointer;
-  background:linear-gradient(135deg,var(--cyan),#006e9e);
-  color:#000;font-size:15px;font-weight:600;letter-spacing:1px;
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  margin-bottom:14px;
-  box-shadow:0 0 40px rgba(0,229,255,0.25);
-  transition:transform .1s;
-}
-.home-btn:active{transform:scale(0.96)}
+/* top gradient */
+.top-grad{position:absolute;top:0;left:0;right:0;height:120px;background:linear-gradient(to bottom,rgba(0,0,0,.8),transparent);z-index:10;pointer-events:none}
 
-.home-btn2{
-  width:200px;height:44px;border-radius:22px;cursor:pointer;
-  background:transparent;border:1px solid rgba(255,255,255,0.18);
-  color:rgba(255,255,255,0.55);font-size:13px;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-}
-.home-btn2:active{background:rgba(255,255,255,0.08)}
-
-/* ═══════ CAMERA ═══════ */
-#cam{background:#000;position:relative;overflow:hidden}
-
-#vid{
-  position:absolute;
-  top:0;left:0;
-  width:100%;height:100%;
-  object-fit:cover;
-  display:block;
-}
-
-/* top controls overlay */
-.top-bar{
-  position:absolute;
-  top:0;left:0;right:0;
-  padding-top:var(--safe-top);
-  z-index:50;
-  pointer-events:none;
-}
-.top-bar-inner{
+/* top row */
+.top-row{
+  position:absolute;top:0;left:0;right:0;
+  padding-top:var(--st);
   display:flex;align-items:center;justify-content:space-between;
-  padding:10px 16px 0;
-  pointer-events:all;
+  padding-left:14px;padding-right:14px;
+  padding-bottom:0;
+  z-index:11;pointer-events:all;
+  height:calc(var(--st) + 60px);
 }
+.topbtn{width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);flex-shrink:0}
+.top-mid{display:flex;flex-direction:column;align-items:center;gap:2px}
+.top-deg{font-size:22px;font-weight:200;letter-spacing:2px;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+.top-st{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.top-st.rec{color:var(--red);animation:blink .9s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
-.icon-btn{
-  width:40px;height:40px;border-radius:50%;
-  background:rgba(0,0,0,0.55);
-  border:1px solid rgba(255,255,255,0.18);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  color:#fff;font-size:19px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-}
+/* progress bar */
+.prog-wrap{position:absolute;top:calc(var(--st) + 60px);left:0;right:0;height:2px;background:rgba(255,255,255,.1);z-index:11}
+.prog{height:100%;width:0%;background:linear-gradient(90deg,var(--cyan),#7b61ff);transition:width .1s linear}
+.prog.rec{background:var(--red)}
 
-.top-center{
-  display:flex;flex-direction:column;align-items:center;gap:2px;
-}
-.top-angle{
-  font-size:24px;font-weight:100;letter-spacing:2px;
-  color:#fff;line-height:1;
-  font-variant-numeric:tabular-nums;
-}
-.top-status{
-  font-size:10px;letter-spacing:3px;text-transform:uppercase;
-  color:rgba(255,255,255,0.45);
-}
-.top-status.rec{
-  color:var(--red);
-  animation:blink .9s step-end infinite;
-}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
-
-/* progress bar under top bar */
-.prog-bar-wrap{
-  position:absolute;
-  top:calc(var(--safe-top) + 58px);
-  left:0;right:0;height:2px;
-  background:rgba(255,255,255,0.1);
-  z-index:50;
-}
-.prog-bar{
-  height:100%;width:0%;
-  background:linear-gradient(90deg,var(--cyan),#7b61ff);
-  transition:width .1s linear;
-}
-.prog-bar.rec{background:var(--red)}
+/* arc in center */
+.arc-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:200px;height:200px;z-index:9;pointer-events:none}
+.arc-wrap svg{width:100%;height:100%}
 
 /* crosshair */
-.crosshair{
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  z-index:30;pointer-events:none;
-  width:60px;height:60px;
-}
-.ch-h,.ch-v{position:absolute;background:rgba(255,255,255,0.65)}
-.ch-h{width:100%;height:1px;top:50%;transform:translateY(-50%)}
-.ch-v{height:100%;width:1px;left:50%;transform:translateX(-50%)}
-.ch-dot{
-  position:absolute;top:50%;left:50%;
-  width:6px;height:6px;border-radius:50%;
-  background:var(--cyan);
-  transform:translate(-50%,-50%);
-  box-shadow:0 0 10px var(--cyan);
-  transition:background .2s;
-}
-.ch-dot.rec{background:var(--red);box-shadow:0 0 10px var(--red)}
+.xhair{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:12;pointer-events:none;width:54px;height:54px}
+.xh,.xv{position:absolute;background:rgba(255,255,255,.65)}
+.xh{width:100%;height:1px;top:50%;transform:translateY(-50%)}
+.xv{height:100%;width:1px;left:50%;transform:translateX(-50%)}
+.xdot{position:absolute;top:50%;left:50%;width:6px;height:6px;border-radius:50%;background:var(--cyan);transform:translate(-50%,-50%);box-shadow:0 0 10px var(--cyan);transition:background .2s}
+.xdot.rec{background:var(--red);box-shadow:0 0 10px var(--red)}
+
+/* brackets */
+.bracks{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:72px;height:72px;z-index:12;pointer-events:none}
+.bk{position:absolute;width:12px;height:12px}
+.bk::before,.bk::after{content:'';position:absolute;background:rgba(255,255,255,.7)}
+.bk::before{top:0;left:0;width:100%;height:1.5px}
+.bk::after{top:0;left:0;width:1.5px;height:100%}
+.bk.tr{top:0;right:0;transform:scaleX(-1)}
+.bk.bl{bottom:0;left:0;transform:scaleY(-1)}
+.bk.br{bottom:0;right:0;transform:scale(-1)}
 
 /* level */
-.level-bar{
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%, 42px);
-  z-index:30;pointer-events:none;
-  width:110px;height:2px;
-  background:rgba(255,255,255,0.12);
-  border-radius:2px;
-}
-.level-dot{
-  position:absolute;
-  top:50%;left:50%;
-  width:8px;height:8px;border-radius:50%;
-  background:var(--green);
-  transform:translate(-50%,-50%);
-  box-shadow:0 0 7px var(--green);
-  transition:left .1s, background .2s;
-}
-.level-dot.warn{background:#ffd60a;box-shadow:0 0 7px #ffd60a}
-.level-dot.bad{background:var(--red);box-shadow:0 0 7px var(--red)}
+.level{position:absolute;top:calc(50% + 44px);left:50%;transform:translateX(-50%);z-index:12;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px}
+.ltrack{width:110px;height:2px;background:rgba(255,255,255,.12);border-radius:2px;position:relative}
+.lball{position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;background:var(--green);transform:translate(-50%,-50%);box-shadow:0 0 7px var(--green);transition:left .1s,background .2s}
+.lball.warn{background:var(--yellow);box-shadow:0 0 7px var(--yellow)}
+.lball.bad{background:var(--red);box-shadow:0 0 7px var(--red)}
+.llbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3)}
 
-/* live strip at bottom (above controls) */
-.live-strip{
-  position:absolute;
-  bottom:calc(var(--safe-bottom) + 138px);
-  left:14px;right:14px;
-  z-index:40;
-  display:none;
-  flex-direction:column;
-  gap:4px;
-  pointer-events:none;
-}
-.live-strip.visible{display:flex}
-.strip-canvas-wrap{
-  height:44px;border-radius:8px;overflow:hidden;
-  border:1px solid rgba(255,255,255,0.12);
-  background:rgba(0,0,0,0.5);
-  position:relative;
-}
-#stripCanvas{display:block;width:100%;height:44px}
-.strip-cursor{
-  position:absolute;top:0;bottom:0;left:0;
-  width:2px;background:var(--red);
-  box-shadow:0 0 6px var(--red);
-  transition:left .08s linear;
-}
-.strip-fade{
-  position:absolute;inset:0;
-  background:linear-gradient(to right,rgba(0,0,0,.5) 0%,transparent 12%,transparent 88%,rgba(0,0,0,.5) 100%);
-  pointer-events:none;
-}
-.strip-pct{
-  text-align:center;
-  font-size:10px;letter-spacing:2px;
-  color:rgba(255,255,255,0.35);
-}
+/* direction arrows */
+.arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:12;pointer-events:none;font-size:30px;color:rgba(255,255,255,.8);text-shadow:0 0 20px rgba(255,255,255,.5)}
+#arR{right:14px}
+#arL{left:14px;display:none}
 
-/* toast inside camera */
-.cam-toast{
-  position:absolute;
-  bottom:calc(var(--safe-bottom) + 194px);
-  left:14px;right:14px;
-  z-index:50;
-  background:rgba(0,0,0,0.72);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:12px;padding:10px 14px;
-  font-size:13px;color:rgba(255,255,255,0.85);
-  text-align:center;line-height:1.5;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  transition:opacity .35s,transform .35s;
-  pointer-events:none;
-}
-.cam-toast.hidden{opacity:0;transform:translateY(6px)}
+/* live strip */
+.strip-wrap{position:absolute;bottom:calc(var(--sb) + 130px);left:12px;right:12px;z-index:12;display:none;flex-direction:column;gap:4px;pointer-events:none}
+.strip-wrap.on{display:flex}
+.strip-box{height:44px;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.12);background:rgba(0,0,0,.5);position:relative}
+#stripC{display:block;width:100%;height:44px}
+.strip-fade{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.5) 0%,transparent 12%,transparent 88%,rgba(0,0,0,.5) 100%)}
+.strip-cur{position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--red);box-shadow:0 0 6px var(--red);transition:left .08s linear}
+.strip-pct{text-align:center;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.35)}
 
-/* BOTTOM CONTROLS — fixed height, safe area */
-.bottom-bar{
+/* camera toast */
+.ctost{position:absolute;bottom:calc(var(--sb) + 136px);left:14px;right:14px;z-index:13;background:rgba(0,0,0,.75);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 14px;font-size:13px;color:rgba(255,255,255,.85);text-align:center;line-height:1.5;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);pointer-events:none;transition:opacity .35s,transform .35s}
+.ctost.off{opacity:0;transform:translateY(6px)}
+
+/* BOTTOM BAR */
+.cam-bot{
   position:absolute;
   bottom:0;left:0;right:0;
-  padding-bottom:calc(var(--safe-bottom) + 20px);
+  padding-bottom:calc(var(--sb) + 18px);
   padding-top:12px;
-  padding-left:28px;
-  padding-right:28px;
-  background:linear-gradient(to top,rgba(0,0,0,0.82) 0%,transparent 100%);
-  z-index:50;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+  padding-left:28px;padding-right:28px;
+  background:linear-gradient(to top,rgba(0,0,0,.85),transparent);
+  z-index:13;
+  display:flex;align-items:center;justify-content:space-between;
 }
+.sdbtn{width:52px;height:52px;border-radius:13px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;flex-shrink:0;position:relative}
+.sdbtn img{width:100%;height:100%;object-fit:cover;display:none;position:absolute;inset:0}
+.sdbtn-icon{font-size:22px;color:rgba(255,255,255,.5)}
+.sdbtn .badge{display:none;position:absolute;top:3px;right:3px;width:16px;height:16px;border-radius:50%;background:var(--cyan);color:#000;font-size:9px;font-weight:800;align-items:center;justify-content:center}
 
-.side-btn{
-  width:52px;height:52px;border-radius:14px;
-  background:rgba(255,255,255,0.09);
-  border:1px solid rgba(255,255,255,0.15);
-  color:#fff;font-size:21px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;flex-shrink:0;overflow:hidden;
-  position:relative;
-}
-.side-btn img{width:100%;height:100%;object-fit:cover;display:none}
-.side-btn .side-icon{font-size:22px;color:rgba(255,255,255,0.5)}
-.side-btn .cnt-badge{
-  display:none;position:absolute;
-  top:3px;right:3px;
-  width:16px;height:16px;border-radius:50%;
-  background:var(--cyan);color:#000;
-  font-size:9px;font-weight:800;
-  align-items:center;justify-content:center;
-}
-
-/* THE RECORD BUTTON */
-.rec-wrap{
-  display:flex;flex-direction:column;
-  align-items:center;gap:5px;flex-shrink:0;
-}
-.rec-btn{
-  width:76px;height:76px;border-radius:50%;
-  background:rgba(255,255,255,0.1);
-  border:3px solid rgba(255,255,255,0.65);
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:transform .1s;
-  -webkit-tap-highlight-color:transparent;
-}
+.rec-wrap{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0}
+.rec-btn{width:76px;height:76px;border-radius:50%;background:rgba(255,255,255,.1);border:3px solid rgba(255,255,255,.65);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .1s;-webkit-tap-highlight-color:transparent}
 .rec-btn:active{transform:scale(0.92)}
-.rec-inner{
-  width:56px;height:56px;border-radius:50%;
-  background:var(--red);
-  transition:all .2s cubic-bezier(.4,0,.2,1);
-  box-shadow:0 0 18px rgba(255,59,48,0.55);
-}
-.rec-btn.recording .rec-inner{
-  width:26px;height:26px;
-  border-radius:6px;
-}
-.rec-label{
-  font-size:10px;letter-spacing:2px;text-transform:uppercase;
-  color:rgba(255,255,255,0.45);
-}
-.rec-label.recording{
-  color:var(--red);
-  animation:blink .9s step-end infinite;
-}
+.rec-inner{width:56px;height:56px;border-radius:50%;background:var(--red);transition:all .2s cubic-bezier(.4,0,.2,1);box-shadow:0 0 18px rgba(255,59,48,.5)}
+.rec-btn.recording .rec-inner{width:26px;height:26px;border-radius:6px}
+.rec-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.rec-lbl.rec{color:var(--red);animation:blink .9s step-end infinite}
 
-/* flash */
-.flash{
-  position:absolute;inset:0;background:#fff;
-  opacity:0;z-index:100;pointer-events:none;
-  transition:opacity .05s;
-}
-.flash.go{opacity:0.5}
+.flip-btn{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 
-/* scan lines */
-.scanlines{
-  position:absolute;inset:0;z-index:10;pointer-events:none;
-  background:repeating-linear-gradient(to bottom,transparent,transparent 2px,rgba(0,0,0,.035) 2px,rgba(0,0,0,.035) 4px);
-  opacity:0.8;
-}
+/* ══ PREVIEW ══ */
+#s-preview{background:#050508;display:none;flex-direction:column}
+#s-preview.active{display:flex}
+.ph{display:flex;align-items:center;gap:10px;padding-top:calc(var(--st) + 14px);padding-bottom:12px;padding-left:14px;padding-right:14px;background:rgba(0,0,0,.45);border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0}
+.pbk{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.pi{flex:1}
+.pi h2{font-size:16px;font-weight:600}
+.pi p{font-size:11px;color:rgba(255,255,255,.35);margin-top:2px}
+.pbtns{display:flex;gap:8px;flex-shrink:0}
+.pbn{height:34px;padding:0 12px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px}
+.pbn:active{opacity:.7}
+.pbn.hi{background:var(--cyan);border-color:transparent;color:#000}
+.viewer{flex:1;background:#000;position:relative;overflow:hidden;touch-action:none}
+#viewC{position:absolute;top:0;left:0;cursor:grab;display:block}
+#viewC:active{cursor:grabbing}
+.vhint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.45);pointer-events:none;white-space:nowrap;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 
-/* ═══════ PREVIEW ═══════ */
-#preview{
-  background:#050508;
-  display:none;flex-direction:column;
-}
-#preview.active{display:flex}
+/* ══ GALLERY ══ */
+#s-gallery{background:#050508;display:none;flex-direction:column}
+#s-gallery.active{display:flex}
+.gh{display:flex;align-items:center;gap:10px;padding-top:calc(var(--st) + 14px);padding-bottom:12px;padding-left:14px;padding-right:14px;background:rgba(0,0,0,.45);border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0}
+.gbk{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.gtt{flex:1;font-size:17px;font-weight:600}
+.gcn{font-size:11px;color:rgba(255,255,255,.3);letter-spacing:1px}
+.ggrid{flex:1;overflow-y:auto;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;-webkit-overflow-scrolling:touch}
+.gcard{aspect-ratio:2.2/1;border-radius:10px;overflow:hidden;position:relative;cursor:pointer;background:#111;border:1px solid rgba(255,255,255,.07);transition:transform .15s}
+.gcard:active{transform:scale(0.97)}
+.gcard img{width:100%;height:100%;object-fit:cover;display:block}
+.gcinfo{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.85),transparent);padding:14px 8px 6px;font-size:10px;color:rgba(255,255,255,.65)}
+.gempty{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:70px 20px;text-align:center}
+.gempty-icon{font-size:52px;opacity:.3}
+.gempty-ttl{font-size:16px;font-weight:600;color:rgba(255,255,255,.4)}
+.gempty-sub{font-size:12px;color:rgba(255,255,255,.2)}
 
-.prev-head{
-  display:flex;align-items:center;gap:10px;
-  padding:calc(var(--safe-top) + 14px) 14px 12px;
-  background:rgba(0,0,0,0.5);
-  border-bottom:1px solid rgba(255,255,255,0.07);
-  flex-shrink:0;
-}
-.prev-back{
-  width:36px;height:36px;border-radius:9px;
-  background:rgba(255,255,255,0.07);
-  border:1px solid rgba(255,255,255,0.12);
-  color:#fff;font-size:18px;
-  display:flex;align-items:center;justify-content:center;cursor:pointer;
-  flex-shrink:0;
-}
-.prev-info{flex:1}
-.prev-info h2{font-size:16px;font-weight:600}
-.prev-info p{font-size:11px;color:rgba(255,255,255,0.35);margin-top:2px}
-.prev-btns{display:flex;gap:8px;flex-shrink:0}
-.pbtn{
-  height:34px;padding:0 12px;border-radius:8px;
-  border:1px solid rgba(255,255,255,0.14);
-  background:rgba(255,255,255,0.06);
-  color:rgba(255,255,255,0.7);
-  font-size:12px;font-weight:600;cursor:pointer;
-  display:flex;align-items:center;gap:5px;transition:opacity .15s;
-}
-.pbtn:active{opacity:0.7}
-.pbtn.hi{background:var(--cyan);border-color:transparent;color:#000}
-
-.viewer-wrap{
-  flex:1;background:#000;
-  position:relative;overflow:hidden;
-  touch-action:none;
-}
-#viewCanvas{
-  position:absolute;top:0;left:0;cursor:grab;display:block;
-}
-#viewCanvas:active{cursor:grabbing}
-.view-hint{
-  position:absolute;bottom:12px;
-  left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,0.6);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:20px;padding:5px 14px;
-  font-size:11px;letter-spacing:1px;
-  color:rgba(255,255,255,0.45);
-  pointer-events:none;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  white-space:nowrap;
-}
-
-/* ═══════ GALLERY ═══════ */
-#gallery{
-  background:#050508;
-  display:none;flex-direction:column;
-}
-#gallery.active{display:flex}
-
-.gal-head{
-  display:flex;align-items:center;gap:10px;
-  padding:calc(var(--safe-top) + 14px) 14px 12px;
-  background:rgba(0,0,0,0.5);
-  border-bottom:1px solid rgba(255,255,255,0.07);
-  flex-shrink:0;
-}
-.gal-back{
-  width:36px;height:36px;border-radius:9px;
-  background:rgba(255,255,255,0.07);
-  border:1px solid rgba(255,255,255,0.12);
-  color:#fff;font-size:18px;
-  display:flex;align-items:center;justify-content:center;cursor:pointer;
-}
-.gal-ttl{flex:1;font-size:17px;font-weight:600}
-.gal-cnt{font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:1px}
-.gal-grid{
-  flex:1;overflow-y:auto;padding:14px;
-  display:grid;grid-template-columns:1fr 1fr;gap:10px;
-  -webkit-overflow-scrolling:touch;
-}
-.gal-card{
-  aspect-ratio:2.2/1;border-radius:10px;overflow:hidden;
-  position:relative;cursor:pointer;
-  background:#111;border:1px solid rgba(255,255,255,0.07);
-  transition:transform .15s;
-}
-.gal-card:active{transform:scale(0.97)}
-.gal-card img{width:100%;height:100%;object-fit:cover;display:block}
-.gal-card-info{
-  position:absolute;bottom:0;left:0;right:0;
-  background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);
-  padding:14px 8px 6px;
-  font-size:10px;color:rgba(255,255,255,0.65);
-}
-.gal-empty{
-  grid-column:1/-1;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:10px;
-  padding:70px 20px;text-align:center;
-}
-.gal-empty-icon{font-size:54px;opacity:0.3}
-.gal-empty-ttl{font-size:16px;font-weight:600;color:rgba(255,255,255,0.4)}
-.gal-empty-sub{font-size:12px;color:rgba(255,255,255,0.2)}
-
-/* ═══════ LOADING ═══════ */
-.loading{
-  position:fixed;inset:0;z-index:999;
-  background:rgba(0,0,0,0.85);
-  display:none;flex-direction:column;
-  align-items:center;justify-content:center;gap:14px;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-}
+/* ══ LOADING ══ */
+.loading{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.85);display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .loading.on{display:flex}
-.spinner{
-  width:44px;height:44px;border-radius:50%;
-  border:2px solid rgba(0,229,255,0.15);
-  border-top-color:var(--cyan);
-  animation:spin .7s linear infinite;
-}
-.spin-txt{
-  font-size:11px;letter-spacing:3px;text-transform:uppercase;
-  color:rgba(255,255,255,0.4);
-}
+.spinner{width:44px;height:44px;border-radius:50%;border:2px solid rgba(0,229,255,.15);border-top-color:var(--cyan);animation:spin .7s linear infinite}
+.slbl{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4)}
 
-/* ═══════ GLOBAL TOAST ═══════ */
-.g-toast{
-  position:fixed;
-  bottom:calc(var(--safe-bottom)+20px);
-  left:50%;transform:translateX(-50%) translateY(64px);
-  z-index:998;
-  background:rgba(25,25,35,0.95);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:12px;padding:10px 18px;
-  font-size:13px;color:#fff;
-  white-space:normal;text-align:center;
-  max-width:calc(100vw - 32px);
-  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
-  pointer-events:none;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-}
-.g-toast.show{transform:translateX(-50%) translateY(0)}
-.g-toast.ok{border-color:rgba(48,209,88,.4);color:var(--green)}
-.g-toast.err{border-color:rgba(255,59,48,.4);color:var(--red)}
+/* ══ GLOBAL TOAST ══ */
+.gtost{position:fixed;bottom:calc(var(--sb) + 20px);left:50%;transform:translateX(-50%) translateY(64px);z-index:998;background:rgba(22,22,32,.95);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 18px;font-size:13px;color:#fff;white-space:normal;text-align:center;max-width:calc(100vw - 32px);transition:transform .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.gtost.show{transform:translateX(-50%) translateY(0)}
+.gtost.ok{border-color:rgba(52,199,89,.4);color:var(--green)}
+.gtost.err{border-color:rgba(255,59,48,.4);color:var(--red)}
 </style>
 </head>
 <body>
 
 <!-- HOME -->
-<div class="screen active" id="home">
-  <div class="home-logo">
-    <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle class="spin1" cx="45" cy="45" r="41" stroke="rgba(0,229,255,.2)" stroke-width="1" stroke-dasharray="6 5"/>
-      <circle cx="45" cy="45" r="30" stroke="rgba(0,229,255,.08)" stroke-width="1"/>
-      <circle class="spin2" cx="45" cy="45" r="19" stroke="rgba(0,229,255,.3)" stroke-width="1.5" stroke-dasharray="10 4"/>
-      <line x1="45" y1="2" x2="45" y2="88" stroke="rgba(0,229,255,.12)" stroke-width="1"/>
-      <line x1="2" y1="45" x2="88" y2="45" stroke="rgba(0,229,255,.12)" stroke-width="1"/>
-      <circle cx="45" cy="45" r="5" fill="#00e5ff"/>
-      <circle cx="45" cy="45" r="11" fill="rgba(0,229,255,.07)" stroke="rgba(0,229,255,.35)" stroke-width="1"/>
-      <line x1="45" y1="2" x2="45" y2="9" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
-      <line x1="45" y1="81" x2="45" y2="88" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
-      <line x1="2" y1="45" x2="9" y2="45" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
-      <line x1="81" y1="45" x2="88" y2="45" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
-    </svg>
+<div class="screen active" id="s-home">
+  <div class="home-inner">
+    <div class="orb">
+      <svg viewBox="0 0 96 96" fill="none">
+        <circle class="r1" cx="48" cy="48" r="44" stroke="rgba(0,229,255,.2)" stroke-width="1" stroke-dasharray="6 5"/>
+        <circle cx="48" cy="48" r="32" stroke="rgba(0,229,255,.1)" stroke-width="1"/>
+        <circle class="r2" cx="48" cy="48" r="21" stroke="rgba(0,229,255,.3)" stroke-width="1.5" stroke-dasharray="10 4"/>
+        <line x1="48" y1="2" x2="48" y2="94" stroke="rgba(0,229,255,.12)" stroke-width="1"/>
+        <line x1="2" y1="48" x2="94" y2="48" stroke="rgba(0,229,255,.12)" stroke-width="1"/>
+        <circle cx="48" cy="48" r="5" fill="#00e5ff"/>
+        <circle cx="48" cy="48" r="11" fill="rgba(0,229,255,.07)" stroke="rgba(0,229,255,.35)" stroke-width="1"/>
+        <line x1="48" y1="2" x2="48" y2="10" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="48" y1="86" x2="48" y2="94" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="2" y1="48" x2="10" y2="48" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="86" y1="48" x2="94" y2="48" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="home-title">ПАНОРАМА</div>
+    <div class="home-sub">360° Camera</div>
+    <button class="btn-main" onclick="startCam()"><span>⏺</span> Начать съёмку</button>
+    <button class="btn-sec" onclick="openGal()">📁 Галерея</button>
   </div>
-  <div class="home-title">Панорама</div>
-  <div class="home-sub">360° Camera</div>
-  <button class="home-btn" onclick="startCam()">
-    <span>⏺</span> Начать съёмку
-  </button>
-  <button class="home-btn2" onclick="goGallery()">
-    📁 Галерея
-  </button>
 </div>
 
 <!-- CAMERA -->
-<div class="screen" id="cam">
+<div class="screen" id="s-cam">
   <video id="vid" autoplay playsinline muted></video>
-  <div class="scanlines"></div>
-  <div class="flash" id="flash"></div>
+  <div class="scan"></div>
+  <div id="flash"></div>
+  <div class="top-grad"></div>
 
-  <!-- top bar -->
-  <div class="top-bar">
-    <div class="top-bar-inner">
-      <div class="icon-btn" onclick="exitCam()">‹</div>
-      <div class="top-center">
-        <div class="top-angle" id="topAngle">0°</div>
-        <div class="top-status" id="topStatus">НАЖМИТЕ ЗАПИСЬ</div>
-      </div>
-      <div class="icon-btn" id="flipBtn" onclick="flipCam()">⟳</div>
+  <div class="top-row">
+    <div class="topbtn" onclick="exitCam()">‹</div>
+    <div class="top-mid">
+      <div class="top-deg" id="topDeg">0°</div>
+      <div class="top-st" id="topSt">НАЖМИТЕ ЗАПИСЬ</div>
     </div>
+    <div class="topbtn" onclick="flipCam()">⟳</div>
   </div>
 
-  <!-- progress bar -->
-  <div class="prog-bar-wrap">
-    <div class="prog-bar" id="progBar"></div>
+  <div class="prog-wrap"><div class="prog" id="prog"></div></div>
+
+  <div class="arc-wrap">
+    <svg viewBox="0 0 200 200" fill="none">
+      <circle cx="100" cy="100" r="92" stroke="rgba(255,255,255,.08)" stroke-width="2" stroke-dasharray="578 578" transform="rotate(-90 100 100)"/>
+      <circle id="arcP" cx="100" cy="100" r="92" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="0 578" transform="rotate(-90 100 100)"/>
+      <circle id="arcDot" cx="100" cy="8" r="4" fill="#00e5ff"/>
+    </svg>
   </div>
 
-  <!-- crosshair -->
-  <div class="crosshair">
-    <div class="ch-h"></div>
-    <div class="ch-v"></div>
-    <div class="ch-dot" id="chDot"></div>
+  <div class="xhair">
+    <div class="xh"></div>
+    <div class="xv"></div>
+    <div class="xdot" id="xdot"></div>
+  </div>
+  <div class="bracks">
+    <div class="bk"></div>
+    <div class="bk tr"></div>
+    <div class="bk bl"></div>
+    <div class="bk br"></div>
   </div>
 
-  <!-- level -->
-  <div class="level-bar">
-    <div class="level-dot" id="levelDot"></div>
+  <div class="level">
+    <div class="ltrack"><div class="lball" id="lball"></div></div>
+    <div class="llbl">уровень</div>
   </div>
 
-  <!-- live strip -->
-  <div class="live-strip" id="liveStrip">
-    <div class="strip-canvas-wrap">
-      <canvas id="stripCanvas" height="44"></canvas>
+  <div class="arrow" id="arR">›</div>
+  <div class="arrow" id="arL">‹</div>
+
+  <div class="strip-wrap" id="stripWrap">
+    <div class="strip-box">
+      <canvas id="stripC" height="44"></canvas>
       <div class="strip-fade"></div>
-      <div class="strip-cursor" id="stripCursor"></div>
+      <div class="strip-cur" id="stripCur"></div>
     </div>
     <div class="strip-pct" id="stripPct">0% покрыто</div>
   </div>
 
-  <!-- camera toast -->
-  <div class="cam-toast" id="camToast">
-    📱 Нажмите ● для начала записи, затем медленно поворачивайте вправо
-  </div>
+  <div class="ctost" id="ctost">📱 Нажмите ● для начала записи, затем медленно поворачивайтесь вправо</div>
 
-  <!-- bottom bar -->
-  <div class="bottom-bar">
-    <!-- gallery thumb -->
-    <div class="side-btn" id="galBtn" onclick="goGallery()">
-      <img id="galThumbImg" alt="">
-      <span class="side-icon">📁</span>
-      <span class="cnt-badge" id="cntBadge"></span>
+  <div class="cam-bot">
+    <div class="sdbtn" id="galBtn" onclick="openGal()">
+      <img id="galThumb" alt="">
+      <span class="sdbtn-icon">📁</span>
+      <span class="badge" id="galBadge"></span>
     </div>
-
-    <!-- RECORD BUTTON -->
     <div class="rec-wrap">
       <div class="rec-btn" id="recBtn" onclick="toggleRec()">
-        <div class="rec-inner" id="recInner"></div>
+        <div class="rec-inner"></div>
       </div>
-      <div class="rec-label" id="recLabel">ЗАПИСЬ</div>
+      <div class="rec-lbl" id="recLbl">ЗАПИСЬ</div>
     </div>
-
-    <!-- flip -->
-    <div class="side-btn" onclick="flipCam()">⟳</div>
+    <div class="flip-btn" onclick="flipCam()">⟳</div>
   </div>
 </div>
 
 <!-- PREVIEW -->
-<div class="screen" id="preview">
-  <div class="prev-head">
-    <div class="prev-back" onclick="closePreview()">‹</div>
-    <div class="prev-info">
-      <h2>Панорама 360°</h2>
-      <p id="prevSub">—</p>
-    </div>
-    <div class="prev-btns">
-      <button class="pbtn" onclick="savePano()">💾</button>
-      <button class="pbtn hi" onclick="sharePano()">↗ Поделиться</button>
+<div class="screen" id="s-preview">
+  <div class="ph">
+    <div class="pbk" onclick="closePreview()">‹</div>
+    <div class="pi"><h2>Панорама 360°</h2><p id="prevSub">—</p></div>
+    <div class="pbtns">
+      <button class="pbn" onclick="savePano()">💾</button>
+      <button class="pbn hi" onclick="sharePano()">↗ Поделиться</button>
     </div>
   </div>
-  <div class="viewer-wrap" id="viewerWrap">
-    <canvas id="viewCanvas"></canvas>
-    <div class="view-hint" id="viewHint">← тяните для обзора →</div>
+  <div class="viewer" id="viewerDiv">
+    <canvas id="viewC"></canvas>
+    <div class="vhint">← тяните для обзора →</div>
   </div>
 </div>
 
 <!-- GALLERY -->
-<div class="screen" id="gallery">
-  <div class="gal-head">
-    <div class="gal-back" onclick="closeGallery()">‹</div>
-    <div class="gal-ttl">Галерея</div>
-    <div class="gal-cnt" id="galCnt"></div>
+<div class="screen" id="s-gallery">
+  <div class="gh">
+    <div class="gbk" onclick="closeGal()">‹</div>
+    <div class="gtt">Галерея</div>
+    <div class="gcn" id="gcnt"></div>
   </div>
-  <div class="gal-grid" id="galGrid"></div>
+  <div class="ggrid" id="ggrid"></div>
 </div>
 
 <!-- LOADING -->
 <div class="loading" id="loading">
   <div class="spinner"></div>
-  <div class="spin-txt" id="spinTxt">Обработка</div>
+  <div class="slbl" id="slbl">Обработка</div>
 </div>
 
-<!-- GLOBAL TOAST -->
-<div class="g-toast" id="gToast"></div>
+<div class="gtost" id="gtost"></div>
 
 <script>
-/* ─── CONSTANTS ─── */
-const PANO_W = 4096;
-const PANO_H = 640;
+const PW=4096,PH=640;
+let vs=null,facing='environment';
+let isRec=false,gyroOk=false,touchMode=false;
+let prevA=null,contA=0,startA=0,delta=0,lastD=-1;
+let panoC=null,panoCtx=null,rafR=null;
+let panos=[],curI=-1;
+let touchX=null,mX=null;
 
-/* ─── STATE ─── */
-let vs = null;           // video stream
-let facing = 'environment';
-let recording = false;
-let gyroOk = false;
-let touchMode = false;
-
-// Angle tracking
-let prevAlpha = null;
-let contAngle = 0;       // continuously accumulates
-let startAngle = 0;      // angle when rec started
-let delta = 0;           // degrees since rec start
-let lastDrawn = -1;      // last drawn angle
-
-// Offscreen panorama
-let panoC = null;
-let panoCtx = null;
-let rafRec = null;
-
-// Gallery
-let panos = [];
-let curIdx = -1;
-
-// Touch
-let touchX = null;
-let mX = null;
-
-/* ─── UTIL ─── */
-function show(id){
+function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-function showLoad(t){
-  document.getElementById('spinTxt').textContent=(t||'Обработка').toUpperCase();
-  document.getElementById('loading').classList.add('on');
-}
+function showLoad(t){document.getElementById('slbl').textContent=(t||'').toUpperCase();document.getElementById('loading').classList.add('on')}
 function hideLoad(){document.getElementById('loading').classList.remove('on')}
 
-let gtTimer;
-function gToast(msg,type=''){
-  const el=document.getElementById('gToast');
-  el.textContent=msg;el.className='g-toast show '+type;
-  clearTimeout(gtTimer);gtTimer=setTimeout(()=>el.classList.remove('show'),3200);
+let gtT;
+function gToast(m,tp=''){
+  const el=document.getElementById('gtost');
+  el.textContent=m;el.className='gtost show '+tp;
+  clearTimeout(gtT);gtT=setTimeout(()=>el.classList.remove('show'),3200);
+}
+let ctT;
+function cToast(m){
+  const el=document.getElementById('ctost');
+  el.textContent=m;el.classList.remove('off');
+  clearTimeout(ctT);ctT=setTimeout(()=>el.classList.add('off'),6000);
 }
 
-let ctTimer;
-function cToast(msg){
-  const el=document.getElementById('camToast');
-  el.textContent=msg;el.classList.remove('hidden');
-  clearTimeout(ctTimer);ctTimer=setTimeout(()=>el.classList.add('hidden'),6000);
-}
-
-/* ─── CAMERA ─── */
+/* CAMERA */
 async function startCam(){
   showLoad('Запуск камеры');
   try{
-    vs=await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:facing,width:{ideal:1920},height:{ideal:1080}},audio:false
-    });
+    vs=await navigator.mediaDevices.getUserMedia({video:{facingMode:facing,width:{ideal:1920},height:{ideal:1080}},audio:false});
     const v=document.getElementById('vid');
     v.srcObject=vs;
     await v.play();
     hideLoad();
-    show('cam');
+    go('s-cam');
     initGyro();
-    setAngleUI(0);
+    updArc(0);
     cToast('📱 Нажмите ● для начала записи, затем медленно поворачивайтесь вправо');
   }catch(e){
     hideLoad();
     gToast('❌ Нет доступа к камере. Разрешите в настройках.','err');
   }
 }
-
-function exitCam(){
-  stopRec(true);
-  stopVid();
-  window.removeEventListener('deviceorientation',onGyro,true);
-  show('home');
-}
-
-function stopVid(){
-  if(vs){vs.getTracks().forEach(t=>t.stop());vs=null;}
-}
-
+function exitCam(){stopRec(true);stopVS();window.removeEventListener('deviceorientation',onGyro,true);go('s-home')}
+function stopVS(){if(vs){vs.getTracks().forEach(t=>t.stop());vs=null}}
 async function flipCam(){
-  const btn=document.getElementById('flipBtn');
-  btn.style.transform='rotateY(360deg)';
-  btn.style.transition='transform .5s';
-  setTimeout(()=>{btn.style.transform='';btn.style.transition='';},500);
   facing=facing==='environment'?'user':'environment';
-  if(vs){
-    vs.getTracks().forEach(t=>t.stop());
-    try{
-      vs=await navigator.mediaDevices.getUserMedia({video:{facingMode:facing},audio:false});
-      document.getElementById('vid').srcObject=vs;
-    }catch(e){facing=facing==='environment'?'user':'environment';}
-  }
+  if(vs){vs.getTracks().forEach(t=>t.stop());
+    try{vs=await navigator.mediaDevices.getUserMedia({video:{facingMode:facing},audio:false});document.getElementById('vid').srcObject=vs;}
+    catch(e){facing=facing==='environment'?'user':'environment'}}
 }
 
-/* ─── GYRO ─── */
+/* GYRO */
 function initGyro(){
-  prevAlpha=null;contAngle=0;gyroOk=false;touchMode=false;
+  prevA=null;contA=0;gyroOk=false;touchMode=false;
   if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
-    DeviceOrientationEvent.requestPermission()
-      .then(s=>{
-        if(s==='granted')window.addEventListener('deviceorientation',onGyro,true);
-        else enableTouch();
-      }).catch(()=>enableTouch());
+    DeviceOrientationEvent.requestPermission().then(s=>s==='granted'?window.addEventListener('deviceorientation',onGyro,true):enTouch()).catch(enTouch);
   }else{
     window.addEventListener('deviceorientation',onGyro,true);
-    setTimeout(()=>{if(!gyroOk)enableTouch();},1500);
+    setTimeout(()=>{if(!gyroOk)enTouch()},1500);
   }
 }
-
 function onGyro(e){
-  if(e.alpha===null||e.alpha===undefined){if(!gyroOk)enableTouch();return;}
+  if(e.alpha===null||e.alpha===undefined){if(!gyroOk)enTouch();return}
   gyroOk=true;
-  if(prevAlpha===null){prevAlpha=e.alpha;return;}
-  let d=e.alpha-prevAlpha;
+  if(prevA===null){prevA=e.alpha;return}
+  let d=e.alpha-prevA;
   if(d>180)d-=360;if(d<-180)d+=360;
-  contAngle+=d;prevAlpha=e.alpha;
-  updateLevel(e.gamma);
-  tick();
+  contA+=d;prevA=e.alpha;
+  updLevel(e.gamma);tick();
 }
-
-function enableTouch(){
+function enTouch(){
   touchMode=true;
-  document.getElementById('topStatus').textContent='ТЯНИТЕ ЭКРАН ВЛЕВО';
+  document.getElementById('topSt').textContent='ТЯНИТЕ ЭКРАН ВЛЕВО';
   cToast('👆 Гироскоп недоступен — тяните экран влево для поворота');
 }
 
-/* ─── TICK (angle update) ─── */
+/* TICK */
 function tick(){
-  delta=contAngle-startAngle;
+  delta=contA-startA;
   const disp=Math.abs(delta)%360;
-  setAngleUI(disp);
-  if(recording&&Math.abs(delta)>=360){stopRec(false);}
+  document.getElementById('topDeg').textContent=Math.round(Math.abs(delta))+'°';
+  updArc(disp);
+  document.getElementById('arR').style.display=delta>=0?'block':'none';
+  document.getElementById('arL').style.display=delta<0?'block':'none';
+  if(isRec&&Math.abs(delta)>=360)stopRec(false);
 }
-
-function setAngleUI(deg){
-  document.getElementById('topAngle').textContent=Math.round(Math.abs(delta||0))+'°';
-  const pct=Math.min(deg/360,1);
-  const pb=document.getElementById('progBar');
-  pb.style.width=(pct*100).toFixed(1)+'%';
-  // strip cursor
-  document.getElementById('stripCursor').style.left=(pct*100).toFixed(1)+'%';
-  document.getElementById('stripPct').textContent=Math.round(pct*100)+'% покрыто';
+function updArc(deg){
+  const p=Math.min(deg/360,1),c=578;
+  const arc=document.getElementById('arcP');
+  arc.setAttribute('stroke-dasharray',(p*c).toFixed(1)+' '+c);
+  const a=(p*360-90)*Math.PI/180;
+  const dot=document.getElementById('arcDot');
+  dot.setAttribute('cx',(100+92*Math.cos(a)).toFixed(1));
+  dot.setAttribute('cy',(100+92*Math.sin(a)).toFixed(1));
+  document.getElementById('prog').style.width=(p*100).toFixed(1)+'%';
+  document.getElementById('stripCur').style.left=(p*100).toFixed(1)+'%';
+  document.getElementById('stripPct').textContent=Math.round(p*100)+'% покрыто';
 }
-
-function updateLevel(g){
-  if(g===null||g===undefined)return;
+function updLevel(g){
+  if(g==null)return;
   const t=Math.max(-45,Math.min(45,g));
-  const p=50+(t/45)*40;
-  const d=document.getElementById('levelDot');
-  d.style.left=p+'%';
+  const b=document.getElementById('lball');
+  b.style.left=(50+(t/45)*40)+'%';
   const a=Math.abs(t);
-  d.className='level-dot'+(a>25?' bad':a>12?' warn':'');
+  b.className='lball'+(a>25?' bad':a>12?' warn':'');
 }
 
-/* ─── RECORD ─── */
-function toggleRec(){
-  recording?stopRec(false):startRec();
-}
-
+/* RECORD */
+function toggleRec(){isRec?stopRec(false):startRec()}
 function startRec(){
-  recording=true;
-  startAngle=contAngle;delta=0;lastDrawn=-1;
-
-  panoC=document.createElement('canvas');
-  panoC.width=PANO_W;panoC.height=PANO_H;
-  panoCtx=panoC.getContext('2d');
-  panoCtx.fillStyle='#0a0a0e';
-  panoCtx.fillRect(0,0,PANO_W,PANO_H);
-
-  // setup strip canvas
-  const sw=document.getElementById('liveStrip');
-  sw.classList.add('visible');
-  const sc=document.getElementById('stripCanvas');
-  const wrap=sw.querySelector('.strip-canvas-wrap');
-  sc.width=wrap.clientWidth||320;sc.height=44;
-
+  isRec=true;startA=contA;delta=0;lastD=-1;
+  panoC=document.createElement('canvas');panoC.width=PW;panoC.height=PH;
+  panoCtx=panoC.getContext('2d');panoCtx.fillStyle='#0a0a0e';panoCtx.fillRect(0,0,PW,PH);
+  const sw=document.getElementById('stripWrap');
+  sw.classList.add('on');
+  const sc=document.getElementById('stripC');
+  sc.width=sw.querySelector('.strip-box').clientWidth||320;sc.height=44;
   document.getElementById('recBtn').classList.add('recording');
-  document.getElementById('recLabel').textContent='■ СТОП';
-  document.getElementById('recLabel').classList.add('recording');
-  document.getElementById('topStatus').textContent='● ЗАПИСЬ';
-  document.getElementById('topStatus').classList.add('rec');
-  document.getElementById('progBar').classList.add('rec');
-  document.getElementById('chDot').classList.add('rec');
-
-  rafRec=requestAnimationFrame(recLoop);
-  cToast('🔴 Запись идёт! Медленно поворачивайтесь вправо на 360°');
+  document.getElementById('recLbl').textContent='■ СТОП';
+  document.getElementById('recLbl').classList.add('rec');
+  document.getElementById('topSt').textContent='● ЗАПИСЬ';
+  document.getElementById('topSt').classList.add('rec');
+  document.getElementById('arcP').style.stroke='var(--red)';
+  document.getElementById('arcDot').style.fill='var(--red)';
+  document.getElementById('xdot').classList.add('rec');
+  document.getElementById('prog').classList.add('rec');
+  updArc(0);
+  rafR=requestAnimationFrame(recLoop);
+  cToast('🔴 Запись! Медленно поворачивайтесь вправо на 360°');
 }
-
 function stopRec(cancel){
-  if(!recording)return;
-  recording=false;
-  cancelAnimationFrame(rafRec);
-
+  if(!isRec)return;isRec=false;cancelAnimationFrame(rafR);
   document.getElementById('recBtn').classList.remove('recording');
-  document.getElementById('recLabel').textContent='ЗАПИСЬ';
-  document.getElementById('recLabel').classList.remove('recording');
-  document.getElementById('topStatus').textContent=touchMode?'ТЯНИТЕ ЭКРАН ВЛЕВО':'НАЖМИТЕ ЗАПИСЬ';
-  document.getElementById('topStatus').classList.remove('rec');
-  document.getElementById('progBar').classList.remove('rec');
-  document.getElementById('chDot').classList.remove('rec');
-
+  document.getElementById('recLbl').textContent='ЗАПИСЬ';
+  document.getElementById('recLbl').classList.remove('rec');
+  document.getElementById('topSt').textContent=touchMode?'ТЯНИТЕ ЭКРАН ВЛЕВО':'НАЖМИТЕ ЗАПИСЬ';
+  document.getElementById('topSt').classList.remove('rec');
+  document.getElementById('arcP').style.stroke='#00e5ff';
+  document.getElementById('arcDot').style.fill='#00e5ff';
+  document.getElementById('xdot').classList.remove('rec');
+  document.getElementById('prog').classList.remove('rec');
   if(cancel||!panoC)return;
-  const deg=Math.abs(delta);
-  if(deg<10){
-    gToast('⚠️ Слишком мало движения','err');
-    document.getElementById('liveStrip').classList.remove('visible');
-    return;
-  }
+  if(Math.abs(delta)<10){gToast('⚠️ Слишком мало движения','err');document.getElementById('stripWrap').classList.remove('on');return}
   buildPano();
 }
-
-/* ─── RECORDING LOOP ─── */
 function recLoop(){
-  if(!recording)return;
-  const sinceLast=Math.abs(delta)-(lastDrawn<0?0:Math.abs(lastDrawn));
-  if(sinceLast>=0.25)drawSlice();
-  rafRec=requestAnimationFrame(recLoop);
+  if(!isRec)return;
+  const since=Math.abs(delta)-(lastD<0?0:Math.abs(lastD));
+  if(since>=0.25)drawSlice();
+  rafR=requestAnimationFrame(recLoop);
 }
-
 function drawSlice(){
   const v=document.getElementById('vid');
   if(!v.videoWidth||!panoCtx)return;
-  const normAngle=Math.abs(delta)%360;
-  const x=(normAngle/360)*PANO_W;
-  const prevNorm=lastDrawn<0?0:Math.abs(lastDrawn)%360;
-  let sw2=Math.abs(normAngle-prevNorm)/360*PANO_W;
-  sw2=Math.max(2,Math.ceil(sw2)+1);
-  const srcX=Math.floor(v.videoWidth*0.4);
-  const srcW=Math.max(2,Math.floor(v.videoWidth*0.2));
-  panoCtx.drawImage(v,srcX,0,srcW,v.videoHeight,x-sw2/2,0,sw2,PANO_H);
-  if(x+sw2>PANO_W)panoCtx.drawImage(v,srcX,0,srcW,v.videoHeight,x-sw2/2-PANO_W,0,sw2,PANO_H);
-  if(x-sw2/2<0)panoCtx.drawImage(v,srcX,0,srcW,v.videoHeight,x-sw2/2+PANO_W,0,sw2,PANO_H);
-  lastDrawn=delta;
-  // update strip preview
-  const sc=document.getElementById('stripCanvas');
-  if(sc&&panoC){
-    const ctx=sc.getContext('2d');
-    ctx.drawImage(panoC,0,0,PANO_W,PANO_H,0,0,sc.width,44);
-  }
-  setAngleUI(normAngle);
+  const norm=Math.abs(delta)%360;
+  const x=(norm/360)*PW;
+  const pn=lastD<0?0:Math.abs(lastD)%360;
+  let sw=Math.abs(norm-pn)/360*PW;sw=Math.max(2,Math.ceil(sw)+1);
+  const sx=Math.floor(v.videoWidth*.4),sw2=Math.max(2,Math.floor(v.videoWidth*.2));
+  panoCtx.drawImage(v,sx,0,sw2,v.videoHeight,x-sw/2,0,sw,PH);
+  if(x+sw>PW)panoCtx.drawImage(v,sx,0,sw2,v.videoHeight,x-sw/2-PW,0,sw,PH);
+  if(x-sw/2<0)panoCtx.drawImage(v,sx,0,sw2,v.videoHeight,x-sw/2+PW,0,sw,PH);
+  lastD=delta;
+  const sc=document.getElementById('stripC');
+  if(sc&&panoC){const c=sc.getContext('2d');c.drawImage(panoC,0,0,PW,PH,0,0,sc.width,44)}
+  updArc(norm);
 }
 
-/* ─── BUILD FINAL ─── */
+/* BUILD PANORAMA */
 async function buildPano(){
   showLoad('Сборка панорамы');
   await new Promise(r=>setTimeout(r,60));
-  const covered=Math.min(Math.abs(delta),360);
-  const cropW=Math.round(covered/360*PANO_W);
-  const fc=document.createElement('canvas');
-  fc.width=Math.max(cropW,100);fc.height=PANO_H;
-  const fctx=fc.getContext('2d');
-  fctx.drawImage(panoC,0,0,cropW,PANO_H,0,0,cropW,PANO_H);
-  // vignette
-  const vg=fctx.createLinearGradient(0,0,0,PANO_H);
-  vg.addColorStop(0,'rgba(0,0,0,.3)');vg.addColorStop(.15,'rgba(0,0,0,0)');
-  vg.addColorStop(.85,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.3)');
-  fctx.fillStyle=vg;fctx.fillRect(0,0,cropW,PANO_H);
-  if(covered<355){
-    const lr=fctx.createLinearGradient(0,0,cropW,0);
-    lr.addColorStop(0,'rgba(0,0,0,.4)');lr.addColorStop(.04,'rgba(0,0,0,0)');
-    lr.addColorStop(.96,'rgba(0,0,0,0)');lr.addColorStop(1,'rgba(0,0,0,.4)');
-    fctx.fillStyle=lr;fctx.fillRect(0,0,cropW,PANO_H);
-  }
+  const cov=Math.min(Math.abs(delta),360),cw=Math.round(cov/360*PW);
+  const fc=document.createElement('canvas');fc.width=Math.max(cw,100);fc.height=PH;
+  const fx=fc.getContext('2d');
+  fx.drawImage(panoC,0,0,cw,PH,0,0,cw,PH);
+  const vg=fx.createLinearGradient(0,0,0,PH);
+  vg.addColorStop(0,'rgba(0,0,0,.3)');vg.addColorStop(.15,'rgba(0,0,0,0)');vg.addColorStop(.85,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.3)');
+  fx.fillStyle=vg;fx.fillRect(0,0,cw,PH);
+  if(cov<355){const lr=fx.createLinearGradient(0,0,cw,0);lr.addColorStop(0,'rgba(0,0,0,.4)');lr.addColorStop(.04,'rgba(0,0,0,0)');lr.addColorStop(.96,'rgba(0,0,0,0)');lr.addColorStop(1,'rgba(0,0,0,.4)');fx.fillStyle=lr;fx.fillRect(0,0,cw,PH)}
   const url=fc.toDataURL('image/jpeg',.92);
-  const pano={
-    url,
-    date:new Date().toLocaleString('ru-RU',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}),
-    angle:Math.round(covered),
-    id:Date.now()
-  };
-  panos.unshift(pano);curIdx=0;
-  document.getElementById('liveStrip').classList.remove('visible');
-  setAngleUI(0);
-  document.getElementById('topAngle').textContent='0°';
-  // update gallery thumb btn
-  const img=document.getElementById('galThumbImg');
-  img.src=url;img.style.display='block';
-  document.querySelector('#galBtn .side-icon').style.display='none';
-  const badge=document.getElementById('cntBadge');
-  badge.textContent=panos.length;badge.style.display='flex';
-  hideLoad();
-  openPreview(pano);
+  const pano={url,date:new Date().toLocaleString('ru-RU',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}),angle:Math.round(cov),id:Date.now()};
+  panos.unshift(pano);curI=0;
+  document.getElementById('stripWrap').classList.remove('on');
+  updArc(0);document.getElementById('topDeg').textContent='0°';
+  const img=document.getElementById('galThumb');img.src=url;img.style.display='block';
+  document.querySelector('#galBtn .sdbtn-icon').style.display='none';
+  const b=document.getElementById('galBadge');b.textContent=panos.length;b.style.display='flex';
+  hideLoad();openPreview(pano);
 }
 
-/* ─── PREVIEW ─── */
-let vImg=null,vRaf=null,panX=0,velX=0,drag=false,lastDX=0,vW=0,vH=0;
-
-function openPreview(pano){
-  show('preview');
-  document.getElementById('prevSub').textContent=pano.angle+'° · '+pano.date;
-  const area=document.getElementById('viewerWrap');
-  const canvas=document.getElementById('viewCanvas');
-  vW=area.clientWidth;vH=area.clientHeight;
-  canvas.width=vW;canvas.height=vH;
-  canvas.style.width=vW+'px';canvas.style.height=vH+'px';
+/* PREVIEW */
+let vImg=null,vRaf=null,panX=0,velX=0,drag=false,ldx=0,vW=0,vH=0;
+function openPreview(p){
+  go('s-preview');
+  document.getElementById('prevSub').textContent=p.angle+'° · '+p.date;
+  const d=document.getElementById('viewerDiv');
+  const c=document.getElementById('viewC');
+  vW=d.clientWidth;vH=d.clientHeight;
+  c.width=vW;c.height=vH;c.style.width=vW+'px';c.style.height=vH+'px';
   panX=0;velX=0;drag=false;
-  vImg=new Image();
-  vImg.onload=()=>{renderView();startInertia();};
-  vImg.src=pano.url;
-  canvas.addEventListener('touchstart',e=>{drag=true;lastDX=e.touches[0].clientX;velX=0;},{passive:true});
-  canvas.addEventListener('touchmove',e=>{
-    e.preventDefault();
-    const dx=e.touches[0].clientX-lastDX;
-    panX-=dx*2.5;lastDX=e.touches[0].clientX;velX=-dx*2.5;
-    renderView();
-  },{passive:false});
-  canvas.addEventListener('touchend',()=>{drag=false;});
-  canvas.addEventListener('mousedown',e=>{drag=true;lastDX=e.clientX;velX=0;});
-  window.addEventListener('mousemove',e=>{
-    if(!drag||!document.getElementById('preview').classList.contains('active'))return;
-    const dx=e.clientX-lastDX;panX-=dx*2.5;lastDX=e.clientX;velX=-dx*2.5;renderView();
-  });
-  window.addEventListener('mouseup',()=>{drag=false;});
+  vImg=new Image();vImg.onload=()=>{rv();startInertia()};vImg.src=p.url;
+  const nc=c.cloneNode(false);c.parentNode.replaceChild(nc,c);
+  nc.width=vW;nc.height=vH;nc.style.width=vW+'px';nc.style.height=vH+'px';
+  nc.addEventListener('touchstart',e=>{drag=true;ldx=e.touches[0].clientX;velX=0},{passive:true});
+  nc.addEventListener('touchmove',e=>{e.preventDefault();const dx=e.touches[0].clientX-ldx;panX-=dx*2.5;ldx=e.touches[0].clientX;velX=-dx*2.5;rv()},{passive:false});
+  nc.addEventListener('touchend',()=>{drag=false});
+  nc.addEventListener('mousedown',e=>{drag=true;ldx=e.clientX;velX=0});
+  window.addEventListener('mousemove',e=>{if(!drag||!document.getElementById('s-preview').classList.contains('active'))return;const dx=e.clientX-ldx;panX-=dx*2.5;ldx=e.clientX;velX=-dx*2.5;rv()});
+  window.addEventListener('mouseup',()=>{drag=false});
 }
-
-function renderView(){
-  if(!vImg||!vImg.complete)return;
-  const canvas=document.getElementById('viewCanvas');
-  const ctx=canvas.getContext('2d');
-  const drawW=vH*(vImg.width/vImg.height);
-  const off=((panX%drawW)+drawW)%drawW;
+function rv(){
+  const c=document.getElementById('viewC');
+  if(!vImg||!vImg.complete||!c)return;
+  const ctx=c.getContext('2d');
+  const dw=vH*(vImg.width/vImg.height);
+  const off=((panX%dw)+dw)%dw;
   ctx.clearRect(0,0,vW,vH);
-  ctx.drawImage(vImg,drawW-off,0,drawW,vH);
-  ctx.drawImage(vImg,-off,0,drawW,vH);
+  ctx.drawImage(vImg,dw-off,0,dw,vH);
+  ctx.drawImage(vImg,-off,0,dw,vH);
 }
-
 function startInertia(){
   cancelAnimationFrame(vRaf);
-  function loop(){
-    if(!drag){velX*=.93;panX+=velX;if(Math.abs(velX)>.4)renderView();}
-    vRaf=requestAnimationFrame(loop);
-  }loop();
+  (function loop(){if(!drag){velX*=.93;panX+=velX;if(Math.abs(velX)>.4)rv()}vRaf=requestAnimationFrame(loop)})();
 }
-
-function closePreview(){
-  cancelAnimationFrame(vRaf);
-  show(vs?'cam':'home');
-}
-
-function savePano(){
-  const p=panos[curIdx];if(!p)return;
-  const a=document.createElement('a');a.href=p.url;a.download='pano360_'+p.id+'.jpg';a.click();
-  gToast('💾 Сохранено','ok');
-}
-
+function closePreview(){cancelAnimationFrame(vRaf);go(vs?'s-cam':'s-home')}
+function savePano(){const p=panos[curI];if(!p)return;const a=document.createElement('a');a.href=p.url;a.download='pano360_'+p.id+'.jpg';a.click();gToast('💾 Сохранено','ok')}
 async function sharePano(){
-  const p=panos[curIdx];if(!p)return;
-  try{
-    const blob=await(await fetch(p.url)).blob();
-    const f=new File([blob],'pano360.jpg',{type:'image/jpeg'});
-    if(navigator.share&&navigator.canShare?.({files:[f]})){await navigator.share({title:'Панорама 360°',files:[f]});return;}
-  }catch(e){}
+  const p=panos[curI];if(!p)return;
+  try{const blob=await(await fetch(p.url)).blob();const f=new File([blob],'pano360.jpg',{type:'image/jpeg'});if(navigator.share&&navigator.canShare?.({files:[f]})){await navigator.share({title:'Панорама 360°',files:[f]});return}}catch(e){}
   savePano();
 }
 
-/* ─── GALLERY ─── */
-function goGallery(){show('gallery');renderGal();}
-function closeGallery(){show(vs?'cam':'home');}
-
+/* GALLERY */
+function openGal(){go('s-gallery');renderGal()}
+function closeGal(){go(vs?'s-cam':'s-home')}
 function renderGal(){
-  const grid=document.getElementById('galGrid');
-  const cnt=document.getElementById('galCnt');
-  if(!panos.length){
-    cnt.textContent='';
-    grid.innerHTML='<div class="gal-empty"><div class="gal-empty-icon">🌐</div><div class="gal-empty-ttl">Нет панорам</div><div class="gal-empty-sub">Снимите первую 360°</div></div>';
-    return;
-  }
-  cnt.textContent=panos.length+' шт';
-  grid.innerHTML='';
-  panos.forEach((p,i)=>{
-    const el=document.createElement('div');
-    el.className='gal-card';
-    el.innerHTML=`<img src="${p.url}" alt=""><div class="gal-card-info">${p.date} · ${p.angle}°</div>`;
-    el.onclick=()=>{curIdx=i;openPreview(p);};
-    grid.appendChild(el);
-  });
+  const g=document.getElementById('ggrid'),c=document.getElementById('gcnt');
+  if(!panos.length){c.textContent='';g.innerHTML='<div class="gempty"><div class="gempty-icon">🌐</div><div class="gempty-ttl">Нет панорам</div><div class="gempty-sub">Снимите первую 360°</div></div>';return}
+  c.textContent=panos.length+' шт';g.innerHTML='';
+  panos.forEach((p,i)=>{const el=document.createElement('div');el.className='gcard';el.innerHTML=`<img src="${p.url}" alt=""><div class="gcinfo">${p.date} · ${p.angle}°</div>`;el.onclick=()=>{curI=i;openPreview(p)};g.appendChild(el)});
 }
 
-/* ─── TOUCH FAKE GYRO ─── */
-const camEl=document.getElementById('cam');
-camEl.addEventListener('touchstart',e=>{
-  if(e.target.closest('#recBtn,.icon-btn,.side-btn'))return;
-  touchX=e.touches[0].clientX;
-},{passive:true});
-camEl.addEventListener('touchmove',e=>{
-  if(!touchMode||touchX===null)return;
-  const dx=e.touches[0].clientX-touchX;
-  contAngle+=(-dx*0.45);touchX=e.touches[0].clientX;
-  updateLevel(0);tick();
-  if(recording)drawSlice();
-},{passive:true});
-camEl.addEventListener('touchend',()=>{touchX=null;});
-
-document.addEventListener('mousedown',e=>{
-  if(!document.getElementById('cam').classList.contains('active'))return;
-  if(e.target.closest('#recBtn,.icon-btn,.side-btn'))return;
-  mX=e.clientX;
-});
-document.addEventListener('mousemove',e=>{
-  if(!touchMode||mX===null)return;
-  if(!document.getElementById('cam').classList.contains('active'))return;
-  contAngle+=-(e.clientX-mX)*0.5;mX=e.clientX;
-  tick();if(recording)drawSlice();
-});
-document.addEventListener('mouseup',()=>{mX=null;});
+/* TOUCH FAKE GYRO */
+const camEl=document.getElementById('s-cam');
+camEl.addEventListener('touchstart',e=>{if(e.target.closest('#recBtn,.topbtn,.flip-btn,.sdbtn'))return;touchX=e.touches[0].clientX},{passive:true});
+camEl.addEventListener('touchmove',e=>{if(!touchMode||touchX===null)return;const dx=e.touches[0].clientX-touchX;contA+=(-dx*.45);touchX=e.touches[0].clientX;updLevel(0);tick();if(isRec)drawSlice()},{passive:true});
+camEl.addEventListener('touchend',()=>{touchX=null});
+document.addEventListener('mousedown',e=>{if(!document.getElementById('s-cam').classList.contains('active'))return;if(e.target.closest('#recBtn,.topbtn,.flip-btn,.sdbtn'))return;mX=e.clientX});
+document.addEventListener('mousemove',e=>{if(!touchMode||mX===null||!document.getElementById('s-cam').classList.contains('active'))return;contA+=-(e.clientX-mX)*.5;mX=e.clientX;tick();if(isRec)drawSlice()});
+document.addEventListener('mouseup',()=>{mX=null});
 </script>
 </body>
 </html>
