@@ -489,10 +489,12 @@ function drawSlice(){
   const x=(norm/360)*PW;
   const pn=lastD<0?0:Math.abs(lastD)%360;
   let sw=Math.abs(norm-pn)/360*PW;sw=Math.max(2,Math.ceil(sw)+1);
-  const sx=Math.floor(v.videoWidth*.4),sw2=Math.max(2,Math.floor(v.videoWidth*.2));
-  panoCtx.drawImage(v,sx,0,sw2,v.videoHeight,x-sw/2,0,sw,PH);
-  if(x+sw>PW)panoCtx.drawImage(v,sx,0,sw2,v.videoHeight,x-sw/2-PW,0,sw,PH);
-  if(x-sw/2<0)panoCtx.drawImage(v,sx,0,sw2,v.videoHeight,x-sw/2+PW,0,sw,PH);
+  // Take a thin vertical slice from the CENTER of the frame (full height)
+  const sliceSrcW=Math.max(4,Math.floor(v.videoWidth*0.015));
+  const sliceSrcX=Math.floor((v.videoWidth-sliceSrcW)/2);
+  panoCtx.drawImage(v,sliceSrcX,0,sliceSrcW,v.videoHeight,x-sw/2,0,sw,PH);
+  if(x+sw>PW)panoCtx.drawImage(v,sliceSrcX,0,sliceSrcW,v.videoHeight,x-sw/2-PW,0,sw,PH);
+  if(x-sw/2<0)panoCtx.drawImage(v,sliceSrcX,0,sliceSrcW,v.videoHeight,x-sw/2+PW,0,sw,PH);
   lastD=delta;
   const sc=document.getElementById('stripC');
   if(sc&&panoC){const c=sc.getContext('2d');c.drawImage(panoC,0,0,PW,PH,0,0,sc.width,44)}
