@@ -10,24 +10,18 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
 html,body{width:100%;height:100%;overflow:hidden;background:#000;touch-action:none}
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;color:#fff}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
 :root{
   --c:#00e5ff;--r:#ff3b30;--g:#34c759;--y:#ffd60a;
   --st:env(safe-area-inset-top,0px);
   --sb:env(safe-area-inset-bottom,0px);
 }
-
-/* ─── SCREENS ─── */
 .scr{position:fixed;inset:0;display:none;overflow:hidden}
 .scr.on{display:block}
 
-/* ─── HOME ─── */
+/* ── HOME ── */
 #home{background:radial-gradient(ellipse 80% 55% at 50% 15%,#0d1f2d,#000 65%)}
-.hbox{
-  position:absolute;inset:0;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:0 20px;
-}
+.hbox{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 20px}
 .logo{width:84px;height:84px;margin-bottom:16px;flex-shrink:0}
 .logo svg{width:100%;height:100%}
 .lr{animation:spin 9s linear infinite;transform-origin:42px 42px}
@@ -35,146 +29,41 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
 @keyframes spin{to{transform:rotate(360deg)}}
 .ht{font-size:30px;font-weight:300;letter-spacing:8px;text-transform:uppercase;text-align:center}
 .hst{font-size:11px;letter-spacing:5px;color:rgba(255,255,255,.32);text-transform:uppercase;margin:5px 0 32px}
-.bmain{
-  width:196px;height:52px;border-radius:26px;border:none;cursor:pointer;
-  background:linear-gradient(135deg,var(--c),#0077b6);color:#000;
-  font-size:14px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  margin-bottom:10px;box-shadow:0 0 32px rgba(0,229,255,.22);
-}
+.bmain{width:196px;height:52px;border-radius:26px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--c),#0077b6);color:#000;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;box-shadow:0 0 32px rgba(0,229,255,.22)}
 .bmain:active{opacity:.85;transform:scale(0.97)}
-.bsec{
-  width:196px;height:42px;border-radius:21px;cursor:pointer;
-  background:transparent;border:1px solid rgba(255,255,255,.18);
-  color:rgba(255,255,255,.5);font-size:13px;
-  display:flex;align-items:center;justify-content:center;gap:7px;
-}
+.bsec{width:196px;height:42px;border-radius:21px;cursor:pointer;background:transparent;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.5);font-size:13px;display:flex;align-items:center;justify-content:center;gap:7px}
 .bsec:active{background:rgba(255,255,255,.07)}
 
-/* ─── CAMERA SCREEN ─── */
-/* Everything is absolute inside #cam which is fixed full-screen */
+/* ── CAMERA ── */
 #cam{background:#000}
+#vid{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;display:block}
+.grad-top{position:absolute;top:0;left:0;right:0;height:160px;background:linear-gradient(to bottom,rgba(0,0,0,.75),transparent);z-index:10;pointer-events:none}
+.grad-bot{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,rgba(0,0,0,.85),transparent);z-index:10;pointer-events:none}
 
-/* Video — full screen, lowest layer */
-#vid{
-  position:absolute;
-  top:0;left:0;
-  width:100%;height:100%;
-  object-fit:cover;
-  z-index:1;
-  display:block;
-}
-
-/* Gradient overlays — above video */
-.grad-top{
-  position:absolute;
-  top:0;left:0;right:0;
-  height:160px;
-  background:linear-gradient(to bottom,rgba(0,0,0,.75) 0%,transparent 100%);
-  z-index:10;
-  pointer-events:none;
-}
-.grad-bot{
-  position:absolute;
-  bottom:0;left:0;right:0;
-  height:200px;
-  background:linear-gradient(to top,rgba(0,0,0,.85) 0%,transparent 100%);
-  z-index:10;
-  pointer-events:none;
-}
-
-/* Top bar — status safe area + controls */
-.cam-top{
-  position:absolute;
-  top:0;left:0;right:0;
-  /* height = safe area + 60px for controls */
-  padding-top:var(--st);
-  z-index:20;
-}
-.cam-top-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:10px 14px 0;
-}
-.ib{
-  width:40px;height:40px;border-radius:50%;
-  background:rgba(0,0,0,.55);
-  border:1px solid rgba(255,255,255,.2);
-  color:#fff;font-size:20px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  flex-shrink:0;
-}
+.cam-top{position:absolute;top:0;left:0;right:0;padding-top:var(--st);z-index:20}
+.cam-top-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 0}
+.ib{width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);flex-shrink:0}
 .cam-info{display:flex;flex-direction:column;align-items:center;gap:1px}
-.cam-deg{
-  font-size:22px;font-weight:200;letter-spacing:2px;
-  color:#fff;line-height:1;font-variant-numeric:tabular-nums;
-}
-.cam-st{
-  font-size:10px;letter-spacing:3px;text-transform:uppercase;
-  color:rgba(255,255,255,.5);
-}
+.cam-deg{font-size:22px;font-weight:200;letter-spacing:2px;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+.cam-st{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.5)}
 .cam-st.rec{color:var(--r);animation:blink .9s step-end infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.1}}
 
-/* Progress bar — below top row */
-.progress-wrap{
-  position:absolute;
-  top:calc(var(--st) + 60px);
-  left:0;right:0;
-  height:3px;
-  background:rgba(255,255,255,.1);
-  z-index:20;
-}
-.progress-bar{
-  height:100%;width:0%;
-  background:linear-gradient(90deg,var(--c),#a78bfa);
-  transition:width .1s linear;
-}
+.progress-wrap{position:absolute;top:calc(var(--st) + 60px);left:0;right:0;height:3px;background:rgba(255,255,255,.1);z-index:20}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--c),#a78bfa);transition:width .1s linear}
 .progress-bar.rec{background:var(--r)}
 
-/* Circle arc viewfinder — centered */
-.arc-wrap{
-  position:absolute;
-  /* center it: top 50% minus half height, adjust up a little */
-  top:50%;left:50%;
-  transform:translate(-50%,-55%);
-  width:186px;height:186px;
-  z-index:15;pointer-events:none;
-}
+.arc-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:186px;height:186px;z-index:15;pointer-events:none}
 .arc-wrap svg{width:100%;height:100%}
 
-/* Crosshair */
-.crosshair{
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:50px;height:50px;
-  z-index:16;pointer-events:none;
-}
+.crosshair{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:50px;height:50px;z-index:16;pointer-events:none}
 .ch-h,.ch-v{position:absolute;background:rgba(255,255,255,.75)}
 .ch-h{width:100%;height:1px;top:50%;transform:translateY(-50%)}
 .ch-v{height:100%;width:1px;left:50%;transform:translateX(-50%)}
-.ch-dot{
-  position:absolute;top:50%;left:50%;
-  width:7px;height:7px;border-radius:50%;
-  background:var(--c);
-  transform:translate(-50%,-50%);
-  box-shadow:0 0 10px var(--c);
-  transition:background .2s;
-}
+.ch-dot{position:absolute;top:50%;left:50%;width:7px;height:7px;border-radius:50%;background:var(--c);transform:translate(-50%,-50%);box-shadow:0 0 10px var(--c);transition:background .2s}
 .ch-dot.rec{background:var(--r);box-shadow:0 0 10px var(--r)}
 
-/* Corner brackets */
-.brackets{
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:64px;height:64px;
-  z-index:16;pointer-events:none;
-}
+.brackets{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:64px;height:64px;z-index:16;pointer-events:none}
 .bk{position:absolute;width:11px;height:11px}
 .bk::before,.bk::after{content:'';position:absolute;background:rgba(255,255,255,.8)}
 .bk::before{top:0;left:0;width:100%;height:1.5px}
@@ -183,284 +72,87 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
 .bk.bl{bottom:0;left:0;transform:scaleY(-1)}
 .bk.br{bottom:0;right:0;transform:scale(-1)}
 
-/* Level bar */
-.level-wrap{
-  position:absolute;
-  top:calc(50% + 38px);
-  left:50%;transform:translateX(-50%);
-  z-index:16;pointer-events:none;
-  display:flex;flex-direction:column;align-items:center;gap:3px;
-}
-.level-track{
-  width:100px;height:2px;
-  background:rgba(255,255,255,.1);border-radius:2px;
-  position:relative;
-}
-.level-ball{
-  position:absolute;top:50%;left:50%;
-  width:8px;height:8px;border-radius:50%;
-  background:var(--g);
-  transform:translate(-50%,-50%);
-  box-shadow:0 0 7px var(--g);
-  transition:left .08s,background .2s;
-}
+.level-wrap{position:absolute;top:calc(50% + 38px);left:50%;transform:translateX(-50%);z-index:16;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px}
+.level-track{width:100px;height:2px;background:rgba(255,255,255,.1);border-radius:2px;position:relative}
+.level-ball{position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;background:var(--g);transform:translate(-50%,-50%);box-shadow:0 0 7px var(--g);transition:left .08s,background .2s}
 .level-ball.warn{background:var(--y);box-shadow:0 0 7px var(--y)}
 .level-ball.bad{background:var(--r);box-shadow:0 0 7px var(--r)}
 .level-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25)}
 
-/* Tilt warning */
-.tilt-warn{
-  position:absolute;
-  top:calc(50% + 70px);
-  left:50%;transform:translateX(-50%);
-  z-index:16;pointer-events:none;
-  font-size:10px;letter-spacing:1px;
-  color:var(--y);
-  background:rgba(0,0,0,.5);
-  border-radius:8px;padding:3px 8px;
-  opacity:0;transition:opacity .3s;
-  white-space:nowrap;
-}
-.tilt-warn.show{opacity:1}
-
-/* Direction arrows */
-.arr{
-  position:absolute;top:50%;
-  transform:translateY(-50%);
-  z-index:16;pointer-events:none;
-  font-size:30px;color:rgba(255,255,255,.8);
-  text-shadow:0 0 14px rgba(255,255,255,.35);
-  display:none;
-}
+.arr{position:absolute;top:50%;transform:translateY(-50%);z-index:16;pointer-events:none;font-size:30px;color:rgba(255,255,255,.8);text-shadow:0 0 14px rgba(255,255,255,.35);display:none}
 #aR{right:12px}
 #aL{left:12px}
 
-/* Live strip preview */
-.strip-wrap{
-  position:absolute;
-  bottom:calc(var(--sb) + 140px);
-  left:12px;right:12px;
-  z-index:20;
-  display:none;
-  flex-direction:column;gap:4px;
-}
+.strip-wrap{position:absolute;bottom:calc(var(--sb) + 140px);left:12px;right:12px;z-index:20;display:none;flex-direction:column;gap:4px}
 .strip-wrap.on{display:flex}
-.strip-box{
-  height:54px;border-radius:10px;overflow:hidden;
-  border:1px solid rgba(255,255,255,.15);
-  background:rgba(0,0,0,.55);
-  position:relative;
-}
+.strip-box{height:54px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.55);position:relative}
 #sc{display:block;width:100%;height:54px}
-.strip-fade{
-  position:absolute;inset:0;
-  background:linear-gradient(to right,rgba(0,0,0,.55) 0%,transparent 10%,transparent 90%,rgba(0,0,0,.55) 100%);
-  pointer-events:none;
-}
-.strip-cursor{
-  position:absolute;top:0;bottom:0;left:0;
-  width:2px;background:var(--r);box-shadow:0 0 8px var(--r);
-}
+.strip-fade{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.55) 0%,transparent 10%,transparent 90%,rgba(0,0,0,.55) 100%);pointer-events:none}
+.strip-cursor{position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--r);box-shadow:0 0 8px var(--r)}
 .strip-pct{text-align:center;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.35)}
 
-/* Camera toast */
-.cam-toast{
-  position:absolute;
-  bottom:calc(var(--sb) + 148px);
-  left:14px;right:14px;
-  z-index:21;
-  background:rgba(0,0,0,.8);
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:12px;
-  padding:10px 14px;
-  font-size:13px;color:rgba(255,255,255,.9);
-  text-align:center;line-height:1.5;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  pointer-events:none;
-  transition:opacity .3s,transform .3s;
-}
+.cam-toast{position:absolute;bottom:calc(var(--sb) + 148px);left:14px;right:14px;z-index:21;background:rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 14px;font-size:13px;color:rgba(255,255,255,.9);text-align:center;line-height:1.5;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);pointer-events:none;transition:opacity .3s,transform .3s}
 .cam-toast.hide{opacity:0;transform:translateY(6px)}
 
-/* Bottom controls */
-.cam-bottom{
-  position:absolute;
-  bottom:0;left:0;right:0;
-  padding-bottom:calc(var(--sb) + 16px);
-  padding-top:12px;
-  padding-left:22px;padding-right:22px;
-  z-index:20;
-  display:flex;align-items:center;justify-content:space-between;
-}
+.cam-bottom{position:absolute;bottom:0;left:0;right:0;padding-bottom:calc(var(--sb) + 16px);padding-top:12px;padding-left:22px;padding-right:22px;z-index:20;display:flex;align-items:center;justify-content:space-between}
 
-/* Gallery button */
-.gal-btn{
-  width:54px;height:54px;border-radius:14px;
-  background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.14);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;overflow:hidden;flex-shrink:0;
-  position:relative;
-}
-.gal-btn img{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;display:none;
-}
+.gal-btn{width:54px;height:54px;border-radius:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;flex-shrink:0;position:relative}
+.gal-btn img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
 .gal-btn-icon{font-size:22px;color:rgba(255,255,255,.48)}
-.gal-badge{
-  display:none;position:absolute;
-  top:3px;right:3px;
-  width:16px;height:16px;border-radius:50%;
-  background:var(--c);color:#000;font-size:9px;font-weight:800;
-  align-items:center;justify-content:center;
-}
+.gal-badge{display:none;position:absolute;top:3px;right:3px;width:16px;height:16px;border-radius:50%;background:var(--c);color:#000;font-size:9px;font-weight:800;align-items:center;justify-content:center}
 
-/* Record button */
 .rec-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0}
-.rec-btn{
-  width:80px;height:80px;border-radius:50%;
-  background:rgba(255,255,255,.1);
-  border:3.5px solid rgba(255,255,255,.72);
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:transform .1s;
-  -webkit-tap-highlight-color:transparent;
-}
+.rec-btn{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.1);border:3.5px solid rgba(255,255,255,.72);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .1s;-webkit-tap-highlight-color:transparent}
 .rec-btn:active{transform:scale(0.92)}
-.rec-inner{
-  width:58px;height:58px;border-radius:50%;
-  background:var(--r);
-  box-shadow:0 0 20px rgba(255,59,48,.5);
-  transition:all .2s cubic-bezier(.4,0,.2,1);
-}
+.rec-inner{width:58px;height:58px;border-radius:50%;background:var(--r);box-shadow:0 0 20px rgba(255,59,48,.5);transition:all .2s cubic-bezier(.4,0,.2,1)}
 .rec-btn.on .rec-inner{width:26px;height:26px;border-radius:7px}
 .rec-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.42)}
 .rec-lbl.on{color:var(--r);animation:blink .9s step-end infinite}
 
-/* Flip button */
-.flip-btn{
-  width:54px;height:54px;border-radius:50%;
-  background:rgba(255,255,255,.1);
-  border:1px solid rgba(255,255,255,.14);
-  color:#fff;font-size:20px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;flex-shrink:0;
-}
+.flip-btn{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 
-/* ─── PREVIEW ─── */
+/* ── PREVIEW ── */
 #prev{background:#050508;display:none;flex-direction:column}
 #prev.on{display:flex}
-.prev-head{
-  display:flex;align-items:center;gap:10px;
-  padding-top:calc(var(--st)+14px);padding-bottom:12px;
-  padding-left:14px;padding-right:14px;
-  background:rgba(0,0,0,.5);border-bottom:1px solid rgba(255,255,255,.07);
-  flex-shrink:0;
-}
-.prev-back{
-  width:36px;height:36px;border-radius:9px;
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
-  color:#fff;font-size:18px;
-  display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;
-}
+.prev-head{display:flex;align-items:center;gap:10px;padding-top:calc(var(--st)+14px);padding-bottom:12px;padding-left:14px;padding-right:14px;background:rgba(0,0,0,.5);border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0}
+.prev-back{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 .prev-info{flex:1}
 .prev-info h2{font-size:16px;font-weight:600}
 .prev-info p{font-size:11px;color:rgba(255,255,255,.32);margin-top:2px}
 .prev-btns{display:flex;gap:8px;flex-shrink:0}
-.pbn{
-  height:34px;padding:0 12px;border-radius:8px;
-  border:1px solid rgba(255,255,255,.14);
-  background:rgba(255,255,255,.06);
-  color:rgba(255,255,255,.7);font-size:12px;font-weight:600;
-  cursor:pointer;display:flex;align-items:center;gap:5px;
-}
+.pbn{height:34px;padding:0 12px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px}
 .pbn:active{opacity:.7}
 .pbn.hi{background:var(--c);border-color:transparent;color:#000}
 .viewer{flex:1;background:#000;position:relative;overflow:hidden;touch-action:none}
 #vc{position:absolute;top:0;left:0;cursor:grab;display:block}
 #vc:active{cursor:grabbing}
-.view-hint{
-  position:absolute;bottom:12px;left:50%;transform:translateX(-50%);
-  background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.1);
-  border-radius:20px;padding:5px 14px;
-  font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.42);
-  pointer-events:none;white-space:nowrap;
-}
+.view-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.42);pointer-events:none;white-space:nowrap}
 
-/* ─── GALLERY ─── */
+/* ── GALLERY ── */
 #gal{background:#050508;display:none;flex-direction:column}
 #gal.on{display:flex}
-.gal-head{
-  display:flex;align-items:center;gap:10px;
-  padding-top:calc(var(--st)+14px);padding-bottom:12px;
-  padding-left:14px;padding-right:14px;
-  background:rgba(0,0,0,.5);border-bottom:1px solid rgba(255,255,255,.07);
-  flex-shrink:0;
-}
-.gal-back{
-  width:36px;height:36px;border-radius:9px;
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
-  color:#fff;font-size:18px;
-  display:flex;align-items:center;justify-content:center;cursor:pointer;
-}
+.gal-head{display:flex;align-items:center;gap:10px;padding-top:calc(var(--st)+14px);padding-bottom:12px;padding-left:14px;padding-right:14px;background:rgba(0,0,0,.5);border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0}
+.gal-back{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .gal-ttl{flex:1;font-size:17px;font-weight:600}
 .gal-cnt{font-size:11px;color:rgba(255,255,255,.28);letter-spacing:1px}
-.gal-grid{
-  flex:1;overflow-y:auto;padding:14px;
-  display:grid;grid-template-columns:1fr 1fr;gap:10px;
-}
-.gc{
-  aspect-ratio:2.2/1;border-radius:10px;overflow:hidden;
-  position:relative;cursor:pointer;background:#111;
-  border:1px solid rgba(255,255,255,.07);
-  transition:transform .15s;
-}
+.gal-grid{flex:1;overflow-y:auto;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gc{aspect-ratio:2.2/1;border-radius:10px;overflow:hidden;position:relative;cursor:pointer;background:#111;border:1px solid rgba(255,255,255,.07);transition:transform .15s}
 .gc:active{transform:scale(0.97)}
 .gc img{width:100%;height:100%;object-fit:cover;display:block}
-.gc-info{
-  position:absolute;bottom:0;left:0;right:0;
-  background:linear-gradient(to top,rgba(0,0,0,.88),transparent);
-  padding:14px 8px 6px;font-size:10px;color:rgba(255,255,255,.62);
-}
-.gal-empty{
-  grid-column:1/-1;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:10px;
-  padding:70px 20px;text-align:center;
-}
+.gc-info{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.88),transparent);padding:14px 8px 6px;font-size:10px;color:rgba(255,255,255,.62)}
+.gal-empty{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:70px 20px;text-align:center}
 .gal-empty-icon{font-size:52px;opacity:.28}
 .gal-empty-ttl{font-size:16px;font-weight:600;color:rgba(255,255,255,.38)}
 .gal-empty-sub{font-size:12px;color:rgba(255,255,255,.18)}
 
-/* ─── LOADING ─── */
-.ld{
-  position:fixed;inset:0;z-index:999;
-  background:rgba(0,0,0,.88);
-  display:none;flex-direction:column;
-  align-items:center;justify-content:center;gap:14px;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-}
+/* ── LOADING ── */
+.ld{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.88);display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .ld.on{display:flex}
-.sp{
-  width:44px;height:44px;border-radius:50%;
-  border:2px solid rgba(0,229,255,.15);border-top-color:var(--c);
-  animation:spin .7s linear infinite;
-}
+.sp{width:44px;height:44px;border-radius:50%;border:2px solid rgba(0,229,255,.15);border-top-color:var(--c);animation:spin .7s linear infinite}
 .sp-lbl{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.38)}
 
-/* ─── TOAST ─── */
-.toast{
-  position:fixed;
-  bottom:calc(var(--sb)+20px);
-  left:50%;transform:translateX(-50%) translateY(60px);
-  z-index:998;
-  background:rgba(16,16,26,.96);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:12px;padding:10px 18px;
-  font-size:13px;color:#fff;
-  white-space:normal;text-align:center;
-  max-width:calc(100vw - 32px);
-  transition:transform .4s cubic-bezier(.34,1.56,.64,1);
-  pointer-events:none;
-}
+/* ── TOAST ── */
+.toast{position:fixed;bottom:calc(var(--sb)+20px);left:50%;transform:translateX(-50%) translateY(60px);z-index:998;background:rgba(16,16,26,.96);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 18px;font-size:13px;color:#fff;white-space:normal;text-align:center;max-width:calc(100vw - 32px);transition:transform .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
 .toast.on{transform:translateX(-50%) translateY(0)}
 .toast.ok{border-color:rgba(52,199,89,.4);color:var(--g)}
 .toast.er{border-color:rgba(255,59,48,.4);color:var(--r)}
@@ -495,14 +187,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
 
 <!-- CAMERA -->
 <div class="scr" id="cam">
-  <!-- Video — z-index:1 -->
   <video id="vid" autoplay playsinline muted></video>
-
-  <!-- Gradient overlays — z-index:10, pointer-events:none -->
   <div class="grad-top"></div>
   <div class="grad-bot"></div>
 
-  <!-- Top controls — z-index:20 -->
   <div class="cam-top">
     <div class="cam-top-row">
       <div class="ib" onclick="exitCam()">‹</div>
@@ -514,57 +202,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
     </div>
   </div>
 
-  <!-- Progress bar -->
   <div class="progress-wrap">
     <div class="progress-bar" id="pb"></div>
   </div>
 
-  <!-- Arc viewfinder — z-index:15 -->
   <div class="arc-wrap">
     <svg viewBox="0 0 186 186" fill="none">
-      <circle cx="93" cy="93" r="85"
-        stroke="rgba(255,255,255,.08)" stroke-width="2"
-        stroke-dasharray="534 534"
-        transform="rotate(-90 93 93)"/>
-      <circle id="ap" cx="93" cy="93" r="85"
-        stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round"
-        stroke-dasharray="0 534"
-        transform="rotate(-90 93 93)"/>
+      <circle cx="93" cy="93" r="85" stroke="rgba(255,255,255,.08)" stroke-width="2" stroke-dasharray="534 534" transform="rotate(-90 93 93)"/>
+      <circle id="ap" cx="93" cy="93" r="85" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="0 534" transform="rotate(-90 93 93)"/>
       <circle id="ad" cx="93" cy="8" r="4" fill="#00e5ff"/>
     </svg>
   </div>
 
-  <!-- Crosshair -->
   <div class="crosshair">
     <div class="ch-h"></div>
     <div class="ch-v"></div>
     <div class="ch-dot" id="ch-dot"></div>
   </div>
-
-  <!-- Corner brackets -->
   <div class="brackets">
-    <div class="bk"></div>
-    <div class="bk tr"></div>
-    <div class="bk bl"></div>
-    <div class="bk br"></div>
+    <div class="bk"></div><div class="bk tr"></div><div class="bk bl"></div><div class="bk br"></div>
   </div>
 
-  <!-- Level -->
   <div class="level-wrap">
-    <div class="level-track">
-      <div class="level-ball" id="lb"></div>
-    </div>
+    <div class="level-track"><div class="level-ball" id="lb"></div></div>
     <div class="level-lbl">уровень</div>
   </div>
 
-  <!-- Tilt warning -->
-  <div class="tilt-warn" id="tilt-warn">⚠ Выровняйте телефон</div>
-
-  <!-- Direction arrows -->
   <div class="arr" id="aR">›</div>
   <div class="arr" id="aL">‹</div>
 
-  <!-- Live strip preview -->
   <div class="strip-wrap" id="sw">
     <div class="strip-box">
       <canvas id="sc" height="54"></canvas>
@@ -574,10 +240,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
     <div class="strip-pct" id="spct">0% покрыто</div>
   </div>
 
-  <!-- Camera toast -->
   <div class="cam-toast" id="ctt">📱 Нажмите ● для записи, затем медленно поворачивайтесь вправо</div>
 
-  <!-- Bottom controls -->
   <div class="cam-bottom">
     <div class="gal-btn" id="gal-btn" onclick="openGal()">
       <img id="gth" alt="">
@@ -585,9 +249,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
       <span class="gal-badge" id="gbdg"></span>
     </div>
     <div class="rec-wrap">
-      <div class="rec-btn" id="rb" onclick="toggleRec()">
-        <div class="rec-inner"></div>
-      </div>
+      <div class="rec-btn" id="rb" onclick="toggleRec()"><div class="rec-inner"></div></div>
       <div class="rec-lbl" id="rl">ЗАПИСЬ</div>
     </div>
     <div class="flip-btn" onclick="flipCam()">⟳</div>
@@ -598,10 +260,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
 <div class="scr" id="prev">
   <div class="prev-head">
     <div class="prev-back" onclick="closePrev()">‹</div>
-    <div class="prev-info">
-      <h2>Панорама 360°</h2>
-      <p id="ps">—</p>
-    </div>
+    <div class="prev-info"><h2>Панорама 360°</h2><p id="ps">—</p></div>
     <div class="prev-btns">
       <button class="pbn" onclick="savePano()">💾 Сохранить</button>
       <button class="pbn hi" onclick="sharePano()">↗ Поделиться</button>
@@ -623,114 +282,96 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;co
   <div class="gal-grid" id="gg"></div>
 </div>
 
-<!-- LOADING -->
-<div class="ld" id="ld">
-  <div class="sp"></div>
-  <div class="sp-lbl" id="sl">Обработка</div>
-</div>
-
-<!-- TOAST -->
+<div class="ld" id="ld"><div class="sp"></div><div class="sp-lbl" id="sl">Обработка</div></div>
 <div class="toast" id="toast"></div>
 
 <script>
-/* ═══════════════════════════════════════════════
-   АЛГОРИТМ СЪЁМКИ:
+/*
+  ═══════════════════════════════════════════════════
+  АЛГОРИТМ (исправленный):
 
-   Как в обычной камере телефона:
-   1. Нажал кнопку Запись → начинаем
-   2. Телефон поворачивается → гироскоп даёт дельту угла
-   3. RAF loop (60fps) → каждый кадр берём узкую полосу из ЦЕНТРА видео
-   4. Кладём полосу на X = угол × PX_PER_DEG
-   5. Нет пробелов: заполняем ОТ lastX ДО currentX
-   6. Вертикальный гироскоп (beta): если наклон > порога,
-      обрезаем панораму по вертикали так чтобы она выравнивалась
-   7. Стоп → одна длинная горизонтальная фотка
+  ГЛАВНАЯ ПРИЧИНА АРТЕФАКТОВ в прошлых версиях:
+    Брали STRIP_SRC_PX=6 пикселей из видео и растягивали
+    на 50-200px когда телефон двигался быстро → горизонтальные
+    полосы и размытие.
 
-   ИСПРАВЛЕНИЯ от прошлой версии:
-   - Верстка камеры: видео z-index:1, оверлеи выше, кнопки z-index:20
-   - Нет дёрганья: STRIP_PX=8 с большим overlap, не ждём gyro event
-   - Нет полос: fillFrom-fillTo всегда заполняет без пробелов
-   - Вертикальный гироскоп: beta → srcY смещение в кадре
-═══════════════════════════════════════════════ */
+  РЕШЕНИЕ:
+    1. Берём ШИРОКУЮ полосу из центра видео: 8% ширины кадра
+       (например при 1920px → 154px источник)
+    2. Рисуем её ФИКСИРОВАННОЙ шириной DEST_W=14px на каждый RAF кадр
+    3. Позиция = текущий_угол × PX_PER_DEG
+    4. Overlap: при 60fps и нормальной скорости поворота
+       каждый кадр перекрывает предыдущий → нет пробелов
+    5. НЕТ gap-filling растяжки → нет артефактов
 
-// ── CONFIG ──────────────────────────────────────
-const PX_PER_DEG = 14;         // пикселей на градус
-const PANO_H     = 1080;       // высота панорамы
-const PANO_MAX_W = 360 * PX_PER_DEG; // макс. ширина = 5040px
-// Ширина захватываемой полосы из центра видео.
-// Должна быть достаточно широкой чтобы не было пробелов даже при 60fps
-const STRIP_SRC_PX = 6;       // пикселей из центра видео
+  Итог: плавная панорама без полос и размытий.
+  ═══════════════════════════════════════════════════
+*/
 
-// Вертикальный угол: нормальный держание телефона = beta ~90°
-// Допустимое отклонение ±TILT_MARGIN градусов, иначе warn
-const TILT_MARGIN = 20;       // градусов допустимого вертикального наклона
+// ── CONFIG ──────────────────────────────────────────────
+const PX_PER_DEG  = 12;               // пикселей на градус (360° = 4320px)
+const PANO_H      = 1080;             // высота панорамы в пикселях
+const PANO_MAX_W  = 360 * PX_PER_DEG; // = 4320px макс ширина
 
-// ── STATE ────────────────────────────────────────
+// Источник: процент ширины видео для захвата (8%)
+// При 1920px → 154px, это даёт чёткое изображение без размытия
+const SRC_FRAC    = 0.08;
+
+// Назначение: фиксированная ширина полосы на каждый кадр
+// При 60fps и скорости 36°/с → 7.2px/кадр, DEST_W=14 → overlap 2x → нет дырок
+const DEST_W      = 14;
+
+// ── STATE ────────────────────────────────────────────────
 let vs=null, fac='environment';
 let isRec=false, gyroOk=false, touchMode=false;
 let prevAlpha=null, smoothDelta=0, contAngle=0;
 let startAngle=0, recDelta=0;
-let betaAngle=0; // вертикальный наклон
+let betaAngle=90; // вертикальный угол, норма ≈ 90°
 let panoC=null, panoCtx=null, rafId=null;
-let lastWrittenX=-1;
+let frameCount=0;
 let panos=[], curI=-1;
 let touchX=null, mouseX=null;
 
-// ── SCREENS ──────────────────────────────────────
+// ── SCREENS ──────────────────────────────────────────────
 function go(id){
   document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
-  const el=document.getElementById(id);
-  if(el){el.classList.add('on')}
+  document.getElementById(id)?.classList.add('on');
 }
-function showL(t){
-  document.getElementById('sl').textContent=(t||'ОБРАБОТКА').toUpperCase();
-  document.getElementById('ld').classList.add('on');
-}
+function showL(t){document.getElementById('sl').textContent=(t||'ОБРАБОТКА').toUpperCase();document.getElementById('ld').classList.add('on')}
 function hideL(){document.getElementById('ld').classList.remove('on')}
 let toastT;
 function showToast(m,tp=''){
-  const e=document.getElementById('toast');
-  e.textContent=m;e.className='toast on '+(tp||'');
-  clearTimeout(toastT);
-  toastT=setTimeout(()=>e.classList.remove('on'),3200);
+  const e=document.getElementById('toast');e.textContent=m;
+  e.className='toast on '+(tp||'');
+  clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('on'),3200);
 }
 let camToastT;
 function camToast(m){
-  const e=document.getElementById('ctt');
-  e.textContent=m;e.classList.remove('hide');
-  clearTimeout(camToastT);
-  camToastT=setTimeout(()=>e.classList.add('hide'),6000);
+  const e=document.getElementById('ctt');e.textContent=m;e.classList.remove('hide');
+  clearTimeout(camToastT);camToastT=setTimeout(()=>e.classList.add('hide'),6000);
 }
 
-// ── CAMERA ───────────────────────────────────────
+// ── CAMERA ───────────────────────────────────────────────
 async function startCam(){
   showL('Запуск камеры');
   try{
     vs=await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:fac,width:{ideal:1920},height:{ideal:1080}},
-      audio:false
+      video:{facingMode:fac,width:{ideal:1920},height:{ideal:1080}},audio:false
     });
     const v=document.getElementById('vid');
-    v.srcObject=vs;
-    await v.play();
-    hideL();
-    go('cam');
-    initGyro();
-    setArcUI(0);
+    v.srcObject=vs;await v.play();
+    hideL();go('cam');initGyro();setArcUI(0);
     camToast('📱 Нажмите ● для записи, затем медленно поворачивайтесь вправо');
   }catch(e){
-    hideL();
-    showToast('❌ Нет доступа к камере. Разрешите в настройках.','er');
+    hideL();showToast('❌ Нет доступа к камере. Разрешите в настройках.','er');
   }
 }
-
 function exitCam(){
   stopRec(true);
   if(vs){vs.getTracks().forEach(t=>t.stop());vs=null}
   window.removeEventListener('deviceorientation',onGyro,true);
   go('home');
 }
-
 async function flipCam(){
   fac=fac==='environment'?'user':'environment';
   if(vs){
@@ -742,16 +383,15 @@ async function flipCam(){
   }
 }
 
-// ── GYROSCOPE ────────────────────────────────────
+// ── GYROSCOPE ────────────────────────────────────────────
 function initGyro(){
-  prevAlpha=null; contAngle=0; smoothDelta=0; gyroOk=false; touchMode=false;
-  if(typeof DeviceOrientationEvent!=='undefined' &&
+  prevAlpha=null;contAngle=0;smoothDelta=0;gyroOk=false;touchMode=false;
+  if(typeof DeviceOrientationEvent!=='undefined'&&
      typeof DeviceOrientationEvent.requestPermission==='function'){
-    // iOS 13+ needs explicit permission
     DeviceOrientationEvent.requestPermission()
       .then(s=>s==='granted'
-        ? window.addEventListener('deviceorientation',onGyro,true)
-        : enableTouchMode())
+        ?window.addEventListener('deviceorientation',onGyro,true)
+        :enableTouchMode())
       .catch(enableTouchMode);
   }else{
     window.addEventListener('deviceorientation',onGyro,true);
@@ -763,23 +403,19 @@ function onGyro(e){
   if(e.alpha==null){if(!gyroOk)enableTouchMode();return}
   gyroOk=true;
 
-  // ── Горизонтальный угол (alpha) ──
+  // Горизонтальный угол с low-pass фильтром
   if(prevAlpha===null){prevAlpha=e.alpha;return}
   let d=e.alpha-prevAlpha;
-  if(d>180)d-=360;
-  if(d<-180)d+=360;
-  // Low-pass filter: убирает джиттер, сохраняет плавность
-  smoothDelta=smoothDelta*0.25+d*0.75;
+  if(d>180)d-=360;if(d<-180)d+=360;
+  // Фильтр: 80% новое, 20% старое — баланс точности и плавности
+  smoothDelta=smoothDelta*0.2+d*0.8;
   contAngle+=smoothDelta;
   prevAlpha=e.alpha;
 
-  // ── Вертикальный угол (beta) ──
-  // beta=90 = телефон вертикально (нормально)
-  // beta=0  = телефон горизонтально (плашмя)
-  if(e.beta!=null) betaAngle=e.beta;
+  // Вертикальный угол: beta ~90° = телефон вертикально
+  if(e.beta!=null)betaAngle=e.beta;
 
   updateLevel(e.gamma);
-  updateTiltWarn();
   tick();
 }
 
@@ -789,7 +425,6 @@ function enableTouchMode(){
   camToast('👆 Гироскоп недоступен — тяните экран влево для поворота');
 }
 
-// ── LEVEL (gamma = боковой наклон) ───────────────
 function updateLevel(g){
   if(g==null)return;
   const t=Math.max(-45,Math.min(45,g));
@@ -799,33 +434,16 @@ function updateLevel(g){
   b.className='level-ball'+(a>25?' bad':a>12?' warn':'');
 }
 
-// ── TILT WARN (beta = вертикальный наклон) ────────
-function updateTiltWarn(){
-  // Нормальное положение: beta ~90° (вертикально)
-  // Warn если сильно отклонился
-  const warn=document.getElementById('tilt-warn');
-  const diff=Math.abs(betaAngle-90);
-  if(diff>TILT_MARGIN){
-    warn.classList.add('show');
-  }else{
-    warn.classList.remove('show');
-  }
-}
-
-// ── ANGLE TICK ───────────────────────────────────
 function tick(){
   recDelta=contAngle-startAngle;
   const disp=Math.min(Math.abs(recDelta),360);
   document.getElementById('deg').textContent=Math.round(Math.abs(recDelta))+'°';
   setArcUI(disp);
-  // Arrows
   document.getElementById('aR').style.display=recDelta>=0?'block':'none';
   document.getElementById('aL').style.display=recDelta<0?'block':'none';
-  // Auto-complete at 360
-  if(isRec&&Math.abs(recDelta)>=360) stopRec(false);
+  if(isRec&&Math.abs(recDelta)>=360)stopRec(false);
 }
 
-// ── ARC UI ───────────────────────────────────────
 function setArcUI(deg){
   const p=Math.min(deg/360,1),C=534;
   document.getElementById('ap').setAttribute('stroke-dasharray',(p*C).toFixed(1)+' '+C);
@@ -837,123 +455,111 @@ function setArcUI(deg){
   document.getElementById('spct').textContent=Math.round(p*100)+'% покрыто';
 }
 
-// ── RECORD ───────────────────────────────────────
+// ── RECORD ───────────────────────────────────────────────
 function toggleRec(){isRec?stopRec(false):startRec()}
 
 function startRec(){
-  isRec=true;
-  startAngle=contAngle;
-  recDelta=0;
-  lastWrittenX=-1;
+  isRec=true;startAngle=contAngle;recDelta=0;frameCount=0;
 
-  // Offscreen canvas для панорамы
   panoC=document.createElement('canvas');
-  panoC.width=PANO_MAX_W;
-  panoC.height=PANO_H;
+  panoC.width=PANO_MAX_W;panoC.height=PANO_H;
   panoCtx=panoC.getContext('2d');
   panoCtx.fillStyle='#0a0a0e';
   panoCtx.fillRect(0,0,PANO_MAX_W,PANO_H);
 
-  // Live strip
-  const sw=document.getElementById('sw');
-  sw.classList.add('on');
+  const sw=document.getElementById('sw');sw.classList.add('on');
   const sc=document.getElementById('sc');
-  const sbw=sw.querySelector('.strip-box').clientWidth||300;
-  sc.width=sbw; sc.height=54;
+  sc.width=sw.querySelector('.strip-box').clientWidth||300;sc.height=54;
 
-  // UI
   document.getElementById('rb').classList.add('on');
-  document.getElementById('rl').textContent='■ СТОП';
-  document.getElementById('rl').classList.add('on');
-  document.getElementById('cam-st').textContent='● ЗАПИСЬ';
-  document.getElementById('cam-st').classList.add('rec');
+  document.getElementById('rl').textContent='■ СТОП';document.getElementById('rl').classList.add('on');
+  document.getElementById('cam-st').textContent='● ЗАПИСЬ';document.getElementById('cam-st').classList.add('rec');
   document.getElementById('ap').style.stroke='#ff3b30';
   document.getElementById('ad').style.fill='#ff3b30';
   document.getElementById('ch-dot').classList.add('rec');
   document.getElementById('pb').classList.add('rec');
   setArcUI(0);
 
-  // Launch capture loop
   rafId=requestAnimationFrame(captureLoop);
   camToast('🔴 Запись! Медленно поворачивайтесь вправо на 360°');
 }
 
 function stopRec(cancel){
   if(!isRec)return;
-  isRec=false;
-  cancelAnimationFrame(rafId);
-
+  isRec=false;cancelAnimationFrame(rafId);
   document.getElementById('rb').classList.remove('on');
-  document.getElementById('rl').textContent='ЗАПИСЬ';
-  document.getElementById('rl').classList.remove('on');
+  document.getElementById('rl').textContent='ЗАПИСЬ';document.getElementById('rl').classList.remove('on');
   document.getElementById('cam-st').textContent=touchMode?'ТЯНИТЕ ЭКРАН ВЛЕВО':'НАЖМИТЕ ЗАПИСЬ';
   document.getElementById('cam-st').classList.remove('rec');
   document.getElementById('ap').style.stroke='#00e5ff';
   document.getElementById('ad').style.fill='#00e5ff';
   document.getElementById('ch-dot').classList.remove('rec');
   document.getElementById('pb').classList.remove('rec');
-
   if(cancel||!panoC){document.getElementById('sw').classList.remove('on');return}
-  if(Math.abs(recDelta)<5){
-    showToast('⚠️ Слишком мало движения','er');
-    document.getElementById('sw').classList.remove('on');
-    return;
-  }
+  if(Math.abs(recDelta)<5){showToast('⚠️ Слишком мало движения','er');document.getElementById('sw').classList.remove('on');return}
   buildPano();
 }
 
-// ── CAPTURE LOOP ─────────────────────────────────
+// ── CAPTURE LOOP ─────────────────────────────────────────
 /*
-  Запускается каждый RAF кадр (~16ms / 60fps).
-  Не ждёт gyro событий — сам читает текущее состояние.
-  Это ключ к отсутствию пробелов и плавности.
+  КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ:
+
+  Старый подход (плохой):
+    srcX = center, srcW = 6px → destX = fromX, destW = (targetX - lastX) → РАСТЯЖКА
+
+  Новый подход:
+    srcX = center - (видео_ширина × SRC_FRAC / 2)
+    srcW = видео_ширина × SRC_FRAC   (например 154px при 1920)
+    destX = текущая_позиция - DEST_W/2
+    destW = DEST_W = 14px (фиксированная)
+
+  Теперь из 154px источника рисуем 14px → нет растяжки, есть небольшое сжатие
+  (что и создаёт эффект длинной панорамы как в родной камере).
 
   Вертикальная коррекция (beta):
-  - beta=90: нормальный телефон вертикально → srcY=0 (весь кадр)
-  - beta=70: наклонён назад → смещаем srcY чтобы панорама была ровной
-  - Вычисляем offset в пикселях видео и обрезаем srcH
+    beta=90° → нормальный вертикальный → srcY берём из центра кадра
+    beta=70° → наклон назад → смещаем srcY вниз (видим выше по горизонту)
+    beta=110° → наклон вперёд → смещаем srcY вверх (видим ниже)
 */
-let frameCount=0;
 function captureLoop(){
   if(!isRec)return;
 
   const v=document.getElementById('vid');
   if(v.videoWidth>0&&panoCtx){
     const absDelta=Math.abs(recDelta);
+
     if(absDelta<=360){
-      const targetX=Math.round(absDelta*PX_PER_DEG);
-      // Заполняем от lastWrittenX до targetX (с небольшим overlap)
-      const fromX=lastWrittenX<0 ? 0 : Math.max(0,lastWrittenX-1);
-      const toX=Math.min(targetX,PANO_MAX_W-1);
+      const vW=v.videoWidth, vH=v.videoHeight;
 
-      if(toX>=fromX){
-        const fillW=Math.max(toX-fromX+1,1);
-        const vW=v.videoWidth, vH=v.videoHeight;
+      // Горизонтальная позиция: центр текущего угла
+      const centerX=Math.round(absDelta*PX_PER_DEG);
+      const destX=Math.max(0,Math.min(PANO_MAX_W-DEST_W, centerX-Math.round(DEST_W/2)));
 
-        // ── Вертикальная коррекция по beta ──
-        // Нормальный beta ~90° (телефон вертикально)
-        // Вычисляем сколько пикселей видео сдвинуть по Y
-        const betaDiff = betaAngle - 90; // 0=нормально, >0=вперёд, <0=назад
-        // Нормализуем: ±45° → ±50% высоты
-        const yShiftFrac = Math.max(-0.4, Math.min(0.4, betaDiff / 90));
-        const captureH = Math.round(vH * 0.85); // берём 85% высоты
-        const srcY = Math.round((vH - captureH) / 2 + vH * yShiftFrac * 0.5);
-        const clampedSrcY = Math.max(0, Math.min(vH - captureH, srcY));
+      // Источник: центральная полоса видео (SRC_FRAC = 8%)
+      const srcW=Math.max(2,Math.round(vW*SRC_FRAC));
+      const srcX=Math.round((vW-srcW)/2);
 
-        // Узкая полоса из центра видео по горизонтали, с вертикальной коррекцией
-        const srcX=Math.round((vW-STRIP_SRC_PX)/2);
+      // Вертикальная коррекция по beta
+      // beta=90 (норма) → берём центральную часть по высоте
+      // Диапазон beta обычно 45°-135° при нормальном держании
+      const betaDiff=betaAngle-90; // 0=норма, >0=наклон вперёд, <0=назад
+      const yShift=Math.max(-0.35,Math.min(0.35,betaDiff/100));
+      // Берём 90% высоты кадра (убираем небольшой верх/низ)
+      const captureH=Math.round(vH*0.90);
+      const baseSrcY=Math.round((vH-captureH)/2);
+      const srcY=Math.max(0,Math.min(vH-captureH,
+        Math.round(baseSrcY+vH*yShift*0.4)));
 
-        panoCtx.drawImage(
-          v,
-          srcX, clampedSrcY, STRIP_SRC_PX, captureH,
-          fromX, 0, fillW, PANO_H
-        );
-        lastWrittenX=toX+1;
-      }
+      // РИСУЕМ: широкий источник → узкая полоса назначения
+      panoCtx.drawImage(
+        v,
+        srcX, srcY, srcW, captureH,   // из видео: широкая центральная полоса
+        destX, 0, DEST_W, PANO_H      // в панораму: фиксированная ширина
+      );
 
-      // Обновляем превью каждые 4 кадра (не каждый, для производительности)
+      // Превью каждые 3 кадра
       frameCount++;
-      if(frameCount%4===0){
+      if(frameCount%3===0){
         const sc=document.getElementById('sc');
         if(sc&&sc.width>0){
           sc.getContext('2d').drawImage(panoC,0,0,PANO_MAX_W,PANO_H,0,0,sc.width,54);
@@ -966,7 +572,7 @@ function captureLoop(){
   rafId=requestAnimationFrame(captureLoop);
 }
 
-// ── BUILD FINAL PANORAMA ─────────────────────────
+// ── BUILD FINAL PANORAMA ─────────────────────────────────
 async function buildPano(){
   showL('Сборка панорамы');
   await new Promise(r=>setTimeout(r,80));
@@ -975,19 +581,18 @@ async function buildPano(){
   const cropW=Math.max(Math.round(covDeg*PX_PER_DEG),200);
 
   const fc=document.createElement('canvas');
-  fc.width=cropW; fc.height=PANO_H;
+  fc.width=cropW;fc.height=PANO_H;
   const fx=fc.getContext('2d');
 
-  // Копируем панораму
   fx.drawImage(panoC,0,0,cropW,PANO_H,0,0,cropW,PANO_H);
 
-  // Лёгкое виньетирование сверху-снизу (не тёмные полосы!)
+  // Лёгкое виньетирование
   const vg=fx.createLinearGradient(0,0,0,PANO_H);
-  vg.addColorStop(0,'rgba(0,0,0,.12)');
-  vg.addColorStop(.06,'rgba(0,0,0,0)');
-  vg.addColorStop(.94,'rgba(0,0,0,0)');
-  vg.addColorStop(1,'rgba(0,0,0,.12)');
-  fx.fillStyle=vg; fx.fillRect(0,0,cropW,PANO_H);
+  vg.addColorStop(0,'rgba(0,0,0,.1)');
+  vg.addColorStop(.05,'rgba(0,0,0,0)');
+  vg.addColorStop(.95,'rgba(0,0,0,0)');
+  vg.addColorStop(1,'rgba(0,0,0,.1)');
+  fx.fillStyle=vg;fx.fillRect(0,0,cropW,PANO_H);
 
   const url=fc.toDataURL('image/jpeg',.93);
   const pano={
@@ -996,28 +601,21 @@ async function buildPano(){
     angle:Math.round(covDeg),
     id:Date.now()
   };
-  panos.unshift(pano);
-  curI=0;
+  panos.unshift(pano);curI=0;
 
-  // Reset UI
   document.getElementById('sw').classList.remove('on');
-  setArcUI(0);
-  document.getElementById('deg').textContent='0°';
-  lastWrittenX=-1;
-  frameCount=0;
+  setArcUI(0);document.getElementById('deg').textContent='0°';
 
-  // Update gallery thumb in camera
   const gthumb=document.getElementById('gth');
-  gthumb.src=url; gthumb.style.display='block';
+  gthumb.src=url;gthumb.style.display='block';
   document.querySelector('#gal-btn .gal-btn-icon').style.display='none';
   const bd=document.getElementById('gbdg');
-  bd.textContent=panos.length; bd.style.display='flex';
+  bd.textContent=panos.length;bd.style.display='flex';
 
-  hideL();
-  openPrev(pano);
+  hideL();openPrev(pano);
 }
 
-// ── PREVIEW ──────────────────────────────────────
+// ── PREVIEW VIEWER ───────────────────────────────────────
 let viewImg=null,viewRaf=null,panX=0,velX=0,isDrag=false,dragX=0,vW=0,vH=0;
 
 function openPrev(p){
@@ -1026,42 +624,33 @@ function openPrev(p){
 
   const area=document.getElementById('vwr');
   const oldC=document.getElementById('vc');
-  vW=area.clientWidth; vH=area.clientHeight;
+  vW=area.clientWidth;vH=area.clientHeight;
 
-  // Клонируем canvas чтобы убрать старые listeners
   const c=oldC.cloneNode(false);
-  c.id='vc'; c.width=vW; c.height=vH;
-  c.style.width=vW+'px'; c.style.height=vH+'px';
+  c.id='vc';c.width=vW;c.height=vH;
+  c.style.width=vW+'px';c.style.height=vH+'px';
   oldC.parentNode.replaceChild(c,oldC);
-
-  panX=0; velX=0; isDrag=false;
+  panX=0;velX=0;isDrag=false;
 
   viewImg=new Image();
   viewImg.onload=()=>{renderView();startViewLoop()};
   viewImg.src=p.url;
 
-  c.addEventListener('touchstart',e=>{
-    isDrag=true; dragX=e.touches[0].clientX; velX=0;
-  },{passive:true});
+  c.addEventListener('touchstart',e=>{isDrag=true;dragX=e.touches[0].clientX;velX=0},{passive:true});
   c.addEventListener('touchmove',e=>{
     e.preventDefault();
     const dx=e.touches[0].clientX-dragX;
-    panX-=dx*2.5; dragX=e.touches[0].clientX; velX=-dx*2.5;
-    renderView();
+    panX-=dx*2.5;dragX=e.touches[0].clientX;velX=-dx*2.5;renderView();
   },{passive:false});
   c.addEventListener('touchend',()=>{isDrag=false});
   c.addEventListener('mousedown',e=>{isDrag=true;dragX=e.clientX;velX=0});
-  window.addEventListener('mousemove',vMouseMove);
+  window.addEventListener('mousemove',vMM);
   window.addEventListener('mouseup',()=>{isDrag=false});
 }
-
-function vMouseMove(e){
+function vMM(e){
   if(!isDrag||!document.getElementById('prev').classList.contains('on'))return;
-  const dx=e.clientX-dragX;
-  panX-=dx*2.5; dragX=e.clientX; velX=-dx*2.5;
-  renderView();
+  const dx=e.clientX-dragX;panX-=dx*2.5;dragX=e.clientX;velX=-dx*2.5;renderView();
 }
-
 function renderView(){
   const c=document.getElementById('vc');
   if(!viewImg||!viewImg.complete||!c)return;
@@ -1072,7 +661,6 @@ function renderView(){
   ctx.drawImage(viewImg,dw-off,0,dw,vH);
   ctx.drawImage(viewImg,-off,0,dw,vH);
 }
-
 function startViewLoop(){
   cancelAnimationFrame(viewRaf);
   (function loop(){
@@ -1080,76 +668,56 @@ function startViewLoop(){
     viewRaf=requestAnimationFrame(loop);
   })();
 }
-
 function closePrev(){
   cancelAnimationFrame(viewRaf);
-  window.removeEventListener('mousemove',vMouseMove);
+  window.removeEventListener('mousemove',vMM);
   go(vs?'cam':'home');
 }
-
 function savePano(){
   const p=panos[curI];if(!p)return;
-  const a=document.createElement('a');
-  a.href=p.url; a.download='pano360_'+p.id+'.jpg'; a.click();
+  const a=document.createElement('a');a.href=p.url;a.download='pano360_'+p.id+'.jpg';a.click();
   showToast('💾 Сохранено','ok');
 }
-
 async function sharePano(){
   const p=panos[curI];if(!p)return;
   try{
     const b=await(await fetch(p.url)).blob();
     const f=new File([b],'pano360.jpg',{type:'image/jpeg'});
-    if(navigator.share&&navigator.canShare?.({files:[f]})){
-      await navigator.share({title:'Панорама 360°',files:[f]});return;
-    }
+    if(navigator.share&&navigator.canShare?.({files:[f]})){await navigator.share({title:'Панорама 360°',files:[f]});return}
   }catch(e){}
   savePano();
 }
 
-// ── GALLERY ──────────────────────────────────────
+// ── GALLERY ──────────────────────────────────────────────
 function openGal(){go('gal');renderGal()}
 function closeGal(){go(vs?'cam':'home')}
-
 function renderGal(){
   const g=document.getElementById('gg'),c=document.getElementById('gcn');
   if(!panos.length){
     c.textContent='';
-    g.innerHTML=`<div class="gal-empty">
-      <div class="gal-empty-icon">🌐</div>
-      <div class="gal-empty-ttl">Нет панорам</div>
-      <div class="gal-empty-sub">Снимите первую 360°</div>
-    </div>`;
+    g.innerHTML=`<div class="gal-empty"><div class="gal-empty-icon">🌐</div><div class="gal-empty-ttl">Нет панорам</div><div class="gal-empty-sub">Снимите первую 360°</div></div>`;
     return;
   }
-  c.textContent=panos.length+' шт';
-  g.innerHTML='';
+  c.textContent=panos.length+' шт';g.innerHTML='';
   panos.forEach((p,i)=>{
-    const el=document.createElement('div');
-    el.className='gc';
+    const el=document.createElement('div');el.className='gc';
     el.innerHTML=`<img src="${p.url}" alt=""><div class="gc-info">${p.date} · ${p.angle}°</div>`;
-    el.onclick=()=>{curI=i;openPrev(p)};
-    g.appendChild(el);
+    el.onclick=()=>{curI=i;openPrev(p)};g.appendChild(el);
   });
 }
 
-// ── TOUCH / MOUSE FAKE GYRO ───────────────────────
-// Работает только в touchMode (нет гироскопа)
+// ── TOUCH / FAKE GYRO ────────────────────────────────────
 const camEl=document.getElementById('cam');
-
 camEl.addEventListener('touchstart',e=>{
   if(e.target.closest('#rb,.ib,.flip-btn,.gal-btn'))return;
   touchX=e.touches[0].clientX;
 },{passive:true});
-
 camEl.addEventListener('touchmove',e=>{
   if(!touchMode||touchX===null)return;
   const dx=e.touches[0].clientX-touchX;
-  contAngle+=(-dx*0.4);
-  touchX=e.touches[0].clientX;
-  updateLevel(0);
-  tick();
+  contAngle+=(-dx*0.4);touchX=e.touches[0].clientX;
+  updateLevel(0);tick();
 },{passive:true});
-
 camEl.addEventListener('touchend',()=>{touchX=null});
 
 document.addEventListener('mousedown',e=>{
@@ -1160,10 +728,7 @@ document.addEventListener('mousedown',e=>{
 document.addEventListener('mousemove',e=>{
   if(!touchMode||mouseX===null)return;
   if(!document.getElementById('cam').classList.contains('on'))return;
-  const dx=e.clientX-mouseX;
-  contAngle+=(-dx*0.5);
-  mouseX=e.clientX;
-  tick();
+  contAngle+=-(e.clientX-mouseX)*0.5;mouseX=e.clientX;tick();
 });
 document.addEventListener('mouseup',()=>{mouseX=null});
 </script>
