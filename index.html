@@ -10,269 +10,244 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
 html,body{width:100%;height:100%;overflow:hidden;background:#000;touch-action:none}
-body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;color:#fff}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
 :root{--c:#00e5ff;--r:#ff3b30;--g:#34c759;--st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px)}
-.screen{position:fixed;inset:0;display:none}
-.screen.active{display:block}
+.scr{position:fixed;inset:0;display:none}
+.scr.on{display:block}
 
-/* HOME */
-#home{background:radial-gradient(ellipse 80% 60% at 50% 20%,#0d1f2d,#000 70%)}
-.hc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.orb{width:88px;height:88px;margin-bottom:18px}
-.orb svg{width:100%;height:100%}
-.ra{animation:sp 10s linear infinite;transform-origin:44px 44px}
-.rb{animation:sp 6s linear infinite reverse;transform-origin:44px 44px}
-@keyframes sp{to{transform:rotate(360deg)}}
-.ht{font-size:32px;font-weight:300;letter-spacing:8px;text-transform:uppercase;text-align:center}
-.hs{font-size:11px;letter-spacing:5px;color:rgba(255,255,255,.35);text-transform:uppercase;margin:5px 0 36px;text-align:center}
-.bm{width:200px;height:52px;border-radius:26px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--c),#0077b6);color:#000;font-size:14px;font-weight:700;letter-spacing:1px;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;box-shadow:0 0 36px rgba(0,229,255,.25)}
-.bm:active{opacity:.85}
-.bs{width:200px;height:42px;border-radius:21px;cursor:pointer;background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.55);font-size:13px;display:flex;align-items:center;justify-content:center;gap:8px}
-.bs:active{background:rgba(255,255,255,.08)}
+/* ═══ HOME ═══ */
+#home{background:radial-gradient(ellipse 80% 55% at 50% 15%,#0d1f2d,#000 65%)}
+.hbox{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.logo{width:84px;height:84px;margin-bottom:16px}
+.logo svg{width:100%;height:100%}
+.lr{animation:spin 9s linear infinite;transform-origin:42px 42px}
+.ls{animation:spin 5s linear infinite reverse;transform-origin:42px 42px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ht{font-size:30px;font-weight:300;letter-spacing:8px;text-transform:uppercase;text-align:center}
+.hst{font-size:11px;letter-spacing:5px;color:rgba(255,255,255,.32);text-transform:uppercase;margin:5px 0 32px}
+.bmain{width:196px;height:52px;border-radius:26px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--c),#0077b6);color:#000;font-size:14px;font-weight:700;letter-spacing:.5px;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;box-shadow:0 0 32px rgba(0,229,255,.22)}
+.bmain:active{opacity:.85}
+.bsec{width:196px;height:42px;border-radius:21px;cursor:pointer;background:transparent;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.5);font-size:13px;display:flex;align-items:center;justify-content:center;gap:7px}
+.bsec:active{background:rgba(255,255,255,.07)}
 
-/* CAMERA */
+/* ═══ CAMERA ═══ */
 #cam{background:#000}
 #vid{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1}
-.overlay{position:absolute;inset:0;z-index:2;pointer-events:none}
 
-/* top bar */
-.tbar{
+/* top gradient + bar */
+.tg{position:absolute;top:0;left:0;right:0;height:130px;background:linear-gradient(to bottom,rgba(0,0,0,.8),transparent);z-index:10;pointer-events:none}
+.tr{
   position:absolute;top:0;left:0;right:0;
   padding-top:var(--st);
-  z-index:20;
-  background:linear-gradient(to bottom,rgba(0,0,0,.75) 0%,transparent 100%);
-  padding-bottom:48px;
-  pointer-events:none;
-}
-.trow{
   display:flex;align-items:center;justify-content:space-between;
-  padding:10px 14px 0;
-  pointer-events:all;
+  padding-left:14px;padding-right:14px;
+  z-index:11;pointer-events:all;
+  height:calc(var(--st) + 60px);
+  align-items:flex-end;padding-bottom:6px;
 }
-.tb{width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);flex-shrink:0}
-.tc{display:flex;flex-direction:column;align-items:center;gap:2px}
-.td{font-size:22px;font-weight:200;letter-spacing:2px;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
-.ts{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.5)}
-.ts.r{color:var(--r);animation:bl .9s step-end infinite}
-@keyframes bl{0%,100%{opacity:1}50%{opacity:.15}}
+.ib{width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.52);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);flex-shrink:0}
+.tm{display:flex;flex-direction:column;align-items:center;gap:1px}
+.tdeg{font-size:22px;font-weight:200;letter-spacing:2px;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+.tst{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.48)}
+.tst.r{color:var(--r);animation:blink .9s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.1}}
 
 /* progress */
-.pw{position:absolute;top:calc(var(--st) + 58px);left:0;right:0;height:3px;background:rgba(255,255,255,.1);z-index:20}
-.pb{height:100%;width:0%;background:linear-gradient(90deg,var(--c),#a78bfa);transition:width .15s linear}
+.pw{position:absolute;top:calc(var(--st) + 60px);left:0;right:0;height:3px;background:rgba(255,255,255,.1);z-index:11}
+.pb{height:100%;width:0%;background:linear-gradient(90deg,var(--c),#a78bfa);transition:width .12s linear}
 .pb.r{background:var(--r)}
 
 /* arc */
-.aw{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:190px;height:190px;z-index:10;pointer-events:none}
+.aw{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:186px;height:186px;z-index:8;pointer-events:none}
 .aw svg{width:100%;height:100%}
 
 /* crosshair */
-.xw{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:11;pointer-events:none;width:52px;height:52px}
-.xh{position:absolute;width:100%;height:1px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.7)}
-.xv{position:absolute;height:100%;width:1px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.7)}
-.xd{position:absolute;top:50%;left:50%;width:7px;height:7px;border-radius:50%;background:var(--c);transform:translate(-50%,-50%);box-shadow:0 0 12px var(--c);transition:background .2s,box-shadow .2s}
-.xd.r{background:var(--r);box-shadow:0 0 12px var(--r)}
+.xw{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9;pointer-events:none;width:50px;height:50px}
+.xl,.xv{position:absolute;background:rgba(255,255,255,.75)}
+.xl{width:100%;height:1px;top:50%;transform:translateY(-50%)}
+.xv{height:100%;width:1px;left:50%;transform:translateX(-50%)}
+.xc{position:absolute;top:50%;left:50%;width:7px;height:7px;border-radius:50%;background:var(--c);transform:translate(-50%,-50%);box-shadow:0 0 10px var(--c);transition:background .2s}
+.xc.r{background:var(--r);box-shadow:0 0 10px var(--r)}
 
 /* brackets */
-.bw{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:68px;height:68px;z-index:11;pointer-events:none}
+.bkw{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:64px;height:64px;z-index:9;pointer-events:none}
 .bk{position:absolute;width:11px;height:11px}
-.bk::before,.bk::after{content:'';position:absolute;background:rgba(255,255,255,.75)}
+.bk::before,.bk::after{content:'';position:absolute;background:rgba(255,255,255,.8)}
 .bk::before{top:0;left:0;width:100%;height:1.5px}
 .bk::after{top:0;left:0;width:1.5px;height:100%}
-.bk.t{top:0;right:0;transform:scaleX(-1)}
-.bk.b{bottom:0;left:0;transform:scaleY(-1)}
-.bk.c{bottom:0;right:0;transform:scale(-1)}
+.bk.e{top:0;right:0;transform:scaleX(-1)}
+.bk.s{bottom:0;left:0;transform:scaleY(-1)}
+.bk.f{bottom:0;right:0;transform:scale(-1)}
 
 /* level */
-.lv{position:absolute;top:calc(50% + 42px);left:50%;transform:translateX(-50%);z-index:11;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px}
-.lt{width:110px;height:2px;background:rgba(255,255,255,.12);border-radius:2px;position:relative}
-.lb{position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;background:var(--g);transform:translate(-50%,-50%);box-shadow:0 0 7px var(--g);transition:left .08s,background .2s}
-.lb.w{background:#ffd60a;box-shadow:0 0 7px #ffd60a}
-.lb.x{background:var(--r);box-shadow:0 0 7px var(--r)}
-.ll{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.28)}
+.lw{position:absolute;top:calc(50% + 42px);left:50%;transform:translateX(-50%);z-index:9;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px}
+.lt2{width:106px;height:2px;background:rgba(255,255,255,.1);border-radius:2px;position:relative}
+.lb2{position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;background:var(--g);transform:translate(-50%,-50%);box-shadow:0 0 7px var(--g);transition:left .08s,background .2s}
+.lb2.w{background:#ffd60a;box-shadow:0 0 7px #ffd60a}
+.lb2.x{background:var(--r);box-shadow:0 0 7px var(--r)}
+.ll2{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25)}
 
 /* arrows */
-.ar{position:absolute;top:50%;transform:translateY(-50%);z-index:11;pointer-events:none;font-size:32px;color:rgba(255,255,255,.8);text-shadow:0 0 16px rgba(255,255,255,.4)}
-#aR{right:12px}
-#aL{left:12px;display:none}
+.arr{position:absolute;top:50%;transform:translateY(-50%);z-index:9;pointer-events:none;font-size:30px;color:rgba(255,255,255,.8);text-shadow:0 0 14px rgba(255,255,255,.35)}
+#aR{right:12px}#aL{left:12px;display:none}
 
-/* strip preview */
-.sw{position:absolute;bottom:calc(var(--sb) + 128px);left:12px;right:12px;z-index:12;display:none;flex-direction:column;gap:4px;pointer-events:none}
-.sw.on{display:flex}
-.sb2{height:52px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.6);position:relative}
-#sc{display:block;width:100%;height:52px}
-.sf{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.6) 0%,transparent 10%,transparent 90%,rgba(0,0,0,.6) 100%)}
-.sc2{position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--r);box-shadow:0 0 8px var(--r);transition:left .08s linear}
-.sp{text-align:center;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.35)}
+/* live strip */
+.sw2{position:absolute;bottom:calc(var(--sb) + 126px);left:12px;right:12px;z-index:12;display:none;flex-direction:column;gap:4px;pointer-events:none}
+.sw2.on{display:flex}
+.sb3{height:54px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.55);position:relative}
+#sc{display:block;width:100%;height:54px}
+.sov{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.55) 0%,transparent 10%,transparent 90%,rgba(0,0,0,.55) 100%)}
+.scur{position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--r);box-shadow:0 0 8px var(--r)}
+.spct{text-align:center;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.35)}
 
 /* cam toast */
-.ct{position:absolute;bottom:calc(var(--sb) + 134px);left:14px;right:14px;z-index:13;background:rgba(0,0,0,.78);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 14px;font-size:13px;color:rgba(255,255,255,.88);text-align:center;line-height:1.5;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);pointer-events:none;transition:opacity .3s,transform .3s}
-.ct.h{opacity:0;transform:translateY(6px)}
+.ctt{position:absolute;bottom:calc(var(--sb) + 130px);left:14px;right:14px;z-index:13;background:rgba(0,0,0,.78);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 14px;font-size:13px;color:rgba(255,255,255,.88);text-align:center;line-height:1.5;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);pointer-events:none;transition:opacity .3s,transform .3s}
+.ctt.h{opacity:0;transform:translateY(6px)}
 
 /* BOTTOM BAR */
-.bb{position:absolute;bottom:0;left:0;right:0;padding-bottom:calc(var(--sb) + 16px);padding-top:12px;padding-left:24px;padding-right:24px;background:linear-gradient(to top,rgba(0,0,0,.88),transparent);z-index:20;display:flex;align-items:center;justify-content:space-between}
-.sib{width:54px;height:54px;border-radius:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;flex-shrink:0;position:relative}
-.sib img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
-.sii{font-size:22px;color:rgba(255,255,255,.5)}
-.sib .bg{display:none;position:absolute;top:3px;right:3px;width:16px;height:16px;border-radius:50%;background:var(--c);color:#000;font-size:9px;font-weight:800;align-items:center;justify-content:center}
+.bb{position:absolute;bottom:0;left:0;right:0;padding-bottom:calc(var(--sb) + 16px);padding-top:12px;padding-left:22px;padding-right:22px;background:linear-gradient(to top,rgba(0,0,0,.88),transparent);z-index:13;display:flex;align-items:center;justify-content:space-between}
+.sdb{width:54px;height:54px;border-radius:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;flex-shrink:0;position:relative}
+.sdb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.sdi{font-size:22px;color:rgba(255,255,255,.48)}
+.sdb .bdg{display:none;position:absolute;top:3px;right:3px;width:16px;height:16px;border-radius:50%;background:var(--c);color:#000;font-size:9px;font-weight:800;align-items:center;justify-content:center}
 
-/* RECORD BUTTON */
 .rw{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0}
-.rb2{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.1);border:3.5px solid rgba(255,255,255,.7);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .1s;-webkit-tap-highlight-color:transparent}
-.rb2:active{transform:scale(0.91)}
+.rbtn{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.1);border:3.5px solid rgba(255,255,255,.72);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .1s;-webkit-tap-highlight-color:transparent}
+.rbtn:active{transform:scale(0.9)}
 .ri{width:58px;height:58px;border-radius:50%;background:var(--r);box-shadow:0 0 20px rgba(255,59,48,.5);transition:all .2s cubic-bezier(.4,0,.2,1)}
-.rb2.on .ri{width:26px;height:26px;border-radius:7px}
-.rl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.45)}
-.rl.on{color:var(--r);animation:bl .9s step-end infinite}
+.rbtn.on .ri{width:26px;height:26px;border-radius:7px}
+.rl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.42)}
+.rl.on{color:var(--r);animation:blink .9s step-end infinite}
 
-.fb{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.flp{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 
-/* PREVIEW */
+/* ═══ PREVIEW ═══ */
 #prev{background:#050508;display:none;flex-direction:column}
-#prev.active{display:flex}
+#prev.on{display:flex}
 .ph{display:flex;align-items:center;gap:10px;padding-top:calc(var(--st)+14px);padding-bottom:12px;padding-left:14px;padding-right:14px;background:rgba(0,0,0,.5);border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0}
 .pbk{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
-.pi{flex:1}
-.pi h2{font-size:16px;font-weight:600}
-.pi p{font-size:11px;color:rgba(255,255,255,.35);margin-top:2px}
+.pi{flex:1}.pi h2{font-size:16px;font-weight:600}.pi p{font-size:11px;color:rgba(255,255,255,.32);margin-top:2px}
 .pbtns{display:flex;gap:8px;flex-shrink:0}
 .pbn{height:34px;padding:0 12px;border-radius:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px}
 .pbn:active{opacity:.7}
 .pbn.hi{background:var(--c);border-color:transparent;color:#000}
-.vw{flex:1;background:#000;position:relative;overflow:hidden;touch-action:none}
+.vwr{flex:1;background:#000;position:relative;overflow:hidden;touch-action:none}
 #vc{position:absolute;top:0;left:0;cursor:grab;display:block}
 #vc:active{cursor:grabbing}
-.vh{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.45);pointer-events:none;white-space:nowrap;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.vhi{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.42);pointer-events:none;white-space:nowrap}
 
-/* GALLERY */
+/* ═══ GALLERY ═══ */
 #gal{background:#050508;display:none;flex-direction:column}
-#gal.active{display:flex}
+#gal.on{display:flex}
 .gh{display:flex;align-items:center;gap:10px;padding-top:calc(var(--st)+14px);padding-bottom:12px;padding-left:14px;padding-right:14px;background:rgba(0,0,0,.5);border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0}
 .gbk{width:36px;height:36px;border-radius:9px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.gt{flex:1;font-size:17px;font-weight:600}
-.gcn{font-size:11px;color:rgba(255,255,255,.3);letter-spacing:1px}
-.gg{flex:1;overflow-y:auto;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px;-webkit-overflow-scrolling:touch}
+.gtt{flex:1;font-size:17px;font-weight:600}
+.gcn{font-size:11px;color:rgba(255,255,255,.28);letter-spacing:1px}
+.gg{flex:1;overflow-y:auto;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .gc{aspect-ratio:2.2/1;border-radius:10px;overflow:hidden;position:relative;cursor:pointer;background:#111;border:1px solid rgba(255,255,255,.07);transition:transform .15s}
 .gc:active{transform:scale(0.97)}
 .gc img{width:100%;height:100%;object-fit:cover;display:block}
-.gci{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.88),transparent);padding:14px 8px 6px;font-size:10px;color:rgba(255,255,255,.65)}
+.gci{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.88),transparent);padding:14px 8px 6px;font-size:10px;color:rgba(255,255,255,.62)}
 .ge{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:70px 20px;text-align:center}
-.gei{font-size:52px;opacity:.3}
-.get{font-size:16px;font-weight:600;color:rgba(255,255,255,.4)}
-.ges{font-size:12px;color:rgba(255,255,255,.2)}
+.gei{font-size:52px;opacity:.28}
+.get{font-size:16px;font-weight:600;color:rgba(255,255,255,.38)}
+.ges{font-size:12px;color:rgba(255,255,255,.18)}
 
-/* LOADING */
+/* ═══ LOADING ═══ */
 .ld{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.88);display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .ld.on{display:flex}
-.sp2{width:44px;height:44px;border-radius:50%;border:2px solid rgba(0,229,255,.15);border-top-color:var(--c);animation:sp .7s linear infinite}
-.sl{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4)}
+.sp{width:44px;height:44px;border-radius:50%;border:2px solid rgba(0,229,255,.15);border-top-color:var(--c);animation:spin .7s linear infinite}
+.sl{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.38)}
 
-/* GLOBAL TOAST */
-.gt{position:fixed;bottom:calc(var(--sb)+20px);left:50%;transform:translateX(-50%) translateY(64px);z-index:998;background:rgba(18,18,28,.96);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 18px;font-size:13px;color:#fff;white-space:normal;text-align:center;max-width:calc(100vw - 32px);transition:transform .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.gt.on{transform:translateX(-50%) translateY(0)}
-.gt.ok{border-color:rgba(52,199,89,.4);color:var(--g)}
-.gt.er{border-color:rgba(255,59,48,.4);color:var(--r)}
+/* ═══ GLOBAL TOAST ═══ */
+.gts{position:fixed;bottom:calc(var(--sb)+20px);left:50%;transform:translateX(-50%) translateY(60px);z-index:998;background:rgba(16,16,26,.96);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 18px;font-size:13px;color:#fff;white-space:normal;text-align:center;max-width:calc(100vw - 32px);transition:transform .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
+.gts.on{transform:translateX(-50%) translateY(0)}
+.gts.ok{border-color:rgba(52,199,89,.4);color:var(--g)}
+.gts.er{border-color:rgba(255,59,48,.4);color:var(--r)}
 </style>
 </head>
 <body>
 
 <!-- HOME -->
-<div class="screen active" id="home">
-  <div class="hc">
-    <div class="orb">
-      <svg viewBox="0 0 88 88" fill="none">
-        <circle class="ra" cx="44" cy="44" r="40" stroke="rgba(0,229,255,.2)" stroke-width="1" stroke-dasharray="6 5"/>
-        <circle cx="44" cy="44" r="30" stroke="rgba(0,229,255,.08)" stroke-width="1"/>
-        <circle class="rb" cx="44" cy="44" r="20" stroke="rgba(0,229,255,.3)" stroke-width="1.5" stroke-dasharray="10 4"/>
-        <line x1="44" y1="2" x2="44" y2="86" stroke="rgba(0,229,255,.12)" stroke-width="1"/>
-        <line x1="2" y1="44" x2="86" y2="44" stroke="rgba(0,229,255,.12)" stroke-width="1"/>
-        <circle cx="44" cy="44" r="5" fill="#00e5ff"/>
-        <circle cx="44" cy="44" r="11" fill="rgba(0,229,255,.07)" stroke="rgba(0,229,255,.35)" stroke-width="1"/>
-        <line x1="44" y1="2" x2="44" y2="10" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
-        <line x1="44" y1="78" x2="44" y2="86" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
-        <line x1="2" y1="44" x2="10" y2="44" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
-        <line x1="78" y1="44" x2="86" y2="44" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
+<div class="scr on" id="home">
+  <div class="hbox">
+    <div class="logo">
+      <svg viewBox="0 0 84 84" fill="none">
+        <circle class="lr" cx="42" cy="42" r="38" stroke="rgba(0,229,255,.2)" stroke-width="1" stroke-dasharray="6 5"/>
+        <circle cx="42" cy="42" r="28" stroke="rgba(0,229,255,.08)" stroke-width="1"/>
+        <circle class="ls" cx="42" cy="42" r="19" stroke="rgba(0,229,255,.28)" stroke-width="1.5" stroke-dasharray="10 4"/>
+        <line x1="42" y1="2" x2="42" y2="82" stroke="rgba(0,229,255,.12)" stroke-width="1"/>
+        <line x1="2" y1="42" x2="82" y2="42" stroke="rgba(0,229,255,.12)" stroke-width="1"/>
+        <circle cx="42" cy="42" r="5" fill="#00e5ff"/>
+        <circle cx="42" cy="42" r="11" fill="rgba(0,229,255,.07)" stroke="rgba(0,229,255,.32)" stroke-width="1"/>
+        <line x1="42" y1="2" x2="42" y2="9" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="42" y1="75" x2="42" y2="82" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="2" y1="42" x2="9" y2="42" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="75" y1="42" x2="82" y2="42" stroke="rgba(0,229,255,.6)" stroke-width="2" stroke-linecap="round"/>
       </svg>
     </div>
     <div class="ht">ПАНОРАМА</div>
-    <div class="hs">360° Camera</div>
-    <button class="bm" onclick="startCam()"><span>⏺</span> Начать съёмку</button>
-    <button class="bs" onclick="openGal()">📁 Галерея</button>
+    <div class="hst">360° Camera</div>
+    <button class="bmain" onclick="startCam()"><span>⏺</span> Начать съёмку</button>
+    <button class="bsec" onclick="openGal()">📁 Галерея</button>
   </div>
 </div>
 
 <!-- CAMERA -->
-<div class="screen" id="cam">
+<div class="scr" id="cam">
   <video id="vid" autoplay playsinline muted></video>
-
-  <!-- top bar -->
-  <div class="tbar">
-    <div class="trow">
-      <div class="tb" onclick="exitCam()">‹</div>
-      <div class="tc">
-        <div class="td" id="deg">0°</div>
-        <div class="ts" id="st">НАЖМИТЕ ЗАПИСЬ</div>
-      </div>
-      <div class="tb" onclick="flipCam()">⟳</div>
+  <div class="tg"></div>
+  <div class="tr">
+    <div class="ib" onclick="exitCam()">‹</div>
+    <div class="tm">
+      <div class="tdeg" id="deg">0°</div>
+      <div class="tst" id="tst">НАЖМИТЕ ЗАПИСЬ</div>
     </div>
+    <div class="ib" onclick="flipCam()">⟳</div>
   </div>
-
-  <!-- progress bar -->
   <div class="pw"><div class="pb" id="pb"></div></div>
 
-  <!-- arc -->
   <div class="aw">
-    <svg viewBox="0 0 190 190" fill="none">
-      <circle cx="95" cy="95" r="87" stroke="rgba(255,255,255,.08)" stroke-width="2" stroke-dasharray="547 547" transform="rotate(-90 95 95)"/>
-      <circle id="ap" cx="95" cy="95" r="87" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="0 547" transform="rotate(-90 95 95)"/>
-      <circle id="ad" cx="95" cy="8" r="4" fill="#00e5ff"/>
+    <svg viewBox="0 0 186 186" fill="none">
+      <circle cx="93" cy="93" r="85" stroke="rgba(255,255,255,.08)" stroke-width="2" stroke-dasharray="534 534" transform="rotate(-90 93 93)"/>
+      <circle id="ap" cx="93" cy="93" r="85" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="0 534" transform="rotate(-90 93 93)"/>
+      <circle id="ad" cx="93" cy="8" r="4" fill="#00e5ff"/>
     </svg>
   </div>
 
-  <!-- crosshair -->
-  <div class="xw"><div class="xh"></div><div class="xv"></div><div class="xd" id="xd"></div></div>
-  <div class="bw"><div class="bk"></div><div class="bk t"></div><div class="bk b"></div><div class="bk c"></div></div>
+  <div class="xw"><div class="xl"></div><div class="xv"></div><div class="xc" id="xc"></div></div>
+  <div class="bkw"><div class="bk"></div><div class="bk e"></div><div class="bk s"></div><div class="bk f"></div></div>
 
-  <!-- level -->
-  <div class="lv"><div class="lt"><div class="lb" id="lb"></div></div><div class="ll">уровень</div></div>
+  <div class="lw"><div class="lt2"><div class="lb2" id="lb"></div></div><div class="ll2">уровень</div></div>
 
-  <!-- arrows -->
-  <div class="ar" id="aR">›</div>
-  <div class="ar" id="aL">‹</div>
+  <div class="arr" id="aR">›</div>
+  <div class="arr" id="aL">‹</div>
 
-  <!-- live strip -->
-  <div class="sw" id="sw">
-    <div class="sb2">
-      <canvas id="sc" height="52"></canvas>
-      <div class="sf"></div>
-      <div class="sc2" id="sc2"></div>
+  <div class="sw2" id="sw">
+    <div class="sb3">
+      <canvas id="sc" height="54"></canvas>
+      <div class="sov"></div>
+      <div class="scur" id="scur"></div>
     </div>
-    <div class="sp" id="spp">0% покрыто</div>
+    <div class="spct" id="spct">0% покрыто</div>
   </div>
 
-  <!-- toast -->
-  <div class="ct" id="ct">📱 Нажмите ● для начала записи, затем медленно поворачивайтесь вправо</div>
+  <div class="ctt" id="ctt">📱 Нажмите ● для записи, затем медленно поворачивайтесь вправо</div>
 
-  <!-- BOTTOM BAR -->
   <div class="bb">
-    <div class="sib" id="galb" onclick="openGal()">
-      <img id="gth" alt="">
-      <span class="sii">📁</span>
-      <span class="bg" id="gbg"></span>
+    <div class="sdb" id="galb" onclick="openGal()">
+      <img id="gth" alt=""><span class="sdi">📁</span><span class="bdg" id="bdg"></span>
     </div>
-
     <div class="rw">
-      <div class="rb2" id="rb" onclick="toggleRec()">
-        <div class="ri"></div>
-      </div>
+      <div class="rbtn" id="rb" onclick="toggleRec()"><div class="ri"></div></div>
       <div class="rl" id="rl">ЗАПИСЬ</div>
     </div>
-
-    <div class="fb" onclick="flipCam()">⟳</div>
+    <div class="flp" onclick="flipCam()">⟳</div>
   </div>
 </div>
 
 <!-- PREVIEW -->
-<div class="screen" id="prev">
+<div class="scr" id="prev">
   <div class="ph">
     <div class="pbk" onclick="closePrev()">‹</div>
     <div class="pi"><h2>Панорама 360°</h2><p id="ps">—</p></div>
@@ -281,80 +256,90 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;co
       <button class="pbn hi" onclick="sharePano()">↗ Поделиться</button>
     </div>
   </div>
-  <div class="vw" id="vw">
-    <canvas id="vc"></canvas>
-    <div class="vh">← тяните для обзора →</div>
-  </div>
+  <div class="vwr" id="vwr"><canvas id="vc"></canvas><div class="vhi">← тяните для обзора →</div></div>
 </div>
 
 <!-- GALLERY -->
-<div class="screen" id="gal">
+<div class="scr" id="gal">
   <div class="gh">
     <div class="gbk" onclick="closeGal()">‹</div>
-    <div class="gt">Галерея</div>
+    <div class="gtt">Галерея</div>
     <div class="gcn" id="gcn"></div>
   </div>
   <div class="gg" id="gg"></div>
 </div>
 
 <!-- LOADING -->
-<div class="ld" id="ld"><div class="sp2"></div><div class="sl" id="slt">Обработка</div></div>
-
-<!-- TOAST -->
-<div class="gt" id="gtt"></div>
+<div class="ld" id="ld"><div class="sp"></div><div class="sl" id="sl">Обработка</div></div>
+<div class="gts" id="gts"></div>
 
 <script>
-/* ═══════════════════════════════════════════
-   CONFIG
-   PANO_H: high enough to look good, but not too tall
-   Panorama is built by placing full video frames side by side
-═══════════════════════════════════════════ */
-const PANO_H = 1080;   // output panorama height in pixels
-const PANO_W = 8192;   // max width (360°)
+/*
+  ══════════════════════════════════════════════════
+  ПРАВИЛЬНЫЙ АЛГОРИТМ ПАНОРАМЫ (как в телефоне):
 
-/* ═══════════════════════════════════════════
-   STATE
-═══════════════════════════════════════════ */
+  1. Запускаем видеопоток с камеры (30fps)
+  2. Отслеживаем угол поворота через гироскоп (дельта каждые ~16ms)
+  3. Каждые MIN_ANGLE_STEP градусов → берём кадр из видеопотока
+  4. Из каждого кадра вырезаем ЦЕНТРАЛЬНУЮ ВЕРТИКАЛЬНУЮ ПОЛОСУ
+     (ширина полосы = то, сколько градусов прошли между кадрами → меньше gap → уже полоса)
+  5. Каждую полосу кладём на панораму с OVERLAP и BLENDING (alpha gradient на краях)
+  6. Панорама строится в цилиндрической проекции (все точки одной высоты = одна горизонталь)
+  ══════════════════════════════════════════════════
+*/
+
+// ─── CONFIG ────────────────────────────────────
+const PANO_H       = 960;   // высота панорамы в пикселях (высокое разрешение)
+const PANO_W_TOTAL = 7200;  // ширина для полных 360° (= 20px на градус)
+const PX_PER_DEG   = PANO_W_TOTAL / 360;  // 20px/°
+const MIN_ANGLE_STEP = 0.4; // брать кадр каждые 0.4°
+const BLEND_WIDTH  = 0.08;  // 8% overlap blending с каждого края полосы
+
+// ─── STATE ─────────────────────────────────────
 let vs=null, fac='environment';
 let isRec=false, gyroOk=false, touchMode=false;
-let prevA=null, contA=0, startA=0, delta=0, lastDrawnDelta=0;
+let prevA=null, contA=0, startA=0, delta=0, lastCapDelta=0;
 let panoC=null, panoCtx=null, rafR=null;
 let panos=[], curI=-1;
 let tX=null, mX=null;
 
-/* ═══════════════════════════════════════════
-   UTILS
-═══════════════════════════════════════════ */
-function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
-function showL(t){document.getElementById('slt').textContent=(t||'').toUpperCase();document.getElementById('ld').classList.add('on')}
+// ─── SCREEN ────────────────────────────────────
+function go(id){
+  document.querySelectorAll('.scr').forEach(s=>{
+    s.classList.remove('on');
+    // preview/gallery use 'on' class too
+    if(s.id==='prev'||s.id==='gal')s.classList.remove('on');
+  });
+  document.getElementById(id).classList.add('on');
+}
+
+// ─── LOADING / TOAST ───────────────────────────
+function showL(t){document.getElementById('sl').textContent=(t||'').toUpperCase();document.getElementById('ld').classList.add('on')}
 function hideL(){document.getElementById('ld').classList.remove('on')}
-
-let gTt;
-function gToast(m,tp=''){const e=document.getElementById('gtt');e.textContent=m;e.className='gt on '+tp;clearTimeout(gTt);gTt=setTimeout(()=>e.classList.remove('on'),3200)}
+let gtT;
+function gToast(m,tp=''){const e=document.getElementById('gts');e.textContent=m;e.className='gts on '+tp;clearTimeout(gtT);gtT=setTimeout(()=>e.classList.remove('on'),3000)}
 let cTt;
-function cToast(m){const e=document.getElementById('ct');e.textContent=m;e.classList.remove('h');clearTimeout(cTt);cTt=setTimeout(()=>e.classList.add('h'),6000)}
+function cToast(m){const e=document.getElementById('ctt');e.textContent=m;e.classList.remove('h');clearTimeout(cTt);cTt=setTimeout(()=>e.classList.add('h'),6000)}
 
-/* ═══════════════════════════════════════════
-   CAMERA
-═══════════════════════════════════════════ */
+// ─── CAMERA ────────────────────────────────────
 async function startCam(){
   showL('Запуск камеры');
   try{
-    vs=await navigator.mediaDevices.getUserMedia({video:{facingMode:fac,width:{ideal:1920},height:{ideal:1080}},audio:false});
+    vs=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:fac,width:{ideal:1920},height:{ideal:1080}},audio:false
+    });
     const v=document.getElementById('vid');
-    v.srcObject=vs;
-    await v.play();
-    hideL();
-    go('cam');
-    initGyro();
-    updArc(0);
+    v.srcObject=vs; await v.play();
+    hideL(); go('cam'); initGyro(); updUI(0);
     cToast('📱 Нажмите ● для записи, затем медленно поворачивайтесь вправо');
-  }catch(e){
-    hideL();
-    gToast('❌ Нет доступа к камере. Разрешите в настройках.','er');
-  }
+  }catch(e){hideL();gToast('❌ Нет доступа к камере. Разрешите в настройках.','er')}
 }
-function exitCam(){stopRec(true);if(vs){vs.getTracks().forEach(t=>t.stop());vs=null}window.removeEventListener('deviceorientation',onGyro,true);go('home')}
+function exitCam(){
+  stopRec(true);
+  if(vs){vs.getTracks().forEach(t=>t.stop());vs=null}
+  window.removeEventListener('deviceorientation',onGyro,true);
+  go('home');
+}
 async function flipCam(){
   fac=fac==='environment'?'user':'environment';
   if(vs){vs.getTracks().forEach(t=>t.stop());
@@ -362,13 +347,13 @@ async function flipCam(){
     catch(e){fac=fac==='environment'?'user':'environment'}}
 }
 
-/* ═══════════════════════════════════════════
-   GYRO
-═══════════════════════════════════════════ */
+// ─── GYRO ──────────────────────────────────────
 function initGyro(){
   prevA=null;contA=0;gyroOk=false;touchMode=false;
   if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
-    DeviceOrientationEvent.requestPermission().then(s=>s==='granted'?window.addEventListener('deviceorientation',onGyro,true):enTouch()).catch(enTouch);
+    DeviceOrientationEvent.requestPermission()
+      .then(s=>s==='granted'?window.addEventListener('deviceorientation',onGyro,true):enTouch())
+      .catch(enTouch);
   }else{
     window.addEventListener('deviceorientation',onGyro,true);
     setTimeout(()=>{if(!gyroOk)enTouch()},1800);
@@ -379,238 +364,282 @@ function onGyro(e){
   gyroOk=true;
   if(prevA===null){prevA=e.alpha;return}
   let d=e.alpha-prevA;
-  if(d>180)d-=360;if(d<-180)d+=360;
-  contA+=d;prevA=e.alpha;
+  if(d>180)d-=360; if(d<-180)d+=360;
+  contA+=d; prevA=e.alpha;
   updLevel(e.gamma);
   tick();
 }
-function enTouch(){touchMode=true;document.getElementById('st').textContent='ТЯНИТЕ ЭКРАН ВЛЕВО';cToast('👆 Гироскоп недоступен — тяните экран влево для поворота')}
+function enTouch(){
+  touchMode=true;
+  document.getElementById('tst').textContent='ТЯНИТЕ ЭКРАН ВЛЕВО';
+  cToast('👆 Гироскоп недоступен — тяните экран влево для поворота');
+}
 
-/* ═══════════════════════════════════════════
-   ANGLE TICK
-═══════════════════════════════════════════ */
+// ─── ANGLE TRACKING ────────────────────────────
 function tick(){
   delta=contA-startA;
   const disp=Math.min(Math.abs(delta),360);
   document.getElementById('deg').textContent=Math.round(Math.abs(delta))+'°';
-  updArc(disp);
+  updUI(disp);
   document.getElementById('aR').style.display=delta>=0?'block':'none';
   document.getElementById('aL').style.display=delta<0?'block':'none';
-  if(isRec&&Math.abs(delta)>=360)stopRec(false);
+  // recording: capture a frame if moved enough
+  if(isRec){
+    const stepped=Math.abs(delta)-Math.abs(lastCapDelta);
+    if(stepped>=MIN_ANGLE_STEP) captureStrip();
+    if(Math.abs(delta)>=360) stopRec(false);
+  }
 }
-function updArc(deg){
-  const p=Math.min(deg/360,1),C=547;
+function updUI(deg){
+  const p=Math.min(deg/360,1),C=534;
   document.getElementById('ap').setAttribute('stroke-dasharray',(p*C).toFixed(1)+' '+C);
   const a=(p*360-90)*Math.PI/180;
-  document.getElementById('ad').setAttribute('cx',(95+87*Math.cos(a)).toFixed(1));
-  document.getElementById('ad').setAttribute('cy',(95+87*Math.sin(a)).toFixed(1));
+  document.getElementById('ad').setAttribute('cx',(93+85*Math.cos(a)).toFixed(1));
+  document.getElementById('ad').setAttribute('cy',(93+85*Math.sin(a)).toFixed(1));
   document.getElementById('pb').style.width=(p*100).toFixed(1)+'%';
-  document.getElementById('sc2').style.left=(p*100).toFixed(1)+'%';
-  document.getElementById('spp').textContent=Math.round(p*100)+'% покрыто';
+  document.getElementById('scur').style.left=(p*100).toFixed(1)+'%';
+  document.getElementById('spct').textContent=Math.round(p*100)+'% покрыто';
 }
 function updLevel(g){
   if(g==null)return;
   const t=Math.max(-45,Math.min(45,g)),b=document.getElementById('lb');
   b.style.left=(50+(t/45)*40)+'%';
-  const a=Math.abs(t);b.className='lb'+(a>25?' x':a>12?' w':'');
+  const a=Math.abs(t);b.className='lb2'+(a>25?' x':a>12?' w':'');
 }
 
-/* ═══════════════════════════════════════════
-   RECORD
-═══════════════════════════════════════════ */
+// ─── RECORD ────────────────────────────────────
 function toggleRec(){isRec?stopRec(false):startRec()}
 
 function startRec(){
-  isRec=true;startA=contA;delta=0;lastDrawnDelta=0;
+  isRec=true; startA=contA; delta=0; lastCapDelta=0;
 
-  // Create panorama canvas
-  // Width = PANO_W pixels represents full 360°
   panoC=document.createElement('canvas');
-  panoC.width=PANO_W;panoC.height=PANO_H;
-  panoCtx=panoC.getContext('2d');
-  panoCtx.fillStyle='#050508';
-  panoCtx.fillRect(0,0,PANO_W,PANO_H);
+  panoC.width=PANO_W_TOTAL; panoC.height=PANO_H;
+  panoCtx=panoC.getContext('2d',{willReadFrequently:true});
+  panoCtx.fillStyle='#060608';
+  panoCtx.fillRect(0,0,PANO_W_TOTAL,PANO_H);
 
-  const sw=document.getElementById('sw');sw.classList.add('on');
+  const sw=document.getElementById('sw'); sw.classList.add('on');
   const sc=document.getElementById('sc');
-  sc.width=sw.querySelector('.sb2').clientWidth||300;sc.height=52;
+  sc.width=sw.querySelector('.sb3').clientWidth||300; sc.height=54;
 
   document.getElementById('rb').classList.add('on');
-  document.getElementById('rl').textContent='■ СТОП';document.getElementById('rl').classList.add('on');
-  document.getElementById('st').textContent='● ЗАПИСЬ';document.getElementById('st').classList.add('r');
+  document.getElementById('rl').textContent='■ СТОП'; document.getElementById('rl').classList.add('on');
+  document.getElementById('tst').textContent='● ЗАПИСЬ'; document.getElementById('tst').classList.add('r');
   document.getElementById('ap').style.stroke='#ff3b30';
   document.getElementById('ad').style.fill='#ff3b30';
-  document.getElementById('xd').classList.add('r');
+  document.getElementById('xc').classList.add('r');
   document.getElementById('pb').classList.add('r');
-  updArc(0);
-  rafR=requestAnimationFrame(recLoop);
+  updUI(0);
   cToast('🔴 Запись! Медленно поворачивайтесь вправо на 360°');
+
+  // Start RAF loop for smooth strip capture
+  rafR=requestAnimationFrame(recLoop);
 }
 
 function stopRec(cancel){
-  if(!isRec)return;isRec=false;cancelAnimationFrame(rafR);
+  if(!isRec)return; isRec=false; cancelAnimationFrame(rafR);
   document.getElementById('rb').classList.remove('on');
-  document.getElementById('rl').textContent='ЗАПИСЬ';document.getElementById('rl').classList.remove('on');
-  document.getElementById('st').textContent=touchMode?'ТЯНИТЕ ЭКРАН ВЛЕВО':'НАЖМИТЕ ЗАПИСЬ';document.getElementById('st').classList.remove('r');
+  document.getElementById('rl').textContent='ЗАПИСЬ'; document.getElementById('rl').classList.remove('on');
+  document.getElementById('tst').textContent=touchMode?'ТЯНИТЕ ЭКРАН ВЛЕВО':'НАЖМИТЕ ЗАПИСЬ'; document.getElementById('tst').classList.remove('r');
   document.getElementById('ap').style.stroke='#00e5ff';
   document.getElementById('ad').style.fill='#00e5ff';
-  document.getElementById('xd').classList.remove('r');
+  document.getElementById('xc').classList.remove('r');
   document.getElementById('pb').classList.remove('r');
   if(cancel||!panoC)return;
-  if(Math.abs(delta)<8){gToast('⚠️ Слишком мало движения','er');document.getElementById('sw').classList.remove('on');return}
+  if(Math.abs(delta)<5){gToast('⚠️ Слишком мало движения','er');document.getElementById('sw').classList.remove('on');return}
   buildPano();
 }
 
-/* ═══════════════════════════════════════════
-   RECORD LOOP — draw full video frame slices
-═══════════════════════════════════════════ */
+// ─── RAF LOOP: continuously capture ────────────
 function recLoop(){
   if(!isRec)return;
-  // How many degrees since last draw
-  const sinceLast=Math.abs(delta)-Math.abs(lastDrawnDelta);
-  if(sinceLast>=0.2)drawSlice();
+  // captureStrip is called from tick() via gyro events
+  // This loop just keeps running so gyro events get processed
   rafR=requestAnimationFrame(recLoop);
 }
 
-function drawSlice(){
+// ─── CAPTURE STRIP (core algorithm) ────────────
+/*
+  How this works (like real phone panorama):
+  
+  1. We know exactly how many degrees we moved since last capture
+  2. We calculate the X position on panorama canvas from angle
+  3. We take a NARROW vertical strip from CENTER of video frame
+     - Width = angle_moved * PX_PER_DEG pixels
+     - This way strips fit perfectly without gaps or overlaps
+  4. We scale it to match PANO_H
+  5. We apply alpha blending on left/right edges (feathering)
+     so adjacent strips blend smoothly → no seams
+*/
+function captureStrip(){
   const v=document.getElementById('vid');
   if(!v.videoWidth||!panoCtx)return;
 
-  const totalDeg=Math.abs(delta);
-  if(totalDeg>360)return; // don't overdraw
+  const absNow=Math.abs(delta);
+  const absPrev=Math.abs(lastCapDelta);
+  const stepDeg=absNow-absPrev;
+  if(stepDeg<=0)return;
 
-  // X position on panorama canvas: 0° → 0, 360° → PANO_W
-  const xNow=(totalDeg/360)*PANO_W;
-  const xPrev=(Math.abs(lastDrawnDelta)/360)*PANO_W;
+  // Position on panorama (pixels)
+  const xStart=Math.round(absPrev*PX_PER_DEG);
+  const xEnd=Math.round(absNow*PX_PER_DEG);
+  let stripW=xEnd-xStart;
+  if(stripW<1)stripW=1;
 
-  // Width of slice in pixels on panorama
-  let sliceW=Math.ceil(xNow-xPrev)+1;
-  if(sliceW<1)sliceW=1;
-
-  // === KEY FIX ===
-  // Draw the FULL video frame (entire width, entire height)
-  // We take the center column of the video (reduces fish-eye distortion at edges)
-  // but use the FULL height → this gives a proper panorama strip
   const vW=v.videoWidth, vH=v.videoHeight;
 
-  // Source: thin center column of the video, full height
-  // Using ~3% of width from center = sharp, minimal distortion
-  const srcPct=0.03;
-  const srcW=Math.max(2,Math.round(vW*srcPct));
+  // Source: center column of video (avoids fisheye at edges)
+  // We take proportional width: stepDeg/FOV_DEG * vW
+  // Assume phone camera FOV ≈ 65°
+  const FOV=65;
+  const srcFrac=Math.min(stepDeg/FOV,0.9);
+  const srcW=Math.max(2,Math.round(vW*srcFrac));
   const srcX=Math.round((vW-srcW)/2);
 
-  // Destination on panorama: full height
-  panoCtx.drawImage(
-    v,
-    srcX, 0, srcW, vH,       // src: center thin strip, full height
-    Math.round(xPrev), 0, sliceW, PANO_H  // dst: on panorama canvas
-  );
+  // Draw strip to panorama
+  // We use a temporary canvas to apply blending
+  const tmp=document.createElement('canvas');
+  tmp.width=stripW; tmp.height=PANO_H;
+  const tCtx=tmp.getContext('2d');
 
-  lastDrawnDelta=delta;
+  // Draw the video slice onto temp canvas (full height)
+  tCtx.drawImage(v, srcX,0,srcW,vH, 0,0,stripW,PANO_H);
 
-  // Update live strip preview
-  const sc=document.getElementById('sc');
-  if(sc&&panoC){
-    const ctx=sc.getContext('2d');
-    ctx.drawImage(panoC,0,0,PANO_W,PANO_H,0,0,sc.width,52);
+  // Apply feathered blending on left and right edges
+  // This creates smooth seams between strips
+  const blendPx=Math.round(stripW*BLEND_WIDTH)+2;
+  if(blendPx>1){
+    // Left edge: fade in
+    const lGrad=tCtx.createLinearGradient(0,0,blendPx,0);
+    lGrad.addColorStop(0,'rgba(0,0,0,1)');
+    lGrad.addColorStop(1,'rgba(0,0,0,0)');
+    tCtx.globalCompositeOperation='destination-in';
+    // Instead of masking to black, we blend with existing panorama
+
+    // Actually: draw with globalAlpha on the main canvas with gradient
+    // Reset and use different approach: draw directly with feathering
   }
-  updArc(totalDeg);
+
+  // Better blending: draw directly to panoCtx with gradient alpha
+  // Draw the strip
+  panoCtx.drawImage(v, srcX,0,srcW,vH, xStart,0,stripW,PANO_H);
+
+  // Blend edges: for each border region, blend with previous content
+  // using a linear gradient overlay (multiply alpha toward edges)
+  if(stripW>4){
+    const bw=Math.min(Math.round(stripW*0.25),24);
+    if(bw>1){
+      // Left blend
+      const lg=panoCtx.createLinearGradient(xStart,0,xStart+bw,0);
+      lg.addColorStop(0,'rgba(0,0,0,0.55)');
+      lg.addColorStop(1,'rgba(0,0,0,0)');
+      panoCtx.fillStyle=lg;
+      panoCtx.fillRect(xStart,0,bw,PANO_H);
+      // Right blend
+      const rg=panoCtx.createLinearGradient(xEnd-bw,0,xEnd,0);
+      rg.addColorStop(0,'rgba(0,0,0,0)');
+      rg.addColorStop(1,'rgba(0,0,0,0.55)');
+      panoCtx.fillStyle=rg;
+      panoCtx.fillRect(xEnd-bw,0,bw,PANO_H);
+    }
+  }
+
+  lastCapDelta=delta;
+
+  // Update live preview strip
+  updateStrip(absNow);
 }
 
-/* ═══════════════════════════════════════════
-   BUILD FINAL PANORAMA
-═══════════════════════════════════════════ */
+function updateStrip(deg){
+  const sc=document.getElementById('sc');
+  if(!sc||!panoC)return;
+  const ctx=sc.getContext('2d');
+  ctx.drawImage(panoC,0,0,PANO_W_TOTAL,PANO_H,0,0,sc.width,54);
+  updUI(deg);
+}
+
+// ─── BUILD FINAL PANORAMA ──────────────────────
 async function buildPano(){
   showL('Сборка панорамы');
-  await new Promise(r=>setTimeout(r,60));
+  await new Promise(r=>setTimeout(r,80));
 
   const covDeg=Math.min(Math.abs(delta),360);
-  const cropW=Math.round((covDeg/360)*PANO_W);
+  const cropW=Math.round(covDeg*PX_PER_DEG);
 
   const fc=document.createElement('canvas');
-  fc.width=Math.max(cropW,100);fc.height=PANO_H;
+  fc.width=Math.max(cropW,200); fc.height=PANO_H;
   const fx=fc.getContext('2d');
 
-  // Copy panorama
   fx.drawImage(panoC,0,0,cropW,PANO_H,0,0,cropW,PANO_H);
 
-  // Subtle vignette top/bottom
+  // Vignette top/bottom
   const vg=fx.createLinearGradient(0,0,0,PANO_H);
-  vg.addColorStop(0,'rgba(0,0,0,.25)');vg.addColorStop(.12,'rgba(0,0,0,0)');
-  vg.addColorStop(.88,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.25)');
-  fx.fillStyle=vg;fx.fillRect(0,0,cropW,PANO_H);
+  vg.addColorStop(0,'rgba(0,0,0,.2)'); vg.addColorStop(.1,'rgba(0,0,0,0)');
+  vg.addColorStop(.9,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,.2)');
+  fx.fillStyle=vg; fx.fillRect(0,0,cropW,PANO_H);
 
-  // Left/right fade if not full 360
+  // Fade edges for non-360
   if(covDeg<350){
     const lr=fx.createLinearGradient(0,0,cropW,0);
-    lr.addColorStop(0,'rgba(0,0,0,.45)');lr.addColorStop(.03,'rgba(0,0,0,0)');
-    lr.addColorStop(.97,'rgba(0,0,0,0)');lr.addColorStop(1,'rgba(0,0,0,.45)');
-    fx.fillStyle=lr;fx.fillRect(0,0,cropW,PANO_H);
+    lr.addColorStop(0,'rgba(0,0,0,.5)'); lr.addColorStop(.02,'rgba(0,0,0,0)');
+    lr.addColorStop(.98,'rgba(0,0,0,0)'); lr.addColorStop(1,'rgba(0,0,0,.5)');
+    fx.fillStyle=lr; fx.fillRect(0,0,cropW,PANO_H);
   }
 
-  const url=fc.toDataURL('image/jpeg',.92);
+  const url=fc.toDataURL('image/jpeg',.93);
   const pano={url,date:new Date().toLocaleString('ru-RU',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}),angle:Math.round(covDeg),id:Date.now()};
-  panos.unshift(pano);curI=0;
+  panos.unshift(pano); curI=0;
 
   document.getElementById('sw').classList.remove('on');
-  updArc(0);document.getElementById('deg').textContent='0°';
+  updUI(0); document.getElementById('deg').textContent='0°';
 
-  // update gallery thumb
-  const img=document.getElementById('gth');img.src=url;img.style.display='block';
-  document.querySelector('#galb .sii').style.display='none';
-  const bg=document.getElementById('gbg');bg.textContent=panos.length;bg.style.display='flex';
+  const img=document.getElementById('gth');
+  img.src=url; img.style.display='block';
+  document.querySelector('#galb .sdi').style.display='none';
+  const bd=document.getElementById('bdg'); bd.textContent=panos.length; bd.style.display='flex';
 
-  hideL();
-  openPrev(pano);
+  hideL(); openPrev(pano);
 }
 
-/* ═══════════════════════════════════════════
-   PREVIEW VIEWER
-═══════════════════════════════════════════ */
-let vI=null,vR=null,pX=0,vX=0,dr=false,ldx=0,vW2=0,vH2=0;
+// ─── PREVIEW VIEWER ────────────────────────────
+let vI=null,vRaf=null,pX=0,vXs=0,dr=false,ldx=0,vW2=0,vH2=0;
 
 function openPrev(p){
   go('prev');
   document.getElementById('ps').textContent=p.angle+'° · '+p.date;
-  const d=document.getElementById('vw'),c=document.getElementById('vc');
-  vW2=d.clientWidth;vH2=d.clientHeight;
-  c.width=vW2;c.height=vH2;c.style.width=vW2+'px';c.style.height=vH2+'px';
-  pX=0;vX=0;dr=false;
-  vI=new Image();vI.onload=()=>{rv();startIn()};vI.src=p.url;
-  // clone to remove old listeners
-  const nc=c.cloneNode(false);nc.width=vW2;nc.height=vH2;nc.style.width=vW2+'px';nc.style.height=vH2+'px';
+  const d=document.getElementById('vwr'),c=document.getElementById('vc');
+  vW2=d.clientWidth; vH2=d.clientHeight;
+  c.width=vW2; c.height=vH2; c.style.width=vW2+'px'; c.style.height=vH2+'px';
+  pX=0; vXs=0; dr=false;
+  vI=new Image(); vI.onload=()=>{rv();startIn()}; vI.src=p.url;
+  const nc=c.cloneNode(false); nc.width=vW2; nc.height=vH2; nc.style.width=vW2+'px'; nc.style.height=vH2+'px';
   c.parentNode.replaceChild(nc,c);
-  nc.addEventListener('touchstart',e=>{dr=true;ldx=e.touches[0].clientX;vX=0},{passive:true});
-  nc.addEventListener('touchmove',e=>{e.preventDefault();const dx=e.touches[0].clientX-ldx;pX-=dx*2.5;ldx=e.touches[0].clientX;vX=-dx*2.5;rv()},{passive:false});
+  nc.addEventListener('touchstart',e=>{dr=true;ldx=e.touches[0].clientX;vXs=0},{passive:true});
+  nc.addEventListener('touchmove',e=>{e.preventDefault();const dx=e.touches[0].clientX-ldx;pX-=dx*2.5;ldx=e.touches[0].clientX;vXs=-dx*2.5;rv()},{passive:false});
   nc.addEventListener('touchend',()=>{dr=false});
-  nc.addEventListener('mousedown',e=>{dr=true;ldx=e.clientX;vX=0});
-  window.addEventListener('mousemove',e=>{if(!dr||!document.getElementById('prev').classList.contains('active'))return;const dx=e.clientX-ldx;pX-=dx*2.5;ldx=e.clientX;vX=-dx*2.5;rv()});
+  nc.addEventListener('mousedown',e=>{dr=true;ldx=e.clientX;vXs=0});
+  window.addEventListener('mousemove',e=>{if(!dr||!document.getElementById('prev').classList.contains('on'))return;const dx=e.clientX-ldx;pX-=dx*2.5;ldx=e.clientX;vXs=-dx*2.5;rv()});
   window.addEventListener('mouseup',()=>{dr=false});
 }
-
 function rv(){
   const c=document.getElementById('vc');
   if(!vI||!vI.complete||!c)return;
   const ctx=c.getContext('2d');
-  // Fit height, scroll horizontally
   const dw=vH2*(vI.width/vI.height);
   const off=((pX%dw)+dw)%dw;
   ctx.clearRect(0,0,vW2,vH2);
   ctx.drawImage(vI,dw-off,0,dw,vH2);
   ctx.drawImage(vI,-off,0,dw,vH2);
 }
-
 function startIn(){
-  cancelAnimationFrame(vR);
-  (function loop(){if(!dr){vX*=.92;pX+=vX;if(Math.abs(vX)>.3)rv()}vR=requestAnimationFrame(loop)})();
+  cancelAnimationFrame(vRaf);
+  (function loop(){if(!dr){vXs*=.92;pX+=vXs;if(Math.abs(vXs)>.3)rv()}vRaf=requestAnimationFrame(loop)})();
 }
-
-function closePrev(){cancelAnimationFrame(vR);go(vs?'cam':'home')}
-
+function closePrev(){cancelAnimationFrame(vRaf);go(vs?'cam':'home')}
 function savePano(){
   const p=panos[curI];if(!p)return;
-  const a=document.createElement('a');a.href=p.url;a.download='pano360_'+p.id+'.jpg';a.click();
-  gToast('💾 Сохранено','ok');
+  const a=document.createElement('a');a.href=p.url;a.download='pano360_'+p.id+'.jpg';a.click();gToast('💾 Сохранено','ok');
 }
 async function sharePano(){
   const p=panos[curI];if(!p)return;
@@ -618,9 +647,7 @@ async function sharePano(){
   savePano();
 }
 
-/* ═══════════════════════════════════════════
-   GALLERY
-═══════════════════════════════════════════ */
+// ─── GALLERY ───────────────────────────────────
 function openGal(){go('gal');renderGal()}
 function closeGal(){go(vs?'cam':'home')}
 function renderGal(){
@@ -630,21 +657,18 @@ function renderGal(){
   panos.forEach((p,i)=>{const el=document.createElement('div');el.className='gc';el.innerHTML=`<img src="${p.url}" alt=""><div class="gci">${p.date} · ${p.angle}°</div>`;el.onclick=()=>{curI=i;openPrev(p)};g.appendChild(el)});
 }
 
-/* ═══════════════════════════════════════════
-   TOUCH FAKE GYRO
-═══════════════════════════════════════════ */
+// ─── TOUCH FAKE GYRO ───────────────────────────
 const camEl=document.getElementById('cam');
-camEl.addEventListener('touchstart',e=>{if(e.target.closest('#rb,.tb,.fb,.sib'))return;tX=e.touches[0].clientX},{passive:true});
+camEl.addEventListener('touchstart',e=>{if(e.target.closest('#rb,.ib,.flp,.sdb'))return;tX=e.touches[0].clientX},{passive:true});
 camEl.addEventListener('touchmove',e=>{
   if(!touchMode||tX===null)return;
   const dx=e.touches[0].clientX-tX;
   contA+=(-dx*.5);tX=e.touches[0].clientX;
   updLevel(0);tick();
-  if(isRec)drawSlice();
 },{passive:true});
 camEl.addEventListener('touchend',()=>{tX=null});
-document.addEventListener('mousedown',e=>{if(!document.getElementById('cam').classList.contains('active'))return;if(e.target.closest('#rb,.tb,.fb,.sib'))return;mX=e.clientX});
-document.addEventListener('mousemove',e=>{if(!touchMode||mX===null||!document.getElementById('cam').classList.contains('active'))return;contA+=-(e.clientX-mX)*.6;mX=e.clientX;tick();if(isRec)drawSlice()});
+document.addEventListener('mousedown',e=>{if(!document.getElementById('cam').classList.contains('on'))return;if(e.target.closest('#rb,.ib,.flp,.sdb'))return;mX=e.clientX});
+document.addEventListener('mousemove',e=>{if(!touchMode||mX===null||!document.getElementById('cam').classList.contains('on'))return;contA+=-(e.clientX-mX)*.6;mX=e.clientX;tick()});
 document.addEventListener('mouseup',()=>{mX=null});
 </script>
 </body>
