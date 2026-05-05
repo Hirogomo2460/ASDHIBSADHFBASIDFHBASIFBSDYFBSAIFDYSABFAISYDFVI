@@ -1,3 +1,4 @@
+cat > /mnt/user-data/outputs/panorama360.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -14,8 +15,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
 :root{--c:#00e5ff;--r:#ff3b30;--g:#34c759;--st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px)}
 .scr{position:fixed;inset:0;display:none}
 .scr.on{display:block}
-
-/* ═══ HOME ═══ */
 #home{background:radial-gradient(ellipse 80% 55% at 50% 15%,#0d1f2d,#000 65%)}
 .hbox{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .logo{width:84px;height:84px;margin-bottom:16px}
@@ -25,51 +24,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
 @keyframes spin{to{transform:rotate(360deg)}}
 .ht{font-size:30px;font-weight:300;letter-spacing:8px;text-transform:uppercase;text-align:center}
 .hst{font-size:11px;letter-spacing:5px;color:rgba(255,255,255,.32);text-transform:uppercase;margin:5px 0 32px}
-.bmain{width:196px;height:52px;border-radius:26px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--c),#0077b6);color:#000;font-size:14px;font-weight:700;letter-spacing:.5px;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;box-shadow:0 0 32px rgba(0,229,255,.22)}
+.bmain{width:196px;height:52px;border-radius:26px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--c),#0077b6);color:#000;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;box-shadow:0 0 32px rgba(0,229,255,.22)}
 .bmain:active{opacity:.85}
 .bsec{width:196px;height:42px;border-radius:21px;cursor:pointer;background:transparent;border:1px solid rgba(255,255,255,.18);color:rgba(255,255,255,.5);font-size:13px;display:flex;align-items:center;justify-content:center;gap:7px}
 .bsec:active{background:rgba(255,255,255,.07)}
-
-/* ═══ CAMERA ═══ */
 #cam{background:#000}
 #vid{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1}
-
-/* top gradient + bar */
 .tg{position:absolute;top:0;left:0;right:0;height:130px;background:linear-gradient(to bottom,rgba(0,0,0,.8),transparent);z-index:10;pointer-events:none}
-.tr{
-  position:absolute;top:0;left:0;right:0;
-  padding-top:var(--st);
-  display:flex;align-items:center;justify-content:space-between;
-  padding-left:14px;padding-right:14px;
-  z-index:11;pointer-events:all;
-  height:calc(var(--st) + 60px);
-  align-items:flex-end;padding-bottom:6px;
-}
+.tr{position:absolute;top:0;left:0;right:0;padding-top:var(--st);display:flex;align-items:flex-end;justify-content:space-between;padding-left:14px;padding-right:14px;z-index:11;pointer-events:all;height:calc(var(--st) + 60px);padding-bottom:6px}
 .ib{width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.52);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);flex-shrink:0}
 .tm{display:flex;flex-direction:column;align-items:center;gap:1px}
 .tdeg{font-size:22px;font-weight:200;letter-spacing:2px;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
 .tst{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.48)}
 .tst.r{color:var(--r);animation:blink .9s step-end infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.1}}
-
-/* progress */
 .pw{position:absolute;top:calc(var(--st) + 60px);left:0;right:0;height:3px;background:rgba(255,255,255,.1);z-index:11}
 .pb{height:100%;width:0%;background:linear-gradient(90deg,var(--c),#a78bfa);transition:width .12s linear}
 .pb.r{background:var(--r)}
-
-/* arc */
 .aw{position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);width:186px;height:186px;z-index:8;pointer-events:none}
 .aw svg{width:100%;height:100%}
-
-/* crosshair */
 .xw{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9;pointer-events:none;width:50px;height:50px}
 .xl,.xv{position:absolute;background:rgba(255,255,255,.75)}
 .xl{width:100%;height:1px;top:50%;transform:translateY(-50%)}
 .xv{height:100%;width:1px;left:50%;transform:translateX(-50%)}
 .xc{position:absolute;top:50%;left:50%;width:7px;height:7px;border-radius:50%;background:var(--c);transform:translate(-50%,-50%);box-shadow:0 0 10px var(--c);transition:background .2s}
 .xc.r{background:var(--r);box-shadow:0 0 10px var(--r)}
-
-/* brackets */
 .bkw{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:64px;height:64px;z-index:9;pointer-events:none}
 .bk{position:absolute;width:11px;height:11px}
 .bk::before,.bk::after{content:'';position:absolute;background:rgba(255,255,255,.8)}
@@ -78,20 +57,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
 .bk.e{top:0;right:0;transform:scaleX(-1)}
 .bk.s{bottom:0;left:0;transform:scaleY(-1)}
 .bk.f{bottom:0;right:0;transform:scale(-1)}
-
-/* level */
 .lw{position:absolute;top:calc(50% + 42px);left:50%;transform:translateX(-50%);z-index:9;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px}
 .lt2{width:106px;height:2px;background:rgba(255,255,255,.1);border-radius:2px;position:relative}
 .lb2{position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;background:var(--g);transform:translate(-50%,-50%);box-shadow:0 0 7px var(--g);transition:left .08s,background .2s}
 .lb2.w{background:#ffd60a;box-shadow:0 0 7px #ffd60a}
 .lb2.x{background:var(--r);box-shadow:0 0 7px var(--r)}
 .ll2{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25)}
-
-/* arrows */
 .arr{position:absolute;top:50%;transform:translateY(-50%);z-index:9;pointer-events:none;font-size:30px;color:rgba(255,255,255,.8);text-shadow:0 0 14px rgba(255,255,255,.35)}
 #aR{right:12px}#aL{left:12px;display:none}
-
-/* live strip */
 .sw2{position:absolute;bottom:calc(var(--sb) + 126px);left:12px;right:12px;z-index:12;display:none;flex-direction:column;gap:4px;pointer-events:none}
 .sw2.on{display:flex}
 .sb3{height:54px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.55);position:relative}
@@ -99,18 +72,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
 .sov{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.55) 0%,transparent 10%,transparent 90%,rgba(0,0,0,.55) 100%)}
 .scur{position:absolute;top:0;bottom:0;left:0;width:2px;background:var(--r);box-shadow:0 0 8px var(--r)}
 .spct{text-align:center;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.35)}
-
-/* cam toast */
 .ctt{position:absolute;bottom:calc(var(--sb) + 130px);left:14px;right:14px;z-index:13;background:rgba(0,0,0,.78);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 14px;font-size:13px;color:rgba(255,255,255,.88);text-align:center;line-height:1.5;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);pointer-events:none;transition:opacity .3s,transform .3s}
 .ctt.h{opacity:0;transform:translateY(6px)}
-
-/* BOTTOM BAR */
 .bb{position:absolute;bottom:0;left:0;right:0;padding-bottom:calc(var(--sb) + 16px);padding-top:12px;padding-left:22px;padding-right:22px;background:linear-gradient(to top,rgba(0,0,0,.88),transparent);z-index:13;display:flex;align-items:center;justify-content:space-between}
 .sdb{width:54px;height:54px;border-radius:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;flex-shrink:0;position:relative}
 .sdb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
 .sdi{font-size:22px;color:rgba(255,255,255,.48)}
 .sdb .bdg{display:none;position:absolute;top:3px;right:3px;width:16px;height:16px;border-radius:50%;background:var(--c);color:#000;font-size:9px;font-weight:800;align-items:center;justify-content:center}
-
 .rw{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0}
 .rbtn{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.1);border:3.5px solid rgba(255,255,255,.72);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .1s;-webkit-tap-highlight-color:transparent}
 .rbtn:active{transform:scale(0.9)}
@@ -118,10 +86,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
 .rbtn.on .ri{width:26px;height:26px;border-radius:7px}
 .rl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.42)}
 .rl.on{color:var(--r);animation:blink .9s step-end infinite}
-
 .flp{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
-
-/* ═══ PREVIEW ═══ */
 #prev{background:#050508;display:none;flex-direction:column}
 #prev.on{display:flex}
 .ph{display:flex;align-items:center;gap:10px;padding-top:calc(var(--st)+14px);padding-bottom:12px;padding-left:14px;padding-right:14px;background:rgba(0,0,0,.5);border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0}
@@ -135,8 +100,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
 #vc{position:absolute;top:0;left:0;cursor:grab;display:block}
 #vc:active{cursor:grabbing}
 .vhi{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 14px;font-size:11px;letter-spacing:1px;color:rgba(255,255,255,.42);pointer-events:none;white-space:nowrap}
-
-/* ═══ GALLERY ═══ */
 #gal{background:#050508;display:none;flex-direction:column}
 #gal.on{display:flex}
 .gh{display:flex;align-items:center;gap:10px;padding-top:calc(var(--st)+14px);padding-bottom:12px;padding-left:14px;padding-right:14px;background:rgba(0,0,0,.5);border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0}
@@ -149,17 +112,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
 .gc img{width:100%;height:100%;object-fit:cover;display:block}
 .gci{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.88),transparent);padding:14px 8px 6px;font-size:10px;color:rgba(255,255,255,.62)}
 .ge{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:70px 20px;text-align:center}
-.gei{font-size:52px;opacity:.28}
-.get{font-size:16px;font-weight:600;color:rgba(255,255,255,.38)}
-.ges{font-size:12px;color:rgba(255,255,255,.18)}
-
-/* ═══ LOADING ═══ */
+.gei{font-size:52px;opacity:.28}.get{font-size:16px;font-weight:600;color:rgba(255,255,255,.38)}.ges{font-size:12px;color:rgba(255,255,255,.18)}
 .ld{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.88);display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .ld.on{display:flex}
 .sp{width:44px;height:44px;border-radius:50%;border:2px solid rgba(0,229,255,.15);border-top-color:var(--c);animation:spin .7s linear infinite}
 .sl{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.38)}
-
-/* ═══ GLOBAL TOAST ═══ */
 .gts{position:fixed;bottom:calc(var(--sb)+20px);left:50%;transform:translateX(-50%) translateY(60px);z-index:998;background:rgba(16,16,26,.96);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:10px 18px;font-size:13px;color:#fff;white-space:normal;text-align:center;max-width:calc(100vw - 32px);transition:transform .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
 .gts.on{transform:translateX(-50%) translateY(0)}
 .gts.ok{border-color:rgba(52,199,89,.4);color:var(--g)}
@@ -168,7 +125,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
 </head>
 <body>
 
-<!-- HOME -->
 <div class="scr on" id="home">
   <div class="hbox">
     <div class="logo">
@@ -193,20 +149,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
   </div>
 </div>
 
-<!-- CAMERA -->
 <div class="scr" id="cam">
   <video id="vid" autoplay playsinline muted></video>
   <div class="tg"></div>
   <div class="tr">
     <div class="ib" onclick="exitCam()">‹</div>
-    <div class="tm">
-      <div class="tdeg" id="deg">0°</div>
-      <div class="tst" id="tst">НАЖМИТЕ ЗАПИСЬ</div>
-    </div>
+    <div class="tm"><div class="tdeg" id="deg">0°</div><div class="tst" id="tst">НАЖМИТЕ ЗАПИСЬ</div></div>
     <div class="ib" onclick="flipCam()">⟳</div>
   </div>
   <div class="pw"><div class="pb" id="pb"></div></div>
-
   <div class="aw">
     <svg viewBox="0 0 186 186" fill="none">
       <circle cx="93" cy="93" r="85" stroke="rgba(255,255,255,.08)" stroke-width="2" stroke-dasharray="534 534" transform="rotate(-90 93 93)"/>
@@ -214,26 +165,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
       <circle id="ad" cx="93" cy="8" r="4" fill="#00e5ff"/>
     </svg>
   </div>
-
   <div class="xw"><div class="xl"></div><div class="xv"></div><div class="xc" id="xc"></div></div>
   <div class="bkw"><div class="bk"></div><div class="bk e"></div><div class="bk s"></div><div class="bk f"></div></div>
-
   <div class="lw"><div class="lt2"><div class="lb2" id="lb"></div></div><div class="ll2">уровень</div></div>
-
   <div class="arr" id="aR">›</div>
   <div class="arr" id="aL">‹</div>
-
   <div class="sw2" id="sw">
-    <div class="sb3">
-      <canvas id="sc" height="54"></canvas>
-      <div class="sov"></div>
-      <div class="scur" id="scur"></div>
-    </div>
+    <div class="sb3"><canvas id="sc" height="54"></canvas><div class="sov"></div><div class="scur" id="scur"></div></div>
     <div class="spct" id="spct">0% покрыто</div>
   </div>
-
   <div class="ctt" id="ctt">📱 Нажмите ● для записи, затем медленно поворачивайтесь вправо</div>
-
   <div class="bb">
     <div class="sdb" id="galb" onclick="openGal()">
       <img id="gth" alt=""><span class="sdi">📁</span><span class="bdg" id="bdg"></span>
@@ -246,7 +187,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
   </div>
 </div>
 
-<!-- PREVIEW -->
 <div class="scr" id="prev">
   <div class="ph">
     <div class="pbk" onclick="closePrev()">‹</div>
@@ -259,61 +199,60 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
   <div class="vwr" id="vwr"><canvas id="vc"></canvas><div class="vhi">← тяните для обзора →</div></div>
 </div>
 
-<!-- GALLERY -->
 <div class="scr" id="gal">
   <div class="gh">
     <div class="gbk" onclick="closeGal()">‹</div>
-    <div class="gtt">Галерея</div>
-    <div class="gcn" id="gcn"></div>
+    <div class="gtt">Галерея</div><div class="gcn" id="gcn"></div>
   </div>
   <div class="gg" id="gg"></div>
 </div>
 
-<!-- LOADING -->
 <div class="ld" id="ld"><div class="sp"></div><div class="sl" id="sl">Обработка</div></div>
 <div class="gts" id="gts"></div>
 
 <script>
-/*
-  ══════════════════════════════════════════════════
-  ПРАВИЛЬНЫЙ АЛГОРИТМ ПАНОРАМЫ (как в телефоне):
+// ═══════════════════════════════════════════════════════
+//  КАК РАБОТАЕТ АЛГОРИТМ:
+//
+//  Проблема чёрных полос была в том что:
+//  1. Ждали определённый угол ДО захвата → между захватами = пробел
+//  2. Ширина полосы зависела от скорости → при дёргании = разная ширина
+//
+//  РЕШЕНИЕ:
+//  - RAF loop захватывает КАЖДЫЙ КАДР видео (30fps)
+//  - Из каждого кадра берём узкую полосу шириной STRIP_PX пикселей
+//    точно из центра видео (полная высота)
+//  - Кладём её на позицию X = текущий_угол × PX_PER_DEG
+//  - Полосы перекрываются (STRIP_PX > шаг между кадрами) → нет пробелов
+//  - НЕТ тёмного blending → нет тёмных краёв
+//  - Результат = непрерывная полоса без швов
+// ═══════════════════════════════════════════════════════
 
-  1. Запускаем видеопоток с камеры (30fps)
-  2. Отслеживаем угол поворота через гироскоп (дельта каждые ~16ms)
-  3. Каждые MIN_ANGLE_STEP градусов → берём кадр из видеопотока
-  4. Из каждого кадра вырезаем ЦЕНТРАЛЬНУЮ ВЕРТИКАЛЬНУЮ ПОЛОСУ
-     (ширина полосы = то, сколько градусов прошли между кадрами → меньше gap → уже полоса)
-  5. Каждую полосу кладём на панораму с OVERLAP и BLENDING (alpha gradient на краях)
-  6. Панорама строится в цилиндрической проекции (все точки одной высоты = одна горизонталь)
-  ══════════════════════════════════════════════════
-*/
+// ── CONFIG ──────────────────────────────────────────────
+// 15px на градус → при 360° = 5400px панорама
+const PX_PER_DEG  = 15;
+const PANO_H      = 1080;  // высота панорамы
+const PANO_MAX_W  = 360 * PX_PER_DEG;  // 5400px
 
-// ─── CONFIG ────────────────────────────────────
-const PANO_H       = 960;   // высота панорамы в пикселях (высокое разрешение)
-const PANO_W_TOTAL = 7200;  // ширина для полных 360° (= 20px на градус)
-const PX_PER_DEG   = PANO_W_TOTAL / 360;  // 20px/°
-const MIN_ANGLE_STEP = 0.4; // брать кадр каждые 0.4°
-const BLEND_WIDTH  = 0.08;  // 8% overlap blending с каждого края полосы
+// Ширина полосы: берём с запасом (overlap) чтобы не было пробелов
+// Чем больше STRIP_PX — тем больше overlap но меньше искажений по горизонту
+const STRIP_PX    = 4;   // пикселей из центра видео на каждый кадр RAF
 
-// ─── STATE ─────────────────────────────────────
+// ── STATE ────────────────────────────────────────────────
 let vs=null, fac='environment';
 let isRec=false, gyroOk=false, touchMode=false;
-let prevA=null, contA=0, startA=0, delta=0, lastCapDelta=0;
+let prevA=null, smoothA=0, contA=0, startA=0, delta=0;
 let panoC=null, panoCtx=null, rafR=null;
 let panos=[], curI=-1;
 let tX=null, mX=null;
+// Track last written X to avoid gaps
+let lastWrittenX = 0;
 
-// ─── SCREEN ────────────────────────────────────
+// ── SCREEN ───────────────────────────────────────────────
 function go(id){
-  document.querySelectorAll('.scr').forEach(s=>{
-    s.classList.remove('on');
-    // preview/gallery use 'on' class too
-    if(s.id==='prev'||s.id==='gal')s.classList.remove('on');
-  });
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
   document.getElementById(id).classList.add('on');
 }
-
-// ─── LOADING / TOAST ───────────────────────────
 function showL(t){document.getElementById('sl').textContent=(t||'').toUpperCase();document.getElementById('ld').classList.add('on')}
 function hideL(){document.getElementById('ld').classList.remove('on')}
 let gtT;
@@ -321,7 +260,7 @@ function gToast(m,tp=''){const e=document.getElementById('gts');e.textContent=m;
 let cTt;
 function cToast(m){const e=document.getElementById('ctt');e.textContent=m;e.classList.remove('h');clearTimeout(cTt);cTt=setTimeout(()=>e.classList.add('h'),6000)}
 
-// ─── CAMERA ────────────────────────────────────
+// ── CAMERA ───────────────────────────────────────────────
 async function startCam(){
   showL('Запуск камеры');
   try{
@@ -347,9 +286,9 @@ async function flipCam(){
     catch(e){fac=fac==='environment'?'user':'environment'}}
 }
 
-// ─── GYRO ──────────────────────────────────────
+// ── GYRO ─────────────────────────────────────────────────
 function initGyro(){
-  prevA=null;contA=0;gyroOk=false;touchMode=false;
+  prevA=null; contA=0; smoothA=0; gyroOk=false; touchMode=false;
   if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
     DeviceOrientationEvent.requestPermission()
       .then(s=>s==='granted'?window.addEventListener('deviceorientation',onGyro,true):enTouch())
@@ -359,39 +298,44 @@ function initGyro(){
     setTimeout(()=>{if(!gyroOk)enTouch()},1800);
   }
 }
+
 function onGyro(e){
   if(e.alpha==null){if(!gyroOk)enTouch();return}
   gyroOk=true;
   if(prevA===null){prevA=e.alpha;return}
+
   let d=e.alpha-prevA;
   if(d>180)d-=360; if(d<-180)d+=360;
-  contA+=d; prevA=e.alpha;
+
+  // Smoothing: low-pass filter to remove gyro jitter
+  // alpha=0.7 means 70% new value, 30% old → smooth but responsive
+  smoothA = smoothA*0.3 + d*0.7;
+  contA += smoothA;
+  prevA=e.alpha;
+
   updLevel(e.gamma);
-  tick();
+  tickAngle();
 }
+
 function enTouch(){
   touchMode=true;
   document.getElementById('tst').textContent='ТЯНИТЕ ЭКРАН ВЛЕВО';
   cToast('👆 Гироскоп недоступен — тяните экран влево для поворота');
 }
 
-// ─── ANGLE TRACKING ────────────────────────────
-function tick(){
-  delta=contA-startA;
-  const disp=Math.min(Math.abs(delta),360);
-  document.getElementById('deg').textContent=Math.round(Math.abs(delta))+'°';
+// ── ANGLE ────────────────────────────────────────────────
+function tickAngle(){
+  delta = contA - startA;
+  const disp = Math.min(Math.abs(delta), 360);
+  document.getElementById('deg').textContent = Math.round(Math.abs(delta))+'°';
   updUI(disp);
-  document.getElementById('aR').style.display=delta>=0?'block':'none';
-  document.getElementById('aL').style.display=delta<0?'block':'none';
-  // recording: capture a frame if moved enough
-  if(isRec){
-    const stepped=Math.abs(delta)-Math.abs(lastCapDelta);
-    if(stepped>=MIN_ANGLE_STEP) captureStrip();
-    if(Math.abs(delta)>=360) stopRec(false);
-  }
+  document.getElementById('aR').style.display = delta>=0?'block':'none';
+  document.getElementById('aL').style.display = delta<0?'block':'none';
+  if(isRec && Math.abs(delta)>=360) stopRec(false);
 }
+
 function updUI(deg){
-  const p=Math.min(deg/360,1),C=534;
+  const p=Math.min(deg/360,1), C=534;
   document.getElementById('ap').setAttribute('stroke-dasharray',(p*C).toFixed(1)+' '+C);
   const a=(p*360-90)*Math.PI/180;
   document.getElementById('ad').setAttribute('cx',(93+85*Math.cos(a)).toFixed(1));
@@ -400,6 +344,7 @@ function updUI(deg){
   document.getElementById('scur').style.left=(p*100).toFixed(1)+'%';
   document.getElementById('spct').textContent=Math.round(p*100)+'% покрыто';
 }
+
 function updLevel(g){
   if(g==null)return;
   const t=Math.max(-45,Math.min(45,g)),b=document.getElementById('lb');
@@ -407,17 +352,18 @@ function updLevel(g){
   const a=Math.abs(t);b.className='lb2'+(a>25?' x':a>12?' w':'');
 }
 
-// ─── RECORD ────────────────────────────────────
+// ── RECORD ───────────────────────────────────────────────
 function toggleRec(){isRec?stopRec(false):startRec()}
 
 function startRec(){
-  isRec=true; startA=contA; delta=0; lastCapDelta=0;
+  isRec=true; startA=contA; delta=0; lastWrittenX=0;
 
   panoC=document.createElement('canvas');
-  panoC.width=PANO_W_TOTAL; panoC.height=PANO_H;
-  panoCtx=panoC.getContext('2d',{willReadFrequently:true});
-  panoCtx.fillStyle='#060608';
-  panoCtx.fillRect(0,0,PANO_W_TOTAL,PANO_H);
+  panoC.width=PANO_MAX_W; panoC.height=PANO_H;
+  panoCtx=panoC.getContext('2d');
+  // Fill with near-black (not pure black, helps distinguish "not shot" areas)
+  panoCtx.fillStyle='#0a0a0e';
+  panoCtx.fillRect(0,0,PANO_MAX_W,PANO_H);
 
   const sw=document.getElementById('sw'); sw.classList.add('on');
   const sc=document.getElementById('sc');
@@ -431,17 +377,18 @@ function startRec(){
   document.getElementById('xc').classList.add('r');
   document.getElementById('pb').classList.add('r');
   updUI(0);
-  cToast('🔴 Запись! Медленно поворачивайтесь вправо на 360°');
 
-  // Start RAF loop for smooth strip capture
-  rafR=requestAnimationFrame(recLoop);
+  // Start continuous capture loop
+  rafR = requestAnimationFrame(captureLoop);
+  cToast('🔴 Запись! Медленно поворачивайтесь вправо на 360°');
 }
 
 function stopRec(cancel){
   if(!isRec)return; isRec=false; cancelAnimationFrame(rafR);
   document.getElementById('rb').classList.remove('on');
   document.getElementById('rl').textContent='ЗАПИСЬ'; document.getElementById('rl').classList.remove('on');
-  document.getElementById('tst').textContent=touchMode?'ТЯНИТЕ ЭКРАН ВЛЕВО':'НАЖМИТЕ ЗАПИСЬ'; document.getElementById('tst').classList.remove('r');
+  document.getElementById('tst').textContent=touchMode?'ТЯНИТЕ ЭКРАН ВЛЕВО':'НАЖМИТЕ ЗАПИСЬ';
+  document.getElementById('tst').classList.remove('r');
   document.getElementById('ap').style.stroke='#00e5ff';
   document.getElementById('ad').style.fill='#00e5ff';
   document.getElementById('xc').classList.remove('r');
@@ -451,141 +398,77 @@ function stopRec(cancel){
   buildPano();
 }
 
-// ─── RAF LOOP: continuously capture ────────────
-function recLoop(){
+// ── CAPTURE LOOP (runs every RAF frame ~16ms = 60fps) ────
+// This is the KEY fix: we write continuously, not on gyro events
+// So there are NEVER gaps between strips
+function captureLoop(){
   if(!isRec)return;
-  // captureStrip is called from tick() via gyro events
-  // This loop just keeps running so gyro events get processed
-  rafR=requestAnimationFrame(recLoop);
-}
 
-// ─── CAPTURE STRIP (core algorithm) ────────────
-/*
-  How this works (like real phone panorama):
-  
-  1. We know exactly how many degrees we moved since last capture
-  2. We calculate the X position on panorama canvas from angle
-  3. We take a NARROW vertical strip from CENTER of video frame
-     - Width = angle_moved * PX_PER_DEG pixels
-     - This way strips fit perfectly without gaps or overlaps
-  4. We scale it to match PANO_H
-  5. We apply alpha blending on left/right edges (feathering)
-     so adjacent strips blend smoothly → no seams
-*/
-function captureStrip(){
   const v=document.getElementById('vid');
-  if(!v.videoWidth||!panoCtx)return;
+  if(v.videoWidth && panoCtx){
 
-  const absNow=Math.abs(delta);
-  const absPrev=Math.abs(lastCapDelta);
-  const stepDeg=absNow-absPrev;
-  if(stepDeg<=0)return;
+    // Current X position based on angle
+    const absDelta = Math.abs(delta);
+    if(absDelta <= 360){
+      const targetX = Math.round(absDelta * PX_PER_DEG);
 
-  // Position on panorama (pixels)
-  const xStart=Math.round(absPrev*PX_PER_DEG);
-  const xEnd=Math.round(absNow*PX_PER_DEG);
-  let stripW=xEnd-xStart;
-  if(stripW<1)stripW=1;
+      // Fill from lastWrittenX to targetX to guarantee no gaps
+      const fillFrom = Math.max(0, lastWrittenX - 2); // -2px overlap
+      const fillTo   = Math.min(targetX, PANO_MAX_W);
 
-  const vW=v.videoWidth, vH=v.videoHeight;
+      if(fillTo >= fillFrom){
+        const fillW = Math.max(fillTo - fillFrom, 1);
+        const vW=v.videoWidth, vH=v.videoHeight;
 
-  // Source: center column of video (avoids fisheye at edges)
-  // We take proportional width: stepDeg/FOV_DEG * vW
-  // Assume phone camera FOV ≈ 65°
-  const FOV=65;
-  const srcFrac=Math.min(stepDeg/FOV,0.9);
-  const srcW=Math.max(2,Math.round(vW*srcFrac));
-  const srcX=Math.round((vW-srcW)/2);
+        // Source: fixed narrow strip from CENTER of video
+        // Using exactly STRIP_PX wide from exact center
+        const srcX = Math.round((vW - STRIP_PX) / 2);
 
-  // Draw strip to panorama
-  // We use a temporary canvas to apply blending
-  const tmp=document.createElement('canvas');
-  tmp.width=stripW; tmp.height=PANO_H;
-  const tCtx=tmp.getContext('2d');
+        // Draw this strip stretched to fill the gap
+        panoCtx.drawImage(
+          v,
+          srcX, 0, STRIP_PX, vH,  // source: center strip, full height
+          fillFrom, 0, fillW, PANO_H  // dest: fill the gap on panorama
+        );
 
-  // Draw the video slice onto temp canvas (full height)
-  tCtx.drawImage(v, srcX,0,srcW,vH, 0,0,stripW,PANO_H);
+        lastWrittenX = fillTo + 1;
+      }
 
-  // Apply feathered blending on left and right edges
-  // This creates smooth seams between strips
-  const blendPx=Math.round(stripW*BLEND_WIDTH)+2;
-  if(blendPx>1){
-    // Left edge: fade in
-    const lGrad=tCtx.createLinearGradient(0,0,blendPx,0);
-    lGrad.addColorStop(0,'rgba(0,0,0,1)');
-    lGrad.addColorStop(1,'rgba(0,0,0,0)');
-    tCtx.globalCompositeOperation='destination-in';
-    // Instead of masking to black, we blend with existing panorama
-
-    // Actually: draw with globalAlpha on the main canvas with gradient
-    // Reset and use different approach: draw directly with feathering
-  }
-
-  // Better blending: draw directly to panoCtx with gradient alpha
-  // Draw the strip
-  panoCtx.drawImage(v, srcX,0,srcW,vH, xStart,0,stripW,PANO_H);
-
-  // Blend edges: for each border region, blend with previous content
-  // using a linear gradient overlay (multiply alpha toward edges)
-  if(stripW>4){
-    const bw=Math.min(Math.round(stripW*0.25),24);
-    if(bw>1){
-      // Left blend
-      const lg=panoCtx.createLinearGradient(xStart,0,xStart+bw,0);
-      lg.addColorStop(0,'rgba(0,0,0,0.55)');
-      lg.addColorStop(1,'rgba(0,0,0,0)');
-      panoCtx.fillStyle=lg;
-      panoCtx.fillRect(xStart,0,bw,PANO_H);
-      // Right blend
-      const rg=panoCtx.createLinearGradient(xEnd-bw,0,xEnd,0);
-      rg.addColorStop(0,'rgba(0,0,0,0)');
-      rg.addColorStop(1,'rgba(0,0,0,0.55)');
-      panoCtx.fillStyle=rg;
-      panoCtx.fillRect(xEnd-bw,0,bw,PANO_H);
+      // Update live preview every ~10 frames for performance
+      if(Math.round(absDelta * 10) % 5 === 0){
+        const sc=document.getElementById('sc');
+        if(sc){
+          const ctx=sc.getContext('2d');
+          ctx.drawImage(panoC, 0,0,PANO_MAX_W,PANO_H, 0,0,sc.width,54);
+        }
+        updUI(absDelta);
+      }
     }
   }
 
-  lastCapDelta=delta;
-
-  // Update live preview strip
-  updateStrip(absNow);
+  rafR = requestAnimationFrame(captureLoop);
 }
 
-function updateStrip(deg){
-  const sc=document.getElementById('sc');
-  if(!sc||!panoC)return;
-  const ctx=sc.getContext('2d');
-  ctx.drawImage(panoC,0,0,PANO_W_TOTAL,PANO_H,0,0,sc.width,54);
-  updUI(deg);
-}
-
-// ─── BUILD FINAL PANORAMA ──────────────────────
+// ── BUILD FINAL PANORAMA ─────────────────────────────────
 async function buildPano(){
   showL('Сборка панорамы');
   await new Promise(r=>setTimeout(r,80));
 
-  const covDeg=Math.min(Math.abs(delta),360);
-  const cropW=Math.round(covDeg*PX_PER_DEG);
+  const covDeg = Math.min(Math.abs(delta), 360);
+  const cropW  = Math.max(Math.round(covDeg * PX_PER_DEG), 200);
 
   const fc=document.createElement('canvas');
-  fc.width=Math.max(cropW,200); fc.height=PANO_H;
+  fc.width=cropW; fc.height=PANO_H;
   const fx=fc.getContext('2d');
+  fx.drawImage(panoC, 0,0,cropW,PANO_H, 0,0,cropW,PANO_H);
 
-  fx.drawImage(panoC,0,0,cropW,PANO_H,0,0,cropW,PANO_H);
-
-  // Vignette top/bottom
+  // Light vignette only (no dark bands)
   const vg=fx.createLinearGradient(0,0,0,PANO_H);
-  vg.addColorStop(0,'rgba(0,0,0,.2)'); vg.addColorStop(.1,'rgba(0,0,0,0)');
-  vg.addColorStop(.9,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(0,0,0,.2)');
+  vg.addColorStop(0,'rgba(0,0,0,.15)');
+  vg.addColorStop(.08,'rgba(0,0,0,0)');
+  vg.addColorStop(.92,'rgba(0,0,0,0)');
+  vg.addColorStop(1,'rgba(0,0,0,.15)');
   fx.fillStyle=vg; fx.fillRect(0,0,cropW,PANO_H);
-
-  // Fade edges for non-360
-  if(covDeg<350){
-    const lr=fx.createLinearGradient(0,0,cropW,0);
-    lr.addColorStop(0,'rgba(0,0,0,.5)'); lr.addColorStop(.02,'rgba(0,0,0,0)');
-    lr.addColorStop(.98,'rgba(0,0,0,0)'); lr.addColorStop(1,'rgba(0,0,0,.5)');
-    fx.fillStyle=lr; fx.fillRect(0,0,cropW,PANO_H);
-  }
 
   const url=fc.toDataURL('image/jpeg',.93);
   const pano={url,date:new Date().toLocaleString('ru-RU',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}),angle:Math.round(covDeg),id:Date.now()};
@@ -594,21 +477,20 @@ async function buildPano(){
   document.getElementById('sw').classList.remove('on');
   updUI(0); document.getElementById('deg').textContent='0°';
 
-  const img=document.getElementById('gth');
-  img.src=url; img.style.display='block';
+  const img=document.getElementById('gth'); img.src=url; img.style.display='block';
   document.querySelector('#galb .sdi').style.display='none';
   const bd=document.getElementById('bdg'); bd.textContent=panos.length; bd.style.display='flex';
 
   hideL(); openPrev(pano);
 }
 
-// ─── PREVIEW VIEWER ────────────────────────────
+// ── PREVIEW ──────────────────────────────────────────────
 let vI=null,vRaf=null,pX=0,vXs=0,dr=false,ldx=0,vW2=0,vH2=0;
 
 function openPrev(p){
   go('prev');
   document.getElementById('ps').textContent=p.angle+'° · '+p.date;
-  const d=document.getElementById('vwr'),c=document.getElementById('vc');
+  const d=document.getElementById('vwr'), c=document.getElementById('vc');
   vW2=d.clientWidth; vH2=d.clientHeight;
   c.width=vW2; c.height=vH2; c.style.width=vW2+'px'; c.style.height=vH2+'px';
   pX=0; vXs=0; dr=false;
@@ -647,7 +529,7 @@ async function sharePano(){
   savePano();
 }
 
-// ─── GALLERY ───────────────────────────────────
+// ── GALLERY ──────────────────────────────────────────────
 function openGal(){go('gal');renderGal()}
 function closeGal(){go(vs?'cam':'home')}
 function renderGal(){
@@ -657,19 +539,22 @@ function renderGal(){
   panos.forEach((p,i)=>{const el=document.createElement('div');el.className='gc';el.innerHTML=`<img src="${p.url}" alt=""><div class="gci">${p.date} · ${p.angle}°</div>`;el.onclick=()=>{curI=i;openPrev(p)};g.appendChild(el)});
 }
 
-// ─── TOUCH FAKE GYRO ───────────────────────────
+// ── TOUCH FAKE GYRO ──────────────────────────────────────
 const camEl=document.getElementById('cam');
 camEl.addEventListener('touchstart',e=>{if(e.target.closest('#rb,.ib,.flp,.sdb'))return;tX=e.touches[0].clientX},{passive:true});
 camEl.addEventListener('touchmove',e=>{
   if(!touchMode||tX===null)return;
   const dx=e.touches[0].clientX-tX;
-  contA+=(-dx*.5);tX=e.touches[0].clientX;
-  updLevel(0);tick();
+  // Smooth touch too
+  contA+=(-dx*.4); tX=e.touches[0].clientX;
+  updLevel(0); tickAngle();
 },{passive:true});
 camEl.addEventListener('touchend',()=>{tX=null});
 document.addEventListener('mousedown',e=>{if(!document.getElementById('cam').classList.contains('on'))return;if(e.target.closest('#rb,.ib,.flp,.sdb'))return;mX=e.clientX});
-document.addEventListener('mousemove',e=>{if(!touchMode||mX===null||!document.getElementById('cam').classList.contains('on'))return;contA+=-(e.clientX-mX)*.6;mX=e.clientX;tick()});
+document.addEventListener('mousemove',e=>{if(!touchMode||mX===null||!document.getElementById('cam').classList.contains('on'))return;contA+=-(e.clientX-mX)*.5;mX=e.clientX;tickAngle()});
 document.addEventListener('mouseup',()=>{mX=null});
 </script>
 </body>
 </html>
+HTMLEOF
+echo "Done"
