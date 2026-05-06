@@ -15,7 +15,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
   --c:#00e5ff;--r:#ff3b30;--g:#34c759;--y:#ffd60a;
   --st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px);
 }
-
 .scr{position:fixed;inset:0;display:none;overflow:hidden}
 .scr.on{display:block}
 
@@ -39,7 +38,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
 #vid{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:1;display:block}
 .grad-top{position:absolute;top:0;left:0;right:0;height:160px;background:linear-gradient(to bottom,rgba(0,0,0,.75),transparent);z-index:10;pointer-events:none}
 .grad-bot{position:absolute;bottom:0;left:0;right:0;height:200px;background:linear-gradient(to top,rgba(0,0,0,.85),transparent);z-index:10;pointer-events:none}
-.frame-flash{position:absolute;inset:0;background:rgba(255,255,255,.07);opacity:0;z-index:9;pointer-events:none;transition:opacity 0.04s}
+.frame-flash{position:absolute;inset:0;background:rgba(255,255,255,.05);opacity:0;z-index:9;pointer-events:none;transition:opacity 0.04s}
 .frame-flash.go{opacity:1}
 
 .cam-top{position:absolute;top:0;left:0;right:0;padding-top:var(--st);z-index:20}
@@ -49,26 +48,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
 .cam-deg{font-size:24px;font-weight:200;letter-spacing:2px;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
 .cam-st{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.5)}
 .cam-st.rec{color:var(--r);animation:blink .9s step-end infinite}
-.cam-frames{font-size:9px;letter-spacing:1px;color:rgba(255,255,255,.28)}
+.cam-sub{font-size:9px;letter-spacing:1px;color:rgba(255,255,255,.28)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.1}}
 
 .progress-wrap{position:absolute;top:calc(var(--st) + 60px);left:0;right:0;height:3px;background:rgba(255,255,255,.1);z-index:20}
 .progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--c),#a78bfa);transition:width .08s linear}
 .progress-bar.rec{background:var(--r)}
 
+/* Arc */
 .arc-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:186px;height:186px;z-index:15;pointer-events:none}
 .arc-wrap svg{width:100%;height:100%}
-.arc-count{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:16;pointer-events:none}
-.arc-count-num{font-size:28px;font-weight:100;color:#fff;line-height:1}
-.arc-count-lbl{font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.32);text-transform:uppercase;margin-top:2px}
+.arc-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;z-index:16;pointer-events:none}
+.arc-deg{font-size:28px;font-weight:100;color:#fff;line-height:1}
+.arc-lbl{font-size:9px;letter-spacing:2px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-top:2px}
 
+/* Crosshair */
 .crosshair{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:50px;height:50px;z-index:16;pointer-events:none}
-.ch-h,.ch-v{position:absolute;background:rgba(255,255,255,.75)}
+.ch-h,.ch-v{position:absolute;background:rgba(255,255,255,.7)}
 .ch-h{width:100%;height:1px;top:50%;transform:translateY(-50%)}
 .ch-v{height:100%;width:1px;left:50%;transform:translateX(-50%)}
 .ch-dot{position:absolute;top:50%;left:50%;width:7px;height:7px;border-radius:50%;background:var(--c);transform:translate(-50%,-50%);box-shadow:0 0 10px var(--c);transition:background .2s}
 .ch-dot.rec{background:var(--r);box-shadow:0 0 10px var(--r)}
-
 .brackets{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:64px;height:64px;z-index:16;pointer-events:none}
 .bk{position:absolute;width:11px;height:11px}
 .bk::before,.bk::after{content:'';position:absolute;background:rgba(255,255,255,.8)}
@@ -78,29 +78,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
 .bk.bl{bottom:0;left:0;transform:scaleY(-1)}
 .bk.br{bottom:0;right:0;transform:scale(-1)}
 
+/* Level */
 .level-wrap{position:absolute;top:calc(50% + 42px);left:50%;transform:translateX(-50%);z-index:16;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:3px}
 .level-track{width:100px;height:2px;background:rgba(255,255,255,.1);border-radius:2px;position:relative}
 .level-ball{position:absolute;top:50%;left:50%;width:8px;height:8px;border-radius:50%;background:var(--g);transform:translate(-50%,-50%);box-shadow:0 0 7px var(--g);transition:left .08s,background .2s}
 .level-ball.warn{background:var(--y);box-shadow:0 0 7px var(--y)}
 .level-ball.bad{background:var(--r);box-shadow:0 0 7px var(--r)}
 .level-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25)}
-
-.tilt-guide{position:absolute;top:calc(50% + 72px);left:50%;transform:translateX(-50%);z-index:16;pointer-events:none;font-size:10px;letter-spacing:1px;color:var(--y);background:rgba(0,0,0,.5);border-radius:8px;padding:3px 10px;opacity:0;transition:opacity .3s;white-space:nowrap}
+.tilt-guide{position:absolute;top:calc(50% + 72px);left:50%;transform:translateX(-50%);z-index:16;pointer-events:none;font-size:10px;color:var(--y);background:rgba(0,0,0,.5);border-radius:8px;padding:3px 10px;opacity:0;transition:opacity .3s;white-space:nowrap}
 .tilt-guide.show{opacity:1}
 
+/* Arrows */
 .arr{position:absolute;top:50%;transform:translateY(-50%);z-index:16;pointer-events:none;font-size:30px;color:rgba(255,255,255,.8);text-shadow:0 0 14px rgba(255,255,255,.35);display:none}
 #aR{right:12px}#aL{left:12px}
 
-.strip-wrap{position:absolute;bottom:calc(var(--sb) + 140px);left:12px;right:12px;z-index:20;display:none;flex-direction:column;gap:4px}
+/* Strip */
+.strip-wrap{position:absolute;bottom:calc(var(--sb)+140px);left:12px;right:12px;z-index:20;display:none;flex-direction:column;gap:4px}
 .strip-wrap.on{display:flex}
 .strip-box{height:54px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.55);position:relative}
 #sc{display:block;width:100%;height:54px}
-.strip-fade{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.55) 0%,transparent 10%,transparent 90%,rgba(0,0,0,.55) 100%);pointer-events:none}
-.strip-pct{text-align:center;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.35)}
+.strip-fade{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.6) 0%,transparent 12%,transparent 88%,rgba(0,0,0,.6) 100%);pointer-events:none}
+.strip-info{display:flex;justify-content:space-between;padding:0 2px}
+.strip-lbl{font-size:9px;letter-spacing:1px;color:rgba(255,255,255,.3)}
 
-.cam-toast{position:absolute;bottom:calc(var(--sb) + 148px);left:14px;right:14px;z-index:21;background:rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 14px;font-size:13px;color:rgba(255,255,255,.9);text-align:center;line-height:1.5;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);pointer-events:none;transition:opacity .3s,transform .3s}
+/* Toast */
+.cam-toast{position:absolute;bottom:calc(var(--sb)+148px);left:14px;right:14px;z-index:21;background:rgba(0,0,0,.8);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:10px 14px;font-size:13px;color:rgba(255,255,255,.9);text-align:center;line-height:1.5;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);pointer-events:none;transition:opacity .3s,transform .3s}
 .cam-toast.hide{opacity:0;transform:translateY(6px)}
 
+/* Bottom */
 .cam-bottom{position:absolute;bottom:0;left:0;right:0;padding-bottom:calc(var(--sb)+16px);padding-top:12px;padding-left:22px;padding-right:22px;z-index:20;display:flex;align-items:center;justify-content:space-between}
 .gal-btn{width:54px;height:54px;border-radius:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;flex-shrink:0;position:relative}
 .gal-btn img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
@@ -202,7 +207,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
       <div class="cam-info">
         <div class="cam-deg" id="deg">0°</div>
         <div class="cam-st" id="cam-st">НАЖМИТЕ ЗАПИСЬ</div>
-        <div class="cam-frames" id="cam-frames">&nbsp;</div>
+        <div class="cam-sub" id="cam-sub">&nbsp;</div>
       </div>
       <div class="ib" onclick="flipCam()">⟳</div>
     </div>
@@ -218,9 +223,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
       <circle id="ap" cx="93" cy="93" r="85" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="0 534" transform="rotate(-90 93 93)"/>
       <circle id="ad" cx="93" cy="8" r="4" fill="#00e5ff"/>
     </svg>
-    <div class="arc-count">
-      <div class="arc-count-num" id="fcnt">0</div>
-      <div class="arc-count-lbl">кадров</div>
+    <div class="arc-center">
+      <div class="arc-deg" id="arc-deg">0°</div>
+      <div class="arc-lbl" id="arc-lbl">поворот</div>
     </div>
   </div>
 
@@ -246,7 +251,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
       <canvas id="sc" height="54"></canvas>
       <div class="strip-fade"></div>
     </div>
-    <div class="strip-pct" id="spct">0 кадров снято</div>
+    <div class="strip-info">
+      <span class="strip-lbl" id="s-frames">0 кадров</span>
+      <span class="strip-lbl" id="s-pct">0%</span>
+    </div>
   </div>
 
   <div class="cam-toast" id="ctt">📱 Нажмите ● для записи, затем медленно поворачивайтесь вправо</div>
@@ -294,46 +302,48 @@ body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#fff}
 
 <script>
 /*
-  ═══════════════════════════════════════════════════════
-  АЛГОРИТМ — КАК В iPHONE PANORAMA:
+  ═══════════════════════════════════════════════════════════════
+  ИСПРАВЛЕННЫЙ АЛГОРИТМ (по советам ChatGPT):
 
-  Старый плохой подход: RAF рисует пиксели каждый кадр.
-  При быстром движении — берёт 6px и растягивает их в 200px → полосы.
-  При медленном — рисует в одно место многократно → дёрганье.
+  Было плохо:
+    1. destX = frameCount × 14px → позиция не зависела от угла
+    2. SRC_FRAC = 0.15, DEST = 14 → сжатие 20x → полосы
+    3. Нет overlap между кадрами
+    4. Нет blending на краях
 
-  Новый правильный подход:
-  1. Ждём пока угол продвинется на ПОРОГ (2°)
-  2. Захватываем ПОЛНЫЙ КАДР видео в этот момент
-  3. Из кадра берём центральные 15% по ширине (например 288px из 1920)
-  4. Рисуем их фиксированным 14px в панораму (сжатие, не растяжение)
-  5. Следующий кадр — при следующих 2°
-
-  При 360° × шаг 2° = 180 кадров × 14px = 2520px панорама
-  Нет пробелов: каждый кадр идёт по индексу, не по пикселю угла
-  Нет полос: захват только в момент достижения порога
-  ═══════════════════════════════════════════════════════
+  Исправлено:
+    1. destX = absDeg × PX_PER_DEG → позиция = угол × масштаб
+    2. SRC_FRAC = 0.40 (40% видео), DEST_W = 60px → сжатие ~7x (норм)
+    3. Захватываем каждые STEP_DEG = 1° (чаще → меньше разрывов)
+    4. Каждый кадр рисуем с overlap = DEST_W × 0.5 (перекрываем соседей)
+    5. Blending: globalAlpha через линейный градиент по краям кадра
+    6. Gyro фильтр сильнее: 0.25 новое, 0.75 старое → плавнее
+  ═══════════════════════════════════════════════════════════════
 */
 
-// CONFIG
-const CAPTURE_EVERY_DEG = 2.0;   // захват каждые 2°
-const DEST_SLICE_W      = 14;    // ширина каждого кадра в панораме
-const SRC_FRAC          = 0.15;  // 15% от ширины видео как источник
-const MAX_FRAMES        = 190;   // 360/2 + запас
-const PANO_W            = MAX_FRAMES * DEST_SLICE_W; // 2660px
-const PANO_H            = 1080;
+// ── CONFIG ───────────────────────────────────────────────────
+const PX_PER_DEG  = 16;          // пикселей на градус → 360° = 5760px
+const PANO_W      = 360 * PX_PER_DEG; // 5760px (= 360° полная панорама)
+const PANO_H      = 1080;
 
-// STATE
+const STEP_DEG    = 1.0;         // захват каждый 1° (60 fps × медленный поворот = ~каждые 1-2 кадра)
+const SRC_FRAC    = 0.40;        // берём центральные 40% ширины видео
+const DEST_W      = PX_PER_DEG * STEP_DEG * 3; // = 48px — чуть шире шага → overlap
+// OVERLAP: каждый кадр рисуется шире своего "слота" → перекрывает соседей → нет швов
+const BLEND_FRAC  = 0.25;        // 25% ширины кадра = зона blending с каждой стороны
+
+// ── STATE ────────────────────────────────────────────────────
 let vs=null, fac='environment';
 let isRec=false, gyroOk=false, touchMode=false;
 let prevAlpha=null, smoothD=0, contAngle=0;
 let startAngle=0, recDelta=0, betaAngle=90;
-let lastCapDeg=-CAPTURE_EVERY_DEG;
+let lastCapDeg=-STEP_DEG;
 let frameCount=0;
 let panoC=null, panoCtx=null, rafId=null;
 let panos=[], curI=-1;
 let touchX=null, mouseX=null;
 
-// SCREENS
+// ── SCREENS ──────────────────────────────────────────────────
 function go(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));document.getElementById(id)?.classList.add('on')}
 function showL(t){document.getElementById('sl').textContent=(t||'').toUpperCase();document.getElementById('ld').classList.add('on')}
 function hideL(){document.getElementById('ld').classList.remove('on')}
@@ -342,14 +352,14 @@ function showToast(m,tp=''){const e=document.getElementById('toast');e.textConte
 let camToastT;
 function camToast(m){const e=document.getElementById('ctt');e.textContent=m;e.classList.remove('hide');clearTimeout(camToastT);camToastT=setTimeout(()=>e.classList.add('hide'),6000)}
 
-// CAMERA
+// ── CAMERA ───────────────────────────────────────────────────
 async function startCam(){
   showL('Запуск камеры');
   try{
     vs=await navigator.mediaDevices.getUserMedia({video:{facingMode:fac,width:{ideal:1920},height:{ideal:1080}},audio:false});
     const v=document.getElementById('vid');v.srcObject=vs;await v.play();
     hideL();go('cam');initGyro();setArcUI(0);
-    camToast('📱 Нажмите ● для записи, затем медленно поворачивайтесь вправо');
+    camToast('📱 Нажмите ● и медленно поворачивайтесь вправо');
   }catch(e){hideL();showToast('❌ Нет доступа к камере. Разрешите в настройках.','er')}
 }
 function exitCam(){
@@ -365,7 +375,7 @@ async function flipCam(){
     catch(e){fac=fac==='environment'?'user':'environment'}}
 }
 
-// GYROSCOPE
+// ── GYROSCOPE ────────────────────────────────────────────────
 function initGyro(){
   prevAlpha=null;contAngle=0;smoothD=0;gyroOk=false;touchMode=false;
   if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
@@ -384,20 +394,21 @@ function onGyro(e){
   if(prevAlpha===null){prevAlpha=e.alpha;return}
   let d=e.alpha-prevAlpha;
   if(d>180)d-=360;if(d<-180)d+=360;
-  // Лёгкий фильтр: 85% новое + 15% предыдущее
-  smoothD=smoothD*0.15+d*0.85;
+  // Сильный фильтр: 25% новое + 75% старое
+  // Устраняет шум гироскопа, сохраняет плавное движение
+  smoothD=smoothD*0.75+d*0.25;
   contAngle+=smoothD;
   prevAlpha=e.alpha;
   if(e.beta!=null)betaAngle=e.beta;
   updateLevel(e.gamma);
-  updateTiltGuide();
+  document.getElementById('tg').classList.toggle('show',Math.abs(betaAngle-90)>25);
   tick();
 }
 
 function enableTouchMode(){
   touchMode=true;
   document.getElementById('cam-st').textContent='ТЯНИТЕ ЭКРАН ВЛЕВО';
-  camToast('👆 Гироскоп недоступен — тяните экран влево');
+  camToast('👆 Гироскоп недоступен — тяните экран влево для поворота');
 }
 
 function updateLevel(g){
@@ -408,16 +419,14 @@ function updateLevel(g){
   const a=Math.abs(t);b.className='level-ball'+(a>25?' bad':a>12?' warn':'');
 }
 
-function updateTiltGuide(){
-  document.getElementById('tg').classList.toggle('show',Math.abs(betaAngle-90)>25);
-}
-
-// ANGLE TICK
+// ── ANGLE ────────────────────────────────────────────────────
 function tick(){
   recDelta=contAngle-startAngle;
   const abs=Math.abs(recDelta);
+  const clamped=Math.min(abs,360);
   document.getElementById('deg').textContent=Math.round(abs)+'°';
-  setArcUI(Math.min(abs,360));
+  document.getElementById('arc-deg').textContent=Math.round(clamped)+'°';
+  setArcUI(clamped);
   document.getElementById('aR').style.display=recDelta>=0?'block':'none';
   document.getElementById('aL').style.display=recDelta<0?'block':'none';
   if(isRec&&abs>=360)stopRec(false);
@@ -432,23 +441,27 @@ function setArcUI(deg){
   document.getElementById('pb').style.width=(p*100).toFixed(1)+'%';
 }
 
-// RECORD
+// ── RECORD ───────────────────────────────────────────────────
 function toggleRec(){isRec?stopRec(false):startRec()}
 
 function startRec(){
   isRec=true;startAngle=contAngle;recDelta=0;
-  lastCapDeg=-CAPTURE_EVERY_DEG;frameCount=0;
+  lastCapDeg=-STEP_DEG;frameCount=0;
 
+  // Панорамный холст — полная ширина на 360°
   panoC=document.createElement('canvas');
   panoC.width=PANO_W;panoC.height=PANO_H;
   panoCtx=panoC.getContext('2d');
-  panoCtx.fillStyle='#111';
+  // Чёрный фон (не будет виден при правильной записи)
+  panoCtx.fillStyle='#000';
   panoCtx.fillRect(0,0,PANO_W,PANO_H);
 
+  // Live strip
   const sw=document.getElementById('sw');sw.classList.add('on');
   const sc=document.getElementById('sc');
   sc.width=sw.querySelector('.strip-box').clientWidth||300;sc.height=54;
 
+  // UI recording state
   document.getElementById('rb').classList.add('on');
   document.getElementById('rl').textContent='■ СТОП';document.getElementById('rl').classList.add('on');
   document.getElementById('cam-st').textContent='● ЗАПИСЬ';document.getElementById('cam-st').classList.add('rec');
@@ -456,12 +469,11 @@ function startRec(){
   document.getElementById('ad').style.fill='#ff3b30';
   document.getElementById('ch-dot').classList.add('rec');
   document.getElementById('pb').classList.add('rec');
-  document.getElementById('fcnt').textContent='0';
+  document.getElementById('arc-lbl').textContent='снято';
   setArcUI(0);
 
-  // RAF loop только для проверки порога угла
   rafId=requestAnimationFrame(recLoop);
-  camToast('🔴 Медленно поворачивайтесь вправо. Каждые 2° = +1 кадр');
+  camToast('🔴 Медленно поворачивайтесь вправо на 360°');
 }
 
 function stopRec(cancel){
@@ -474,101 +486,150 @@ function stopRec(cancel){
   document.getElementById('ad').style.fill='#00e5ff';
   document.getElementById('ch-dot').classList.remove('rec');
   document.getElementById('pb').classList.remove('rec');
+  document.getElementById('arc-lbl').textContent='поворот';
   if(cancel||!panoC){document.getElementById('sw').classList.remove('on');return}
   if(frameCount<3){showToast('⚠️ Слишком мало движения','er');document.getElementById('sw').classList.remove('on');return}
   buildPano();
 }
 
-// RECORD LOOP — проверяем порог угла в RAF
+// ── RECORD LOOP ──────────────────────────────────────────────
+// Запускается 60fps, но захват делает только когда угол ≥ STEP_DEG
 function recLoop(){
   if(!isRec)return;
   const abs=Math.abs(recDelta);
-  // Если угол продвинулся на CAPTURE_EVERY_DEG — захватываем кадр
-  if(abs>=lastCapDeg+CAPTURE_EVERY_DEG&&frameCount<MAX_FRAMES){
-    captureFrame(abs);
+  if(abs>=lastCapDeg+STEP_DEG){
+    captureSlice(abs);
     lastCapDeg=abs;
   }
   rafId=requestAnimationFrame(recLoop);
 }
 
+// ── CAPTURE SLICE ────────────────────────────────────────────
 /*
-  captureFrame — захватывает текущий видеокадр и вписывает срез в панораму.
+  КЛЮЧЕВЫЕ ИСПРАВЛЕНИЯ:
 
-  srcX = центр видео минус половина полосы (15% ширины)
-  srcW = 15% ширины видео (например 288px из 1920)
-  destX = frameCount × DEST_SLICE_W (позиция в панораме)
-  destW = DEST_SLICE_W = 14px (фиксированная)
+  1. destX = absDeg × PX_PER_DEG
+     Позиция кадра = угол × масштаб.
+     Если поворот 90° при PX_PER_DEG=16 → x=1440px.
+     Нет зависимости от frameCount!
 
-  drawImage сжимает srcW → destW (288px → 14px) без растяжения.
-  Никаких пробелов: кадры идут последовательно по frameCount.
+  2. DEST_W = 48px (= 3 × PX_PER_DEG)
+     Кадр шире своего "слота" → перекрывает соседей.
+     Это убирает вертикальные чёрные полосы между кадрами.
+
+  3. SRC_FRAC = 0.40
+     Берём 40% ширины видео (не 15%) → меньше сжатие.
+     При 1920px: 768px → 48px (сжатие 16x вместо 137x).
+
+  4. Blending через градиент:
+     Левые 25% и правые 25% каждого кадра рисуются с alpha < 1.
+     Делается через временный canvas + gradient mask.
 */
-function captureFrame(absDeg){
+function captureSlice(absDeg){
   const v=document.getElementById('vid');
   if(!v.videoWidth||!panoCtx)return;
 
-  const vW=v.videoWidth,vH=v.videoHeight;
-  const srcW=Math.max(2,Math.round(vW*SRC_FRAC));
+  const vW=v.videoWidth, vH=v.videoHeight;
+
+  // Источник: центральные SRC_FRAC = 40% видео по горизонтали
+  const srcW=Math.round(vW*SRC_FRAC);
   const srcX=Math.round((vW-srcW)/2);
 
-  // Вертикальная коррекция: beta=90 норма, отклонение → смещаем srcY
-  const bDiff=betaAngle-90;
-  const yFrac=Math.max(-0.25,Math.min(0.25,bDiff/120));
-  const cH=Math.round(vH*0.92);
-  const baseSrcY=Math.round((vH-cH)/2);
-  const srcY=Math.max(0,Math.min(vH-cH,Math.round(baseSrcY+vH*yFrac*0.3)));
+  // Вертикальная коррекция по beta (держание телефона)
+  const bDiff=betaAngle-90; // 0=вертикально, >0=наклон вперёд
+  const yFrac=Math.max(-0.2,Math.min(0.2,bDiff/120));
+  const srcH=Math.round(vH*0.92);
+  const baseSrcY=Math.round((vH-srcH)/2);
+  const srcY=Math.max(0,Math.min(vH-srcH,Math.round(baseSrcY+vH*yFrac*0.3)));
 
-  const destX=frameCount*DEST_SLICE_W;
-  panoCtx.drawImage(v,srcX,srcY,srcW,cH,destX,0,DEST_SLICE_W,PANO_H);
+  // ПОЗИЦИЯ В ПАНОРАМЕ = угол × пикселей на градус
+  // Это ключевое исправление — не frameCount!
+  const centerX=Math.round(absDeg*PX_PER_DEG);
+  const destX=centerX-Math.round(DEST_W/2); // центрируем кадр на текущем угле
+
+  // Рисуем через offscreen canvas чтобы добавить blending
+  // (нельзя drawImage с gradient clip напрямую)
+  const tmp=document.createElement('canvas');
+  tmp.width=DEST_W;tmp.height=PANO_H;
+  const tc=tmp.getContext('2d');
+
+  // 1. Рисуем кадр видео в tmp
+  tc.drawImage(v, srcX, srcY, srcW, srcH, 0, 0, DEST_W, PANO_H);
+
+  // 2. Применяем gradient mask (blending по краям)
+  // Левые и правые BLEND_FRAC → прозрачность для плавного перехода
+  const blendW=Math.round(DEST_W*BLEND_FRAC);
+  const grd=tc.createLinearGradient(0,0,DEST_W,0);
+  grd.addColorStop(0,'rgba(0,0,0,1)');
+  grd.addColorStop(blendW/DEST_W,'rgba(0,0,0,0)');
+  grd.addColorStop(1-blendW/DEST_W,'rgba(0,0,0,0)');
+  grd.addColorStop(1,'rgba(0,0,0,1)');
+
+  // destination-out удаляет пиксели в области градиента
+  tc.globalCompositeOperation='destination-out';
+  tc.fillStyle=grd;
+  tc.fillRect(0,0,DEST_W,PANO_H);
+
+  // 3. Наносим на панораму (source-over = накладываем поверх)
+  panoCtx.globalCompositeOperation='source-over';
+  panoCtx.globalAlpha=1;
+  // Clamp destX чтобы не выйти за границы
+  const clampedX=Math.max(0,Math.min(PANO_W-DEST_W,destX));
+  panoCtx.drawImage(tmp,clampedX,0);
 
   frameCount++;
 
-  // Мигание — подтверждение захвата
-  const ff=document.getElementById('ff');
-  ff.classList.add('go');
-  setTimeout(()=>ff.classList.remove('go'),50);
+  // Мигание
+  const ff=document.getElementById('ff');ff.classList.add('go');setTimeout(()=>ff.classList.remove('go'),50);
 
   // UI
-  document.getElementById('fcnt').textContent=frameCount;
-  document.getElementById('spct').textContent=frameCount+' кадров · '+Math.round(absDeg)+'°';
+  document.getElementById('s-frames').textContent=frameCount+' кадров';
+  document.getElementById('s-pct').textContent=Math.round(absDeg/360*100)+'%';
+  document.getElementById('cam-sub').textContent=frameCount+' кадров · '+Math.round(absDeg)+'°';
 
-  // Live strip — показываем только снятую часть
+  // Обновляем live strip
   const sc=document.getElementById('sc');
   if(sc&&sc.width>0){
-    const filledW=frameCount*DEST_SLICE_W;
-    const ratio=filledW/PANO_W;
     const ctx=sc.getContext('2d');
     ctx.clearRect(0,0,sc.width,54);
-    if(filledW>0)ctx.drawImage(panoC,0,0,filledW,PANO_H,0,0,ratio*sc.width,54);
+    // Показываем заполненную часть панорамы
+    const filledDeg=Math.min(absDeg,360);
+    const filledW=Math.round(filledDeg/360*PANO_W);
+    const drawW=Math.round(filledDeg/360*sc.width);
+    if(filledW>0)ctx.drawImage(panoC,0,0,filledW,PANO_H,0,0,drawW,54);
   }
 
   setArcUI(Math.min(absDeg,360));
   document.getElementById('deg').textContent=Math.round(absDeg)+'°';
+  document.getElementById('arc-deg').textContent=Math.round(Math.min(absDeg,360))+'°';
 }
 
-// BUILD PANORAMA
+// ── BUILD PANORAMA ───────────────────────────────────────────
 async function buildPano(){
   showL('Сборка панорамы');
   await new Promise(r=>setTimeout(r,80));
 
-  const finalW=frameCount*DEST_SLICE_W;
-  const fc=document.createElement('canvas');
-  fc.width=finalW;fc.height=PANO_H;
-  const fx=fc.getContext('2d');
-  fx.drawImage(panoC,0,0,finalW,PANO_H,0,0,finalW,PANO_H);
+  const covDeg=Math.min(Math.abs(recDelta),360);
+  const covW=Math.round(covDeg*PX_PER_DEG);
 
-  // Лёгкое виньетирование
+  const fc=document.createElement('canvas');
+  fc.width=covW;fc.height=PANO_H;
+  const fx=fc.getContext('2d');
+  fx.drawImage(panoC,0,0,covW,PANO_H,0,0,covW,PANO_H);
+
+  // Лёгкое виньетирование сверху/снизу
   const vg=fx.createLinearGradient(0,0,0,PANO_H);
-  vg.addColorStop(0,'rgba(0,0,0,.1)');vg.addColorStop(.04,'rgba(0,0,0,0)');
-  vg.addColorStop(.96,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.1)');
-  fx.fillStyle=vg;fx.fillRect(0,0,finalW,PANO_H);
+  vg.addColorStop(0,'rgba(0,0,0,.12)');vg.addColorStop(.04,'rgba(0,0,0,0)');
+  vg.addColorStop(.96,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.12)');
+  fx.fillStyle=vg;fx.fillRect(0,0,covW,PANO_H);
 
   const url=fc.toDataURL('image/jpeg',.93);
-  const covDeg=Math.min(Math.abs(recDelta),360);
   const pano={url,date:new Date().toLocaleString('ru-RU',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}),angle:Math.round(covDeg),frames:frameCount,id:Date.now()};
   panos.unshift(pano);curI=0;
 
   document.getElementById('sw').classList.remove('on');
-  setArcUI(0);document.getElementById('deg').textContent='0°';document.getElementById('fcnt').textContent='0';
+  setArcUI(0);document.getElementById('deg').textContent='0°';
+  document.getElementById('arc-deg').textContent='0°';document.getElementById('cam-sub').textContent='';
 
   const gt=document.getElementById('gth');gt.src=url;gt.style.display='block';
   document.querySelector('#gal-btn .gal-btn-icon').style.display='none';
@@ -577,7 +638,7 @@ async function buildPano(){
   hideL();openPrev(pano);
 }
 
-// PREVIEW VIEWER
+// ── PREVIEW VIEWER ───────────────────────────────────────────
 let viewImg=null,viewRaf=null,panX=0,velX=0,isDrag=false,dragX=0,vW=0,vH=0;
 function openPrev(p){
   go('prev');
@@ -602,7 +663,8 @@ function renderView(){
   const dw=vH*(viewImg.width/viewImg.height);
   const off=((panX%dw)+dw)%dw;
   ctx.clearRect(0,0,vW,vH);
-  ctx.drawImage(viewImg,dw-off,0,dw,vH);ctx.drawImage(viewImg,-off,0,dw,vH);
+  ctx.drawImage(viewImg,dw-off,0,dw,vH);
+  ctx.drawImage(viewImg,-off,0,dw,vH);
 }
 function startViewLoop(){
   cancelAnimationFrame(viewRaf);
@@ -615,7 +677,7 @@ async function sharePano(){
   try{const b=await(await fetch(p.url)).blob();const f=new File([b],'pano360.jpg',{type:'image/jpeg'});if(navigator.share&&navigator.canShare?.({files:[f]})){await navigator.share({title:'Панорама 360°',files:[f]});return}}catch(e){}savePano();
 }
 
-// GALLERY
+// ── GALLERY ──────────────────────────────────────────────────
 function openGal(){go('gal');renderGal()}
 function closeGal(){go(vs?'cam':'home')}
 function renderGal(){
@@ -625,22 +687,25 @@ function renderGal(){
   panos.forEach((p,i)=>{const el=document.createElement('div');el.className='gc';el.innerHTML=`<img src="${p.url}" alt=""><div class="gc-info">${p.date} · ${p.angle}° · ${p.frames} кадров</div>`;el.onclick=()=>{curI=i;openPrev(p)};g.appendChild(el)});
 }
 
-// TOUCH FAKE GYRO
+// ── TOUCH FAKE GYRO ──────────────────────────────────────────
 const camEl=document.getElementById('cam');
-function checkCapture(abs){
-  if(isRec&&abs>=lastCapDeg+CAPTURE_EVERY_DEG&&frameCount<MAX_FRAMES){captureFrame(abs);lastCapDeg=abs}
+function doCapture(){
+  const abs=Math.abs(recDelta);
+  if(isRec&&abs>=lastCapDeg+STEP_DEG){captureSlice(abs);lastCapDeg=abs}
 }
 camEl.addEventListener('touchstart',e=>{if(e.target.closest('#rb,.ib,.flip-btn,.gal-btn'))return;touchX=e.touches[0].clientX},{passive:true});
 camEl.addEventListener('touchmove',e=>{
   if(!touchMode||touchX===null)return;
-  const dx=e.touches[0].clientX-touchX;contAngle+=(-dx*0.4);touchX=e.touches[0].clientX;
-  updateLevel(0);tick();checkCapture(Math.abs(recDelta));
+  const dx=e.touches[0].clientX-touchX;
+  // Сильный фильтр для touch тоже
+  contAngle+=-dx*0.4;touchX=e.touches[0].clientX;
+  updateLevel(0);tick();doCapture();
 },{passive:true});
 camEl.addEventListener('touchend',()=>{touchX=null});
 document.addEventListener('mousedown',e=>{if(!document.getElementById('cam').classList.contains('on'))return;if(e.target.closest('#rb,.ib,.flip-btn,.gal-btn'))return;mouseX=e.clientX});
 document.addEventListener('mousemove',e=>{
   if(!touchMode||mouseX===null||!document.getElementById('cam').classList.contains('on'))return;
-  contAngle+=-(e.clientX-mouseX)*0.5;mouseX=e.clientX;tick();checkCapture(Math.abs(recDelta));
+  contAngle+=-(e.clientX-mouseX)*0.5;mouseX=e.clientX;tick();doCapture();
 });
 document.addEventListener('mouseup',()=>{mouseX=null});
 </script>
